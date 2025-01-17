@@ -1,5 +1,5 @@
 {
-  "name": "corona_admin",
+  "name": "malasila_kk_profiling",
   "version": "2.0.0",
   "description": "",
   "main": "index.html",
@@ -50,8 +50,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "bootstrapdash",
-  "url": "http://www.bootstrapdash.com/",
+  "author": "lyka",
+  "url": "",
   "copyright": "",
   "license": ""
 }
