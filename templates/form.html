@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Malasila KK Profiling System</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+
+    <!-- MDB icon -->
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <!-- MDB -->
+    <link rel="stylesheet" href="/static/css/mdb.min.css"/>
+
+    <!--Flatpickr-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <style>
+        .gradient-custom {
+            /* Fallback for old browsers */
+            background: #009688;
+    
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to bottom right, rgba(0, 150, 136, 1), rgba(76, 175, 80, 1));
+    
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(to bottom right, rgba(0, 150, 136, 1), rgba(76, 175, 80, 1));
+            min-height: 100vh; /* Full viewport height */
+            margin: 0; /* Remove gaps */
+            padding: 0;
+   
+      }
+      
+      .card-registration .select-input.form-control[readonly]:not([disabled]) {
+      font-size: 1rem;
+      line-height: 2.15;
+      padding-left: .75em;
+      padding-right: .75em;
+      }
+      .card-registration .select-arrow {
+      top: 13px;
+      }
+
+      input[type="date"],
+      input {
+          background-color: #ffffff !important; /* Force white background */
+}
+
+
+</style>
+    </head>
+  <body class="gradient-custom">
+    
+
+    <!-- Start your project here-->
+      <div class="container py-5 h-100">
+        <div class="row justify-content-center align-items-center h-100">
+          <div class="col-12 col-lg-9 col-xl-7">
+            <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+              <div class="card-body p-4 p-md-5">
+<!-- Message to the Respondent -->
+<!-- Message to the Respondent -->
+<div class="card mb-4 shadow-sm border-primary">
+  <div class="card-body">
+      <p class="text-center fw-bold text-primary">
+          To the Respondent:
+      </p>
+      <p>
+          Good day! This registration form is part of our initiative to gather demographic information about the Katipunan ng Kabataan members. Your participation is crucial in creating a comprehensive database that will guide future programs and policies aimed at youth development.
+      </p>
+      <p>
+          We kindly ask you to fill out this form with accurate information. All details provided will be handled with the utmost confidentiality and used solely for the purposes stated.
+      </p>
+      <p class="text-center text-danger fw-bold">
+          Rest assured, your privacy and data security are our top priorities.
+      </p>
+  </div>
+</div>
+
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Create Your Profile</h3>
+                <form method="POST" action="/register">
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div data-mdb-input-init class="form-outline">
+                        <input type="text" id="firstName" name="firstName" class="form-control form-control-lg" required />
+                        <label class="form-label" for="firstName">First Name</label>
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4">
+    
+                      <div data-mdb-input-init class="form-outline">
+                        <input type="text" id="middleName" name="middleName" class="form-control form-control-lg" required/>
+                        <label class="form-label" for="middleName">Middle Name</label>
+                      </div>
+    
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div data-mdb-input-init class="form-outline">
+                        <input type="text" id="lastName" name="lastName" class="form-control form-control-lg" required/>
+                        <label class="form-label" for="lastName">Last Name</label>
+                      </div>
+    
+                    </div>
+                    <div class="col-md-6 mb-4">
+    
+                      <div data-mdb-input-init class="form-outline">
+                        <input type="text" id="suffix" name="suffix" class="form-control form-control-lg" />
+                        <label class="form-label" for="suffix">Suffix (Jr., II, III etc.)</label>
+                        </div>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+    
+                      <div data-mdb-input-init class="form-outline datepicker w-100">
+                        <input type="date" class="form-control form-control-lg" id="birthdayDate" name="birthdayDate" required />
+                        <label for="birthdayDate" class="form-label">Birthday</label>
+                      </div>
+                    </div>
+            
+                <!-- Flatpickr JS -->
+                <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+                <script>
+                    // Initialize Flatpickr
+                    flatpickr("#birthdayDate", {
+                        dateFormat: "Y-m-d", // Format: YYYY-MM-DD
+                        maxDate: "today", // Disable future dates
+                    });
+                </script>
+
+                    <div class="col-md-6 mb-4">
+    
+                      <h6 class="mb-2 pb-1">Gender: </h6>
+    
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="femaleGender"
+                          value="Female" checked />
+                        <label class="form-check-label" for="femaleGender">Female</label>
+                      </div>
+    
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="maleGender"
+                          value="Male" />
+                        <label class="form-check-label" for="maleGender">Male</label>
+                      </div>
+    
+                    </div>
+
+                   
+                    <div class="col-md-6 mb-4">
+                        <div data-mdb-input-init class="form-outline">
+                            <input 
+                                type="email" 
+                                id="emailAddress"
+                                name="emailAddress"
+                                class="form-control form-control-lg" 
+                                required 
+                            />
+                            <label class="form-label" for="emailAddress">Email</label>
+                        </div>
+                        <small id="emailFeedback" class="text-danger" style="display:none;">Please enter a valid email address.</small>
+                    </div>
+                
+                <script>
+                    const emailInput = document.getElementById('emailAddress');
+                    const emailFeedback = document.getElementById('emailFeedback');
+                
+                    emailInput.addEventListener('input', () => {
+                        const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+                        if (!emailPattern.test(emailInput.value)) {
+                            emailFeedback.style.display = 'block';
+                        } else {
+                            emailFeedback.style.display = 'none';
+                        }
+                    });
+                </script>
+    
+
+
+                      <div class="col-md-6 mb-4">
+                          <div data-mdb-input-init class="form-outline">
+                              <input 
+                                  type="tel" 
+                                  id="phoneNumber" 
+                                  name="phoneNumber"
+                                  class="form-control form-control-lg" 
+                                  required 
+                              />
+                              <label class="form-label" for="phoneNumber">Phone Number</label>
+                          </div>
+                          <!-- Warning message outside the input box -->
+                          <small id="phoneFeedback" class="text-danger" style="display:none;">
+                              Please enter a valid Philippine phone number (e.g., 09123456789 or +639123456789).
+                          </small>
+                      </div>
+                  <script>
+                      const phoneInput = document.getElementById('phoneNumber');
+                      const phoneFeedback = document.getElementById('phoneFeedback');
+                  
+                      phoneInput.addEventListener('input', () => {
+                          // Regex for PH mobile numbers: 09XXXXXXXXX or +639XXXXXXXXX
+                          const phonePattern = /^(09\d{9}|(\+63)9\d{9})$/;
+                  
+                          if (!phonePattern.test(phoneInput.value)) {
+                              phoneFeedback.style.display = 'block'; // Show warning
+                          } else {
+                              phoneFeedback.style.display = 'none'; // Hide warning
+                          }
+                      });
+                  </script>
+                  
+                  
+                    <div class="col-12 mb-4">
+    
+                      <div data-mdb-input-init class="form-outline">
+                        <input type="text" id="purok" name="purok" class="form-control form-control-lg" required />
+                        <label class="form-label" for="purok">Purok</label>
+                      </div>
+                      </div>
+                      
+                        <div class="col-12 mb-4">
+        
+                          <div data-mdb-input-init class="form-outline">
+                            <input type="text" id="barangay" name="barangay" class="form-control form-control-lg" value="Malasila" readonly />
+                            <label class="form-label" for="barangay">Barangay</label>
+                          </div>
+                          </div>
+
+                        <div class="col-12 mb-4">
+        
+                          <div data-mdb-input-init class="form-outline">
+                            <input type="text" id="municipality" name="municipality" class="form-control form-control-lg" value="Makilala" readonly />
+                            <label class="form-label" for="barangay">Municipality</label>
+                          </div>
+                          </div>
+
+                        <div class="col-md-6 mb-4 pb-2">
+                          <div data-mdb-input-init class="form-outline">
+                            <input type="text" id="province" name="province" class="form-control form-control-lg" value="North Cotabato" readonly />
+                            <label class="form-label" for="barangay">Province</label>
+                          </div>
+                          </div>
+                        <div class="col-md-6 mb-4 pb-2">        
+                          <div data-mdb-input-init class="form-outline">
+                            <input type="text" id="zipcode" name="zipcode" class="form-control form-control-lg" value="9401" readonly />
+                            <label class="form-label" for="barangay">Zipcode</label>
+                          </div>
+                        </div>
+
+                  <div class="col-12 mb-4">          
+                  <div class="form-outline">
+                    <label for="civilStatus" class="form-label">Civil Status:</label>
+                      <select class="form-select" id="civilStatus" name="civilStatus">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                      </select>
+                  </div>
+                  </div>
+
+                    <div class="col-12 mb-4">
+                        <div class="form-outline">
+                            <label for="youthClassification" class="form-label">Youth Classification:</label>
+                            <select class="form-select" id="youthClassification" name="youthClassification" onchange="toggleSpecificNeeds()">
+                                <option value="" disabled selected>Choose option</option>
+                                <option value="In School Youth">In School Youth</option>
+                                <option value="Out Of School Youth">Out of School Youth</option>
+                                <option value="Working Youth">Working Youth</option>
+                                <option value="Youth with Specific Needs">Youth w/ Specific Needs</option>
+                            </select>
+                        </div>
+                    </div>
+            
+                    <div id="specificNeedsOptions" class="col-12 mb-4">
+                        <div class="form-outline">
+                            <label for="Specific Needs" class="form-label">Specific Needs:</label>
+                            <select class="form-select" id="Specific Needs" name="Specific Needs">
+                                <option value="" disabled selected>Choose option</option>
+                                <option value="Person with Disability">Person w/ Disability</option>
+                                <option value="Children in Conflict with Laws">Children in Conflict w/ Laws</option>
+                                <option value="Indigenous People">Indigenous People</option>
+                            </select>
+                        </div>
+                    </div>
+            
+                <script>
+                    function toggleSpecificNeeds() {
+                        const youthClassification = document.getElementById('youthClassification').value;
+                        const specificNeedsOptions = document.getElementById('specificNeedsOptions');
+            
+                        if (youthClassification === 'Specific Needs') {
+                            specificNeedsOptions.style.display = 'block'; // Show the specific needs dropdown
+                        } else {
+                            specificNeedsOptions.style.display = 'none'; // Hide it
+                        }
+                    }
+                </script>
+
+               
+
+                  <div class="col-12 mb-4">   
+                  <div class="form-outline">
+                    <label for="youthAgeGroup" class="form-label">Youth Age Group:</label>
+                      <select class="form-select" id="youthAgeGroup" name="youthAgeGroup">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Child Youth ">Child Youth (15-17 years old)</option>
+                        <option value="Core Youth">Core Youth (18-24 years old)</option>
+                        <option value="Young Adult">Young Adult (25-30 years old)</option>
+                      </select>
+                  </div>
+                  </div>
+
+                  <div class="col-12 mb-4">   
+                  <div class="form-outline">
+                    <label for="workStatus" class="form-label">Work Status:</label>
+                      <select class="form-select" id="workStatus" name="workStatus">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Employed">Employed</option>
+                        <option value="Unemployed">Unemployed</option>
+                        <option value="Self Employed">Self Employed</option>
+                        <option value="Currently Looking">Currently looking for a job</option>
+                        <option value="Not Interested">Not interested looking for a job</option>
+                      </select>
+                  </div>
+                  </div>
+
+                  <div class="col-12 mb-4">   
+                  <div class="form-outline">
+                    <label for="educationalbg" class="form-label">Educational Background:</label>
+                      <select class="form-select" id="educationalbg" name="educationalbg">
+                        <option value="" disabled selected>Choose option</option>
+                        <option value="Elementary level">Elementary level</option>
+                        <option value="Elementary Grad">Elementary Grad</option>
+                        <option value="High School Level">High School Level</option>
+                        <option value="High School Grad">High School Grad</option>
+                        <option value="Vocational Grad">Vocational Grad</option>
+                        <option value="College Leve">College Level</option>
+                        <option value="College Grad">College Grad</option>
+                        <option value="Vocational Grad">Vocational Grad</option>
+                        <option value="Master Level">Master Level</option>
+                        <option value="Master Grad">Master Grad</option>
+                        <option value="Doctorate Level">Doctorate Level</option>
+                        <option value="Doctorate Grad">Doctorate Grad</option>
+                      </select>
+                  </div>
+                  </div>
+
+                  <div class="col-12 mb-4">   
+                    <div class="form-outline">
+                      <label for="voterStatus" class="form-label">Voter Status:</label>
+                        <select class="form-select" id="voterStatus" name="voterStatus">
+                          <option value="" disabled selected>Choose option</option>
+                          <option value="SK Voter">SK Voter</option>
+                          <option value="National Voter">National Voter</option>
+                          <option value="Not Registered">Not Registered</option>
+                        </select>
+                    </div>
+                  </div>
+
+                  <div class="col-12 mb-4">   
+                    <div class="form-outline">
+                      <label for="voteLastElection" class="form-label">Did you vote last election?</label>
+                        <select class="form-select" id="voteLastElection" name="voteLastElection">
+                          <option value="" disabled selected>Choose option</option>
+                          <option value="Yes">YES</option>
+                          <option value="No">NO</option>
+                        </select>
+                    </div>
+                  </div>
+
+                  <div class="col-12 mb-4">   
+                    <div class="form-outline">
+                        <label for="attendedKK" class="form-label">Have you already attended a KK Assembly?</label>
+                        <select class="form-select" id="attendedKK" name="attendedKK" onchange="handleAttendanceChange()">
+                            <option value="" disabled selected>Choose option</option>
+                            <option value="Yes">YES</option>
+                            <option value="No">NO</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- If YES: How many times? -->
+                <div id="yesOptions" class="col-12 mb-4 conditional" style="display: none;">   
+                    <div class="form-outline">
+                        <label for="timesAttended" class="form-label">If YES, how many times?</label>
+                        <select class="form-select" id="timesAttended" name="timesAttended">
+                            <option value="" disabled selected>Choose option</option>
+                            <option value="1-2 times">1-2 times</option>
+                            <option value="3-4 times">3-4 times</option>
+                            <option value="5 and above">5 and above</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- If NO: Why? -->
+                <div id="noOptions" class="col-12 mb-4 conditional" style="display: none;">   
+                    <div class="form-outline">
+                        <label for="reasonNotAttended" class="form-label">If NO, why?</label>
+                        <select class="form-select" id="reasonNotAttended" name="reasonNotAttended">
+                            <option value="" disabled selected>Choose option</option>
+                            <option value="There's no KK Assembly Meeting">There's no KK Assembly Meeting</option>
+                            <option value="Not interested to attend">Not interested to attend</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <script>
+                    function handleAttendanceChange() {
+                        const attendedDropdown = document.getElementById('attendedKK');
+                        const yesOptions = document.getElementById('yesOptions');
+                        const noOptions = document.getElementById('noOptions');
+                
+                        if (attendedDropdown.value === 'Yes') {
+                            yesOptions.style.display = 'block'; // Show "how many times" options
+                            noOptions.style.display = 'none';  // Hide "why" options
+                        } else if (attendedDropdown.value === 'No') {
+                            noOptions.style.display = 'block';  // Show "why" options
+                            yesOptions.style.display = 'none'; // Hide "how many times" options
+                        } else {
+                            yesOptions.style.display = 'none';
+                            noOptions.style.display = 'none';
+                        }
+                    }
+                </script>
+                
+                <div class="mt-4 pt-2">
+                  <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                </div>
+                </a>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- End your project here-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="/static/js/mdb.umd.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+  </body>
+</html>

@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    /* light-mode.css */
+    body {
+      background-color: white;
+      color: black;
+    }
+    .navbar {
+      background-color: #f8f9fa; /* Light background for navbar */
+    }
+    .card {
+      background-color: #ffffff; /* Light background for cards */
+      border: 1px solid #dee2e6; /* Light border */
+    }
+    body.light-mode {
+      background-color: white;
+      color: black;
+    }
+    body.light-mode .navbar  {
+      background-color: #f8f9fa;
+      color: black;
+    }
+
+    body.light-mode .sidebar {
+      background-color: #f8f9fa;
+    }
+
+    body.light-mode .sidebar .sidebar-brand-wrapper{
+      background-color: #f8f9fa;
+      }
+      
+    body.light-mode .card {
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+
+    }
+    body.light-mode .card-title {
+      background-color: #ffffff;
+      color: black;
+    }
+
+    body.light-mode .content-wrapper {
+      background-color: #cccc;
+    }
+    body.light-mode .navbar .navbar-menu-wrapper .search input{
+      background-color: #cccc;
+      border: #ffffff;
+    }
+
+    body.light-mode .navbar .navbar-menu-wrapper .navbar-nav.navbar-nav-right{
+      color: black}
+
+    #toggle-mode {
+      position: absolute;
+
+      background-color: #007bff;
+      color: white;
+      border: 1px solid #00151f;
+      top: 25px;
+      right: 355px;
+      width: 46px;
+      height: 20px;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #toggle-mode:hover {
+      background-color: #0056b3;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+      border: 1px solid #0056b3;
+    }
+    .fixed-logo {
+      width: 60px; /* Set your desired width */
+      height: auto; /* Maintain aspect ratio */
+      object-fit: contain; /* Prevent stretching */
+      margin-top: 10px;
+    }
+
+        .main-panel {
+          overflow-y: auto; /* Enables vertical scrolling */
+          height: 100vh; /* Adjust this value based on the height of your navbar */
+        }
+      
+        #right-sidebar {
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 300px;
+          height: 100%;
+          background-color:rgba(21, 23, 25, 0.7)
+          color: white;
+          padding: 20px;
+          box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          transform: translateX(100%); /* Initially hidden */
+          transition: transform 0.3s ease-in-out;
+      }
+      
+      #right-sidebar.hidden {
+          transform: translateX(100%);
+      }
+      
+      #right-sidebar-content {
+          overflow-y: auto;
+      }
+            
+
+  </style>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Malasila KK Profiling</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- End Plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a class="fixed-logo" href="{{ url_for('static', filename='admin/index.html') }}" style="display: flex; align-items: center;">
+            <img class="fixed-logo" src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" style="margin-right: 8px;" />
+          </div>
+        <ul class="nav">
+          <li class="nav-item nav-category" style="margin-top:-50px; margin-bottom: -45px; line-height: .5; padding: 40px;">
+            <span class="nav-link">MALASILA KK PROFILING</span>
+          </li>
+          <!--<li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>-->
+          <li class="nav-item profile">
+            <div class="profile-desc">
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">{{ first_name }} {{ last_name }}</h5>
+                  <span>SK Secretary</span>
+                </div>
+              </div>
+              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+                <a href="{{ url_for('admin_account') }}" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('admin_index') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+         
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('sk_profiles') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">SK Officials</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('kk_list') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">KK Members</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('charts') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-library-books"></i>
+              </span>
+              <span class="menu-title">Achievements</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('export') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-file"></i>
+              </span>
+              <span class="menu-title">Exports</span>
+            </a>
+          </li>          
+        </ul>
+      </nav>
+      
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        
+        <!-- partial:../../partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="{{ url_for('admin_index') }}"><img src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">{{ first_name }} {{ last_name }}</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Log out</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+          
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+    
+    
+          <div class="content-wrapper">
+            
+
+            <div class="page-header">
+              <h3 class="page-title"> Reports </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Reports</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Reports</li>
+                </ol>
+              </nav>
+            </div>
+            
+            <!-- Search and Filter Controls -->
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <div class="filter-options">
+                  <select name="chartFilter" id="chartFilter" class="form-control" >
+                      <option value="all">All categories</option>
+                      <option value="barChart">Distribution by purok</option>
+                      <option value="stackedBarChart">Youth Age group</option>
+                      <option value="workStatusByPurokChart">Work Status</option>
+                      <option value="voter-stackedbar">Voter Status</option>
+                      <option value="voteLastElectionChart">Voted Last Election</option>
+                      <option value="genderstackedbar">Gender Count</option>
+                      <option value="youthClassificationbarChart">Youth Classification</option>
+
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <form method="get" action="{{ url_for('charts') }}" style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+                  <label for="from_date" style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">From:</label>
+                  <input type="date" id="from_date" name="from_date" value="{{ from_date }}" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif; font-size: 12px;">
+              
+                  <label for="to_date" style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">Up to:</label>
+                  <input type="date" id="to_date" name="to_date" value="{{ to_date }}" style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: Arial, sans-serif; font-size: 12px;">
+              
+                  <button type="submit" style="padding: 10px 20px; background: linear-gradient(45deg, #4CAF50, #81C784); color: white; border: none; border-radius: 20px; font-size: 12px; font-family: Arial, sans-serif; font-weight: bold; cursor: pointer; transition: background 0.3s ease;">
+                      Filter
+                  </button>
+              </form>
+                </div>
+            </div>    
+            
+            <div id="barChartContainer" class="chart-container">
+              <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                      <div class="card-body">
+                          <h4 class="card-title">KK Members Distribution per Purok</h4>
+                          <canvas id="barChart" style="height:300px; width:100%;"></canvas>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div id="stackedBarChartContainer" class="chart-container">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Youth Age Group Count per Purok</h4>
+                  
+                  <!-- Checkbox placed above the chart -->
+                  <div class="mb-3">
+                    <label>
+                      <input type="checkbox" id="toggleStacked"> Stacked
+                    </label>
+                  </div>
+          
+                  <!-- Chart Canvas with fixed size -->
+                  <div style="position: relative; width: 100%; height: 300px;">
+                    <canvas id="stackedBarChart" style="height: 100%; width: 100%;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+                              <style>#toggleStacked {
+  margin-left: 5px;
+}
+
+  </style>                    
+  <div id="workStatusByPurokChartContainer" class="chart-container">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Work Status by Purok</h4>
+  
+          <!-- Checkbox for toggling stacked/unstacked -->
+          <div class="mb-3">
+            <label>
+              <input type="checkbox" id="toggleWorkStatusStacked"> Stacked
+            </label>
+          </div>
+  
+          <!-- Chart Canvas with fixed size -->
+          <div style="position: relative; width: 100%; height: 300px;">
+            <canvas id="workStatusByPurokChart" style="height: 100%; width: 100%;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+          <div id="voter-stackedbarContainer" class="chart-container">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Voter Status Count by Purok</h4>
+                  
+                  <!-- Checkbox for toggling stacked/unstacked -->
+                  <div class="mb-3">
+                    <label>
+                      <input type="checkbox" id="toggleVoterStatusStacked"> Stacked
+                    </label>
+                  </div>
+          
+                  <!-- Chart Canvas with fixed size -->
+                  <div style="position: relative; width: 100%; height: 300px;">
+                    <canvas id="voter-stackedbar" style="height: 100%; width: 100%;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="voteLastElectionChartContainer" class="chart-container">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Vote Last Election by Purok</h4>
+          
+                  <!-- Checkbox for toggling stacked/unstacked -->
+                  <div class="mb-3">
+                    <label>
+                      <input type="checkbox" id="toggleVoteLastElectionStacked"> Stacked
+                    </label>
+                  </div>
+          
+                  <!-- Chart Canvas with fixed size -->
+                  <div style="position: relative; width: 100%; height: 300px;">
+                    <canvas id="voteLastElectionChart" style="height: 100%; width: 100%;"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+      <div id="genderstackedbarContainer" class="chart-container">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Gender Distribution by Purok</h4>
+              
+              <!-- Checkbox for toggling stacked/unstacked -->
+              <div class="mb-3">
+                <label>
+                  <input type="checkbox" id="toggleGenderStacked"> Stacked
+                </label>
+              </div>
+      
+              <!-- Chart Canvas with fixed size -->
+              <div style="position: relative; width: 100%; height: 300px;">
+                <canvas id="genderstackedbar" style="height: 100%; width: 100%;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div id="youthClassificationbarChartContainer" class="chart-container">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title">Youth Classification by Purok</h4>
+      
+              <!-- Checkbox for toggling stacked/unstacked -->
+              <div class="mb-3">
+                <label>
+                  <input type="checkbox" id="toggleYouthClassificationStacked"> Stacked
+                </label>
+              </div>
+      
+              <!-- Chart Canvas with fixed size -->
+              <div style="position: relative; width: 100%; height: 300px;">
+                <canvas id="youthClassificationbarChart" style="height: 100%; width: 100%;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+            
+<!--================No Backend-->
+
+        <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">KK Assembly Attended</h4>
+                <canvas id="kkAssemblybarChart" style="height:250px"></canvas>
+            </div>
+        </div>
+      </div>
+
+<!--==========-----======-->
+<!-- Modern Sidebar -->
+<div class="right-sidebar">
+  <div class="sidebar-content">
+    <!-- Chart Title -->
+    <h4 id="chartTitle" class="sidebar-heading">Chart Title</h4>
+    <p id="sidebarDetails" class="sidebar-text">Click on a bar to see details here.</p>
+
+    <!-- For Purok Count Chart -->
+    <div class="chart-section">
+      <button id="barChartOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="barChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="barChartOverallData" class="overall-data"></div>
+    </div>
+
+    <!-- For Age Group Chart -->
+    <div class="chart-section">
+      <button id="stackedBarChartOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="stackedBarChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="stackedBarChartOverallData" class="overall-data"></div>
+    </div>
+
+    <!-- For Voter Status Chart -->
+    <div class="chart-section">
+      <button id="voterStatusOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="voterStatusHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="voterStatusOverallData" class="overall-data"></div>
+    </div>
+
+    <!-- Gender Chart -->
+    <div id="genderChartSidebar" class="chart-section">
+      <h4 id="genderChartTitle" class="sidebar-heading"></h4>
+      <button id="genderChartOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="genderChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="genderChartOverallData" class="overall-data"></div>
+    </div>
+
+    <!-- Youth Classification Chart -->
+    <div id="youthClassificationChartSidebar" class="chart-section">
+      <h4 id="youthClassificationChartTitle" class="sidebar-heading"></h4>
+      <button id="youthClassificationChartOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="youthClassificationChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="youthClassificationChartOverallData" class="overall-data"></div>
+    </div>
+
+    <!-- Work Status Chart -->
+    <div id="workStatusChartSidebar" class="chart-section">
+      <h4 id="workStatusChartTitle" class="sidebar-heading"></h4>
+      <button id="workStatusChartOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="workStatusChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="workStatusChartOverallData" class="overall-data"></div>
+    </div>
+
+    <!-- Voted Last Election Chart -->
+    <div id="voteLastElectionChartSidebar" class="chart-section">
+      <h4 id="voteLastElectionChartTitle" class="sidebar-heading"></h4>
+      <button id="voteLastElectionChartOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="voteLastElectionChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="voteLastElectionChartOverallData" class="overall-data"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toggle Button -->
+<button class="toggle-btn" id="toggleBtn">&#8594;</button>
+
+<style>
+  /* Dark Mode Sidebar Styles */
+  .right-sidebar {
+    width: 250px;
+    position: fixed;
+    right: -320px; /* Hidden by default */
+    top: 70px;
+    height: 100%;
+    background-color: #1e1e2f; /* Dark background */
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth transition */
+    overflow-y: auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #f0f0f0; /* Light text for contrast */
+  }
+
+  .right-sidebar.visible {
+    right: 0;
+  }
+
+  .sidebar-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff; /* Bright white for headings */
+  }
+
+  .sidebar-text {
+    font-size: 0.95rem;
+    color: #cfcfcf; /* Softer contrast for details */
+    margin-bottom: 15px;
+  }
+
+  .chart-section {
+    margin-bottom: 20px;
+  }
+
+  .sidebar-btn {
+    display: inline-block;
+    background-color: #33354a; /* Dark button background */
+    color: #ffffff; /* Light text */
+    border: 1px solid #444657; /* Subtle border */
+    border-radius: 5px;
+    padding: 5px 10px; /* Compact size */
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .sidebar-btn:hover {
+    background-color: #565970; /* Highlight on hover */
+    border-color: #6c6f88; /* Slightly lighter border */
+  }
+
+  .sidebar-btn.hidden {
+    display: none;
+  }
+
+  .overall-data {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #bbbbbb; /* Neutral light gray for text */
+  }
+
+  .toggle-btn {
+    position: fixed;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #33354a; /* Match button with sidebar */
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  }
+
+  .toggle-btn:hover {
+    background-color: #565970; /* Highlight on hover */
+  }
+
+  .right-sidebar.visible + .toggle-btn {
+    right: 260px; /* Matches the sidebar's width */
+  }
+</style>
+
+          
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script>
+            document.getElementById("chartFilter").addEventListener("change", function() {
+              const selectedChart = this.value;
+          
+              // Select all chart containers
+              const chartContainers = document.querySelectorAll(".chart-container");
+          
+              if (selectedChart === "all") {
+                  // Show all charts
+                  chartContainers.forEach(container => {
+                      container.style.display = "block";
+                  });
+              } else {
+                  // Hide all charts
+                  chartContainers.forEach(container => {
+                      container.style.display = "none";
+                  });
+          
+                  // Show the selected chart container
+                  const selectedContainer = document.getElementById(selectedChart + "Container");
+                  if (selectedContainer) {
+                      selectedContainer.style.display = "block";
+                  }
+              }
+          });
+          
+          // Initially show all charts on page load
+          window.addEventListener("load", () => {
+              document.querySelectorAll(".chart-container").forEach(container => {
+                  container.style.display = "block";
+              });
+          });
+
+// Declare global variables once
+const toggleBtn = document.getElementById('toggleBtn');
+const sidebar = document.querySelector('.right-sidebar');
+const sidebarDetails = document.getElementById('sidebarDetails');
+const overallDataSection = document.getElementById('overallData');
+const hideOverallBtn = document.getElementById('hideOverallBtn');
+const overallBtn = document.getElementById('overallBtn');
+
+// Global toggle button behavior
+toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('visible');
+    toggleBtn.innerHTML = sidebar.classList.contains('visible') ? '&#8592;' : '&#8594;';
+});
+
+// Sidebar helper functions
+function updateSidebarTitle(title) {
+    document.getElementById('chartTitle').innerText = title;
+}
+
+function updateSidebarDetails(content) {
+    sidebarDetails.innerHTML = content;
+    if (!sidebar.classList.contains('visible')) {
+        sidebar.classList.add('visible'); // Ensure sidebar is visible
+        toggleBtn.innerHTML = '&#8592;'; // Update toggle button
+    }
+}
+
+// Setup handlers for overall data
+function setupOverallDataHandlers(generateOverallHtml, clearOverallHtml) {
+    overallBtn.addEventListener('click', () => {
+        overallDataSection.innerHTML = generateOverallHtml();
+        overallDataSection.style.display = 'block';
+        overallBtn.style.display = 'none';
+        hideOverallBtn.style.display = 'inline-block';
+    });
+
+    hideOverallBtn.addEventListener('click', () => {
+        overallDataSection.style.display = 'none';
+        hideOverallBtn.style.display = 'none';
+        overallBtn.style.display = 'inline-block';
+        clearOverallHtml();
+    });
+}
+
+function setupPurokChart() {
+  const purokLabels = {{ purok_data|map(attribute='purok')|list|tojson }};
+  const purokCounts = {{ purok_data|map(attribute='count')|list|tojson }};
+  const ctx1 = document.getElementById('barChart').getContext('2d');
+
+  const barChart = new Chart(ctx1, {
+      type: 'bar',
+      data: {
+          labels: purokLabels,
+          datasets: [{
+              label: 'Purok Count',
+              data: purokCounts,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+          }]
+      },
+      options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true } },
+          onClick: (event, elements) => {
+              if (elements.length > 0) {
+                  const index = elements[0].index;
+                  const label = purokLabels[index];
+                  const value = purokCounts[index];
+                  updateSidebarTitle('Purok Count');
+                  updateSidebarDetails(`<strong>Purok:</strong> ${label}<br><strong>Count:</strong> ${value}`);
+              }
+          }
+      }
+  });
+
+  // Handle Overall Data for Purok Count Chart
+  const overallDataSection = document.getElementById('barChartOverallData');
+  const overallBtn = document.getElementById('barChartOverallBtn');
+  const hideOverallBtn = document.getElementById('barChartHideOverallBtn');
+
+  overallBtn.addEventListener('click', () => {
+      let overallDataHtml = `<h3>Overall Purok Data:</h3><ul>`;
+      for (let i = 0; i < purokLabels.length; i++) {
+          overallDataHtml += `<li><strong>${purokLabels[i]}:</strong> ${purokCounts[i]}</li>`;
+      }
+      overallDataHtml += `</ul>`;
+      overallDataSection.innerHTML = overallDataHtml;
+      overallDataSection.style.display = 'block';
+      overallBtn.style.display = 'none';
+      hideOverallBtn.style.display = 'inline-block';
+  });
+
+  hideOverallBtn.addEventListener('click', () => {
+      overallDataSection.style.display = 'none';
+      overallBtn.style.display = 'inline-block';
+      hideOverallBtn.style.display = 'none';
+  });
+}
+
+function setupAgeGroupChart() {
+  const ageGroupData = {{ age_group_data | tojson }};
+  const purok = Object.keys(ageGroupData);
+  const ageGroups = [...new Set(Object.values(ageGroupData).flatMap(data => Object.keys(data || {})))];
+
+  const ageGroupDatasets = ageGroups.map((ageGroup, index) => {
+    const counts = purok.map(purok => Math.round(ageGroupData[purok]?.[ageGroup] || 0));
+    const colors = generateColor(index);
+    return {
+      label: ageGroup,
+      data: counts,
+      backgroundColor: colors.backgroundColor,
+      borderColor: colors.borderColor,
+      borderWidth: 1
+    };
+  });
+
+  // Generate distinct colors dynamically for both background and border
+  function generateColor(index) {
+    const backgroundRed = (index * 70 + 100) % 255;
+    const backgroundGreen = (index * 90 + 50) % 255;
+    const backgroundBlue = (index * 110 + 150) % 255;
+
+    const borderRed = (index * 50 + 50) % 255;
+    const borderGreen = (index * 60 + 100) % 255;
+    const borderBlue = (index * 90 + 200) % 255;
+
+    return {
+      backgroundColor: `rgba(${backgroundRed}, ${backgroundGreen}, ${backgroundBlue}, 0.6)`,
+      borderColor: `rgba(${borderRed}, ${borderGreen}, ${borderBlue}, 1)`
+    };
+  }
+
+  const ctx2 = document.getElementById('stackedBarChart').getContext('2d');
+  let stackedBarChart = createChart(false);
+
+  // Create or update the chart
+  function createChart(isStacked) {
+    return new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: purok,
+        datasets: ageGroupDatasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+        plugins: {
+          legend: { position: 'top' },
+          title: { display: true, text: 'Youth Age Group Count per Purok' }
+        },
+        scales: { 
+          x: { stacked: isStacked }, 
+          y: { stacked: isStacked, beginAtZero: true } 
+        }
+      }
+    });
+  }
+
+  // Toggle stacked/unstucked chart
+  const toggleStacked = document.getElementById('toggleStacked');
+  toggleStacked.addEventListener('change', (event) => {
+    const isStacked = event.target.checked;
+    stackedBarChart.destroy();  // Destroy the old chart
+    stackedBarChart = createChart(isStacked);  // Create the new chart
+  });
+
+  // Handle Overall Data for Age Group Chart
+  const overallDataSection = document.getElementById('stackedBarChartOverallData');
+  const overallBtn = document.getElementById('stackedBarChartOverallBtn');
+  const hideOverallBtn = document.getElementById('stackedBarChartHideOverallBtn');
+
+  overallBtn.addEventListener('click', () => {
+    let overallDataHtml = `<h3>Overall Age Group Data:</h3><ul>`;
+    ageGroups.forEach((ageGroup, index) => {
+      const total = stackedBarChart.data.datasets[index].data.reduce((sum, value) => sum + value, 0);
+      overallDataHtml += `<li><strong>${ageGroup}:</strong> ${total}</li>`;
+    });
+    overallDataHtml += `</ul>`;
+    overallDataSection.innerHTML = overallDataHtml;
+    overallDataSection.style.display = 'block';
+    overallBtn.style.display = 'none';
+    hideOverallBtn.style.display = 'inline-block';
+  });
+
+  hideOverallBtn.addEventListener('click', () => {
+    overallDataSection.style.display = 'none';
+    overallBtn.style.display = 'inline-block';
+    hideOverallBtn.style.display = 'none';
+  });
+}
+//voter status
+function setupVoterStatusChart() {
+  const voterStatusData = {{ voter_status_data | tojson }};
+  const puroks = Object.keys(voterStatusData); // Extract puroks from the nested dictionary
+  const voterStatuses = [...new Set(Object.values(voterStatusData).flatMap(data => Object.keys(data)))]; // Extract unique voter statuses
+
+  // Prepare datasets for Chart.js
+  const voterStatusDatasets = voterStatuses.map((status, index) => {
+    const counts = puroks.map(purok => voterStatusData[purok][status] || 0); // Get counts for each purok, default to 0 if missing
+    const colors = generateColor(index);
+
+    return {
+      label: status,
+      data: counts,
+      backgroundColor: colors.backgroundColor,
+      borderColor: colors.borderColor,
+      borderWidth: 1
+    };
+  });
+
+  // Generate distinct colors dynamically for both background and border
+  function generateColor(index) {
+    const backgroundRed = (index * 70 + 100) % 255;
+    const backgroundGreen = (index * 90 + 50) % 255;
+    const backgroundBlue = (index * 110 + 150) % 255;
+
+    const borderRed = (index * 50 + 50) % 255;
+    const borderGreen = (index * 60 + 100) % 255;
+    const borderBlue = (index * 90 + 200) % 255;
+
+    return {
+      backgroundColor: `rgba(${backgroundRed}, ${backgroundGreen}, ${backgroundBlue}, 0.6)`,
+      borderColor: `rgba(${borderRed}, ${borderGreen}, ${borderBlue}, 1)`
+    };
+  }
+
+  const ctx3 = document.getElementById('voter-stackedbar').getContext('2d');
+
+  let voterStatusChart = createChart(false);
+
+  // Create or update the chart
+  function createChart(isStacked) {
+    return new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: puroks, // Use Puroks as the labels for the x-axis
+        datasets: voterStatusDatasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+        plugins: {
+          legend: { position: 'top' },
+          title: { display: true, text: 'Voter Status Count by Purok' }
+        },
+        scales: { 
+          x: { stacked: isStacked }, 
+          y: { stacked: isStacked, beginAtZero: true } 
+        }
+      }
+    });
+  }
+
+  // Toggle stacked/unstucked chart
+  const toggleVoterStatusStacked = document.getElementById('toggleVoterStatusStacked');
+  toggleVoterStatusStacked.addEventListener('change', (event) => {
+    const isStacked = event.target.checked;
+    voterStatusChart.destroy();  // Destroy the old chart
+    voterStatusChart = createChart(isStacked);  // Create the new chart with the new stacking configuration
+  });
+
+  // Handle Overall Data for Voter Status Chart
+  const overallDataSection = document.getElementById('voterStatusOverallData');
+  const overallBtn = document.getElementById('voterStatusOverallBtn');
+  const hideOverallBtn = document.getElementById('voterStatusHideOverallBtn');
+
+  overallBtn.addEventListener('click', () => {
+    let overallDataHtml = `<h3>Overall Voter Status Data:</h3><ul>`;
+    voterStatuses.forEach((status, index) => {
+      const total = voterStatusChart.data.datasets[index].data.reduce((sum, value) => sum + value, 0);
+      overallDataHtml += `<li><strong>${status}:</strong> ${total}</li>`;
+    });
+    overallDataHtml += `</ul>`;
+    overallDataSection.innerHTML = overallDataHtml;
+    overallDataSection.style.display = 'block';
+    overallBtn.style.display = 'none';
+    hideOverallBtn.style.display = 'inline-block';
+  });
+
+  hideOverallBtn.addEventListener('click', () => {
+    overallDataSection.style.display = 'none';
+    overallBtn.style.display = 'inline-block';
+    hideOverallBtn.style.display = 'none';
+  });
+}
+
+  // gender Data
+  function setupGenderChart() {
+    // gender Data grouped by Purok from Flask
+    const genderData = {{ gender_data | tojson }};
+    
+    // Extract all unique puroks and gender
+    const puroks = Object.keys(genderData);
+    const gender = Array.from(new Set(
+      puroks.flatMap(purok => Object.keys(genderData[purok]))
+    ));
+    
+    // Organize data for Chart.js
+    const datasets = gender.map((gender, index) => ({
+      label: gender,
+      data: puroks.map(purok => genderData[purok][gender] || 0),
+      backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
+      borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
+      borderWidth: 1
+    }));
+    
+    // Render the Chart
+    const ctx = document.getElementById('genderstackedbar').getContext('2d');
+    let genderChart = createChart(false);  // Initial chart without stacking
+  
+    // Create or update the chart
+    function createChart(isStacked) {
+      return new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: puroks,
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+          plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            },
+            legend: {
+              display: true,
+              position: 'top'
+            }
+          },
+          scales: {
+            x: { stacked: isStacked },
+            y: { stacked: isStacked, beginAtZero: true }
+          }
+        }
+      });
+    }
+  
+    // Toggle stacked/unstucked chart
+    const toggleGenderStacked = document.getElementById('toggleGenderStacked');
+    toggleGenderStacked.addEventListener('change', (event) => {
+      const isStacked = event.target.checked;
+      genderChart.destroy();  // Destroy the old chart
+      genderChart = createChart(isStacked);  // Create the new chart with the new stacking configuration
+    });
+  
+    // Handle Overall Data for Gender Chart
+    const overallDataSection = document.getElementById('genderChartOverallData');
+    const overallBtn = document.getElementById('genderChartOverallBtn');
+    const hideOverallBtn = document.getElementById('genderChartHideOverallBtn');
+  
+    overallBtn.addEventListener('click', () => {
+      let overallDataHtml = `<h3>Overall Gender Data:</h3><ul>`;
+      gender.forEach((gender, index) => {
+        const total = genderChart.data.datasets[index].data.reduce((sum, value) => sum + value, 0);
+        overallDataHtml += `<li><strong>${gender}:</strong> ${total}</li>`;
+      });
+      overallDataHtml += `</ul>`;
+      overallDataSection.innerHTML = overallDataHtml;
+      overallDataSection.style.display = 'block';
+      overallBtn.style.display = 'none';
+      hideOverallBtn.style.display = 'inline-block';
+    });
+  
+    hideOverallBtn.addEventListener('click', () => {
+      overallDataSection.style.display = 'none';
+      overallBtn.style.display = 'inline-block';
+      hideOverallBtn.style.display = 'none';
+    });
+  }
+  
+
+
+// Function to set up the Youth Classification Chart
+function setupYouthClassificationChart() {
+  // youth classification Data grouped by Purok from Flask
+  const classificationData = {{ classification_data | tojson }};
+
+  // Extract all unique puroks and classification types
+  const puroks = Object.keys(classificationData);
+  const classification = Array.from(new Set(
+    puroks.flatMap(purok => Object.keys(classificationData[purok]))
+  ));
+
+  // Organize data for Chart.js
+  const datasets = classification.map((youth_classification, index) => ({
+    label: youth_classification,
+    data: puroks.map(purok => classificationData[purok][youth_classification] || 0),
+    backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
+    borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
+    borderWidth: 1
+  }));
+
+  // Render the Chart
+  const ctx = document.getElementById('youthClassificationbarChart').getContext('2d');
+  let youthClassificationChart = createChart(true);  // Initial chart with stacking enabled
+
+  // Create or update the chart
+  function createChart(isStacked) {
+    return new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: puroks,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+        plugins: {
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          },
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: { stacked: isStacked },
+          y: { stacked: isStacked, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Toggle stacked/unstucked chart
+  const toggleYouthClassificationStacked = document.getElementById('toggleYouthClassificationStacked');
+  toggleYouthClassificationStacked.addEventListener('change', (event) => {
+    const isStacked = event.target.checked;
+    youthClassificationChart.destroy();  // Destroy the old chart
+    youthClassificationChart = createChart(isStacked);  // Create the new chart with the new stacking configuration
+  });
+
+  // Handle Overall Data for Youth Classification Chart
+  const overallDataSection = document.getElementById('youthClassificationChartOverallData');
+  const overallBtn = document.getElementById('youthClassificationChartOverallBtn');
+  const hideOverallBtn = document.getElementById('youthClassificationChartHideOverallBtn');
+
+  overallBtn.addEventListener('click', () => {
+    let overallDataHtml = `<h3>Overall Youth Classification Data:</h3><ul>`;
+    classification.forEach((youth_classification, index) => {
+      const total = youthClassificationChart.data.datasets[index].data.reduce((sum, value) => sum + value, 0);
+      overallDataHtml += `<li><strong>${youth_classification}:</strong> ${total}</li>`;
+    });
+    overallDataHtml += `</ul>`;
+    overallDataSection.innerHTML = overallDataHtml;
+    overallDataSection.style.display = 'block';
+    overallBtn.style.display = 'none';
+    hideOverallBtn.style.display = 'inline-block';
+  });
+
+  hideOverallBtn.addEventListener('click', () => {
+    overallDataSection.style.display = 'none';
+    overallBtn.style.display = 'inline-block';
+    hideOverallBtn.style.display = 'none';
+  });
+}
+
+  
+// Function to set up the Work Status Chart
+function setupWorkStatusChart() {
+  // Work Status Data grouped by Purok from Flask
+  const workStatusData = {{ work_status_data | tojson }};
+
+  // Extract all unique puroks and work statuses
+  const puroks = Object.keys(workStatusData);
+  const workStatuses = Array.from(new Set(
+    puroks.flatMap(purok => Object.keys(workStatusData[purok]))
+  ));
+
+  // Organize data for Chart.js
+  const datasets = workStatuses.map((status, index) => ({
+    label: status,
+    data: puroks.map(purok => workStatusData[purok][status] || 0),
+    backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
+    borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
+    borderWidth: 1
+  }));
+
+  // Render the Chart
+  const ctx = document.getElementById('workStatusByPurokChart').getContext('2d');
+  let workStatusChart = createChart(true);  // Initial chart with stacking enabled
+
+  // Create or update the chart
+  function createChart(isStacked) {
+    return new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: puroks,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+        plugins: {
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          },
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: { stacked: isStacked },
+          y: { stacked: isStacked, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Toggle stacked/unstucked chart
+  const toggleWorkStatusStacked = document.getElementById('toggleWorkStatusStacked');
+  toggleWorkStatusStacked.addEventListener('change', (event) => {
+    const isStacked = event.target.checked;
+    workStatusChart.destroy();  // Destroy the old chart
+    workStatusChart = createChart(isStacked);  // Create the new chart with the new stacking configuration
+  });
+
+  // Handle Overall Data for Work Status Chart
+  const overallDataSection = document.getElementById('workStatusChartOverallData');
+  const overallBtn = document.getElementById('workStatusChartOverallBtn');
+  const hideOverallBtn = document.getElementById('workStatusChartHideOverallBtn');
+
+  overallBtn.addEventListener('click', () => {
+    let overallDataHtml = `<h3>Overall Work Status Data:</h3><ul>`;
+    workStatuses.forEach((status, index) => {
+      const total = workStatusChart.data.datasets[index].data.reduce((sum, value) => sum + value, 0);
+      overallDataHtml += `<li><strong>${status}:</strong> ${total}</li>`;
+    });
+    overallDataHtml += `</ul>`;
+    overallDataSection.innerHTML = overallDataHtml;
+    overallDataSection.style.display = 'block';
+    overallBtn.style.display = 'none';
+    hideOverallBtn.style.display = 'inline-block';
+  });
+
+  hideOverallBtn.addEventListener('click', () => {
+    overallDataSection.style.display = 'none';
+    overallBtn.style.display = 'inline-block';
+    hideOverallBtn.style.display = 'none';
+  });
+}
+
+
+// Function to set up the Vote Last Election Chart
+function setupVoteLastElectionChart() {
+  // Vote Last Election Data grouped by Purok from Flask
+  const voteLastElectionData = {{ vote_last_election_data | tojson }};
+  const puroks = Object.keys(voteLastElectionData);
+
+  // Extract all unique voting statuses across all puroks
+  const votingStatuses = [...new Set(
+    Object.values(voteLastElectionData).flatMap(data => Object.keys(data || {}))
+  )];
+
+  // Normalize data: ensure every purok has all voting statuses
+  puroks.forEach(purok => {
+    votingStatuses.forEach(status => {
+      if (!(status in voteLastElectionData[purok])) {
+        voteLastElectionData[purok][status] = 0; // Add missing statuses with default value 0
+      }
+    });
+  });
+
+  // Organize data for Chart.js
+  const datasets = votingStatuses.map((status, index) => ({
+    label: status,
+    data: puroks.map(purok => voteLastElectionData[purok][status]),
+    backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
+    borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
+    borderWidth: 1
+  }));
+
+  // Render the Chart
+  const ctx = document.getElementById('voteLastElectionChart').getContext('2d');
+  let voteLastElectionChart = createChart(false);  // Initial chart with stacking disabled
+
+  // Create or update the chart
+  function createChart(isStacked) {
+    return new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: puroks,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+        plugins: {
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          },
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: { stacked: isStacked },
+          y: { stacked: isStacked, beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  // Toggle stacked/unstucked chart
+  const toggleVoteLastElectionStacked = document.getElementById('toggleVoteLastElectionStacked');
+  toggleVoteLastElectionStacked.addEventListener('change', (event) => {
+    const isStacked = event.target.checked;
+    voteLastElectionChart.destroy();  // Destroy the old chart
+    voteLastElectionChart = createChart(isStacked);  // Create the new chart with the new stacking configuration
+  });
+
+  // Handle Overall Data for Vote Last Election Chart
+  const overallDataSection = document.getElementById('voteLastElectionChartOverallData');
+  const overallBtn = document.getElementById('voteLastElectionChartOverallBtn');
+  const hideOverallBtn = document.getElementById('voteLastElectionChartHideOverallBtn');
+
+  overallBtn.addEventListener('click', () => {
+    let overallDataHtml = `<h3>Overall Vote Last Election Data:</h3><ul>`;
+    votingStatuses.forEach((status, index) => {
+      const total = voteLastElectionChart.data.datasets[index].data.reduce((sum, value) => sum + value, 0);
+      overallDataHtml += `<li><strong>${status}:</strong> ${total}</li>`;
+    });
+    overallDataHtml += `</ul>`;
+    overallDataSection.innerHTML = overallDataHtml;
+    overallDataSection.style.display = 'block';
+    overallBtn.style.display = 'none';
+    hideOverallBtn.style.display = 'inline-block';
+  });
+
+  hideOverallBtn.addEventListener('click', () => {
+    overallDataSection.style.display = 'none';
+    overallBtn.style.display = 'inline-block';
+    hideOverallBtn.style.display = 'none';
+  });
+}
+
+  // Initialize both charts
+  setupPurokChart();
+  setupAgeGroupChart();
+  setupVoterStatusChart();
+  setupGenderChart();
+  setupYouthClassificationChart();
+  setupWorkStatusChart();
+  setupVoteLastElectionChart();
+                            </script>
+          
+
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+            </div>
+          </footer>
+          <!-- partial -->
+          
+        </div>
+        <!-- main-panel ends -->
+      </div>
+
+      </div>
+      
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js') }}"></script>
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ url_for('static', filename='assets/js/off-canvas.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/misc.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/todolist.js') }}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+<!--<script src="{{ url_for('static', filename='assets/js/chart.js') }}"></script>-->    
+    <!-- End custom js for this page -->
+  </body>
+</html>

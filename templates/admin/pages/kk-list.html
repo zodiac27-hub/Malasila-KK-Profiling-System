@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    .main-panel {
+      overflow-y: auto; /* Enables vertical scrolling */
+      height: 100vh; /* Adjust this value based on the height of your navbar */
+    }
+
+    .modal-content {
+      max-width: 100%; /* Ensures it adapts to the available width */
+  }
+  .modal-body {
+      padding: 20px;
+  }
+  .modal-dialog.modal-lg {
+      max-width: 900px; /* Larger container for landscape design */
+  }
+  .modal-body img {
+      display: block;
+      margin: 0 auto; /* Centers the profile picture */
+  }
+  .modal-body .container .row .col-md-4 {
+      margin-bottom: 10px;
+  }  
+ 
+/* Default logo size */
+.fixed-logo {
+  width: 60px; /* Large size */
+  transition: all 0.3s ease;
+  height: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Prevent stretching */
+  margin-top: 10px;
+
+}
+
+.fixed-logo-mini {
+  display: none; /* Hidden by default */
+  width: 20px; /* Small size */
+  transition: all 0.3s ease;
+}
+
+/* Sidebar collapsed state */
+.sidebar.sidebar-collapsed .fixed-logo {
+  display: none; /* Hide large logo */
+}
+
+.sidebar.sidebar-collapsed .fixed-logo-mini {
+  display: block; /* Show small logo */
+}
+
+.profile-name h5 {
+  white-space: nowrap; 
+  overflow: hidden;   
+  text-overflow: ellipsis;
+  font-size: .90rem;     
+  margin: 0;          
+  padding: 0;         
+}
+  </style>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Malasila KK Profiling</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- SweetAlert2 CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
+
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a class="fixed-logo" href="{{ url_for('static', filename='admin/index.html') }}" style="display: flex; align-items: center;">
+            <img class="fixed-logo" src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" style="margin-right: 8px;" />
+          </div>
+        <ul class="nav">
+          <li class="nav-item nav-category" style="margin-top:-50px; margin-bottom: -45px; line-height: .5; padding: 40px;">
+            <span class="nav-link">MALASILA KK PROFILING</span>
+          </li>
+          <!--<li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>-->
+          <li class="nav-item profile">
+            <div class="profile-desc">
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">{{ first_name }} {{ last_name }}</h5>
+                  <span>SK Secretary</span>
+                </div>
+              </div>
+              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+                <a href="{{ url_for('admin_account') }}" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('admin_index') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('sk_profiles') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">SK Officials</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('kk_list') }}" >
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">KK Members</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('charts') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-library-books"></i>
+              </span>
+              <span class="menu-title">Achievements</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-file"></i>
+              </span>
+              <span class="menu-title">Exports</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="{{ url_for('admin_index') }}"><img src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-calendar text-success"></i>
+                      </div>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle" src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">{{ first_name }} {{ last_name }}</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Log out</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+              <div class="page-header">
+                  <h3 class="page-title">KK Members List</h3>
+                  <nav aria-label="breadcrumb">
+                      <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="#">KK Members</a></li>
+                          <li class="breadcrumb-item active" aria-current="page">KK Members List</li>
+                      </ol>
+                      <!-- Notification Area -->
+                      <div id="notification" style="display: none;" class="alert" role="alert"></div>
+                    <!-- Modal -->
+                    
+                  </nav>
+              </div>
+      
+              <!-- Search and Filter Controls -->
+              <div class="row mb-3">
+                  <div class="col-md-6">
+                      <input type="text" id="searchBar" class="form-control" placeholder="Search by name">
+                  </div>
+                  <div class="col-md-3">
+                      <select id="voterStatusFilter" class="form-control">
+                          <option value="">All Voter Status</option>
+                          <option value="SK Voter">SK Voter</option>
+                          <option value="National Voter">National Voter</option>
+                          <option value="sk and national">Both SK Voter & National Voter</option>
+                          <option value="Not Registered">Not Registered</option>
+                      </select>
+                  </div>
+                  <div class="col mb-3">
+                    <select class="form-control" id="ageFilter">
+                        <option value="">All Ages</option>
+                        <option value="15-30">15-30 Years Old</option>
+                        <option value="31+">31 Years Old and Above</option>
+                    </select>
+                </div>
+                  <div class="col-md-3">
+                      <button id="exportButton" class="btn btn-primary">Export to PDF</button>
+                  </div>
+              </div>
+
+              <!-- Table -->
+              <div class="row">
+                  <div class="col-lg-12 grid-margin stretch-card">
+                      <div class="card">
+                          <div class="card-body">
+                              <p class="card-description">All Members</p>
+                              <div class="table-responsive">
+                                  <table class="table table-hover">
+                                      <thead>
+                                          <tr>
+                                              <th class="d-none">ID</th>
+                                              <th>Name</th>
+                                              <th class="d-none">Suffix</th>
+                                              <th>Birthday</th>
+                                              <th>Gender</th>
+                                              <th>Email</th>
+                                              <th>Phone</th>
+                                              <th>Purok</th>
+                                              <th class="d-none">Barangay</th>
+                                              <th class="d-none">Municipality</th>
+                                              <th class="d-none">Province</th>
+                                              <th class="d-none">Zipcode</th>
+                                              <th class="d-none">Civil Status</th>
+                                              <th class="d-none">Youth Classification</th>
+                                              <th class="d-none">Specific Needs</th>
+                                              <th class="d-none">Youth Age Group</th>
+                                              <th class="d-none">Work Status</th>
+                                              <th class="d-none">Educational Background</th>
+                                              <th>Voter Status</th>
+                                              <th class="d-none">Voted Last Election</th>
+                                              <th class="d-none">Attended KK Meeting</th>
+                                              <th class="d-none">Times Attended</th>
+                                              <th class="d-none">Reason Not Attended</th>
+                                              <th>Actions</th> <!-- Actions column -->
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          {% for user in users %}
+                                          <tr class="clickable-row" data-toggle="modal" data-target="#detailsModal" data-user='{{ user|tojson }}'>
+                                              <td class="d-none">{{ user['id'] }}</td>
+                                              
+                                              <td>{% if user['is_new'] %}
+                                                <span class="badge badge-success" style="font-size: 10px; padding: 2px 5px;">New</span>
+                                                {% endif %}
+                                                {{ user['first_name'] }} {{ user['middle_name'] }} {{ user['last_name'] }} </td>
+                                              <td class="d-none">{{ user['suffix'] }}</td>
+                                              <td>{{ user['birthday'] }}</td>
+                                              <td>{{ user['gender'] }}</td>
+                                              <td>{{ user['email'] }}</td>
+                                              <td>{{ user['phone'] }}</td>
+                                              <td>{{ user['purok'] }}</td>
+                                              <td class="d-none">{{ user['barangay'] }}</td>
+                                              <td class="d-none">{{ user['municipality'] }}</td>
+                                              <td class="d-none">{{ user['province'] }}</td>
+                                              <td class="d-none">{{ user['zipcode'] }}</td>
+                                              <td class="d-none">{{ user['civil_status'] }}</td>
+                                              <td class="d-none">{{ user['youth_classification'] }}</td>
+                                              <td class="d-none">{{ user['specific_needs'] }}</td>
+                                              <td class="d-none">{{ user['youth_age_group'] }}</td>
+                                              <td class="d-none">{{ user['work_status'] }}</td>
+                                              <td class="d-none">{{ user['educational_bg'] }}</td>
+                                              <td>{{ user['voter_status'] }}</td>
+                                              <td class="d-none">{{ user['vote_last_election'] }}</td>
+                                              <td class="d-none">{{ user['attended_kk'] }}</td>
+                                              <td class="d-none">{{ user['times_attended'] }}</td>
+                                              <td class="d-none">{{ user['reason_not_attended'] }}</td>
+                                              <td>
+                                                <!-- Menu Button -->
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ user['id'] }}" data-toggle="dropdown" aria-expanded="false">
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ user['id'] }}">
+                                                        <!-- Update Button -->
+                                                        <button class="dropdown-item" data-action="edit" data-toggle="modal" data-target="#editModal" data-user='{{ user|tojson }}'>
+                                                            Update
+                                                        </button><br>
+                                                        <button class="dropdown-item" data-action="delete" data-toggle="modal" data-target="#deleteModal" data-user='{{ user|tojson }}'>
+                                                          Delete
+                                                      </button>
+
+                                                        <!-- You can add more options here if needed -->
+                                                    </div>
+                                                </div>
+                                            </td>
+                                              
+                                          </tr>
+                                          {% endfor %}
+                                          <tr id="noResultsMessage" style="display:none;">
+                                              <td colspan="20" class="text-center">No results found</td>
+                                          </tr>
+                                      </tbody>
+                                      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              Are you sure you want to delete this profile?
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                              <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              
+
+<!-- Modal for Editing User Details -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editModalLabel">Update User Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+                          <!-- Notification Container -->
+<div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
+
+              <form id="updateUserForm">
+                  <input type="hidden" id="userId" name="id">
+                  
+                  <!-- Name Fields -->
+                  <div class="form-group">
+                      <label for="firstName">First Name</label>
+                      <input type="text" class="form-control" id="firstName" name="first_name">
+                  </div>
+                  <div class="form-group">
+                      <label for="middleName">Middle Name</label>
+                      <input type="text" class="form-control" id="middleName" name="middle_name">
+                  </div>
+                  <div class="form-group">
+                      <label for="lastName">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" name="last_name">
+                  </div>
+                  <div class="form-group">
+                      <label for="suffix">Suffix</label>
+                      <input type="text" class="form-control" id="suffix" name="suffix">
+                  </div>
+                  <div class="form-group">
+                      <label for="birthday">Birthday</label>
+                      <input type="date" class="form-control" id="birthday" name="birthday">
+                  </div>
+                  <div class="form-group">
+                      <label for="gender">Gender</label>
+                      <select class="form-control" id="gender" name="gender">
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Other">Other</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" id="email" name="email">
+                  </div>
+                  <div class="form-group">
+                      <label for="phone">Phone</label>
+                      <input type="text" class="form-control" id="phone" name="phone">
+                  </div>
+                  <div class="form-group">
+                      <label for="purok">Purok</label>
+                      <input type="text" class="form-control" id="purok" name="purok">
+                  </div>
+                  <div class="form-group">
+                      <label for="voterStatus">Voter Status</label>
+                      <select class="form-control" id="voterStatus" name="voter_status">
+                          <option value="National Voter">National Voter</option>
+                          <option value="SK Voter">SK Voter</option>
+                          <option value="Not Registered">Not Registered</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                      <label for="barangay">Barangay</label>
+                      <input type="text" class="form-control" id="barangay" name="barangay">
+                  </div>
+                  <div class="form-group">
+                      <label for="municipality">Municipality</label>
+                      <input type="text" class="form-control" id="municipality" name="municipality">
+                  </div>
+                  <div class="form-group">
+                      <label for="province">Province</label>
+                      <input type="text" class="form-control" id="province" name="province">
+                  </div>
+                  <div class="form-group">
+                      <label for="zipcode">Zipcode</label>
+                      <input type="text" class="form-control" id="zipcode" name="zipcode">
+                  </div>
+                  <div class="form-group">
+                      <label for="civilStatus">Civil Status</label>
+                      <select class="form-control" id="civilStatus" name="civil_status">
+                          <option value="Single"> Single</option>
+                          <option value="Married">Married</option>
+                          <option value="Divorced">Divorced</option>
+                      </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="youthClassification">Youth Classification</label>
+                    <select class="form-control" id="youthClassification" name="youth_classification">
+                      <option value="In School Youth">In School Youth</option>
+                      <option value="Out Of School Youth">Out of School Youth</option>
+                      <option value="Working Youth">Working Youth</option>
+                      <option value="Youth with Specific needs">Youth with Specific Needs</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specificNeeds">Specific Needs</label>
+                    <select class="form-control" id="specificNeeds" name="specific_needs">
+                        <option value="None">None</option>
+                        <option value="Person w/ Disability">Person w/ Disability</option>
+                        <option value="Children in Conflict w/ Laws">Children in Conflict w/ Laws</option>
+                        <option value="Indigenous People">Indigenous People</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="youthAgeGroup">Youth Age Group</label>
+                    <select class="form-control" id="youthAgeGroup" name="youth_age_group">
+                      <option value="Child Youth ">Child Youth (15-17 years old)</option>
+                      <option value="Core Youth">Core Youth (18-24 years old)</option>
+                      <option value="Young Adult">Young Adult (25-30 years old)</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="workStatus">Work Status</label>
+                    <select class="form-control" id="workStatus" name="work_status">
+                      <option value="Student">Student</option>
+                      <option value="Employed">Employed</option>
+                      <option value="Unemployed">Unemployed</option>
+                      <option value="Self Employed">Self Employed</option>
+                      <option value="Currently Looking">Currently looking for a job</option>
+                      <option value="Not Interested">Not interested looking for a job</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="educationalBg">Educational Background</label>
+                    <select class="form-control" id="educationalBg" name="educational_bg">
+                      <option value="Elementary Level">Elementary level</option>
+                      <option value="Elementary Grad">Elementary Grad</option>
+                      <option value="High School Level">High School Level</option>
+                      <option value="High School Grad">High School Grad</option>
+                      <option value="Vocational Grad">Vocational Grad</option>
+                      <option value="College Level">College Level</option>
+                      <option value="College Grad">College Grad</option>
+                      <option value="Vocational Grad">Vocational Grad</option>
+                      <option value="Master Level">Master Level</option>
+                      <option value="Master Grad">Master Grad</option>
+                      <option value="Doctorate Level">Doctorate Level</option>
+                      <option value="Doctorate Grad">Doctorate Grad</option>
+                  </select>
+                </div>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Custom JavaScript file for deletion logic -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Attach click event listener to delete buttons
+    document.querySelectorAll('[data-action="delete"]').forEach(function (button) {
+        button.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent triggering parent events
+            console.log('Delete button clicked');
+
+            // Parse the data-user attribute to get the user data
+            let user;
+            try {
+                user = JSON.parse(this.getAttribute('data-user')); // Parse the user data from the data-user attribute
+            } catch (error) {
+                console.error('Error parsing data-user attribute:', error);
+                return;
+            }
+
+            console.log('Fetched user data for deletion:', user);
+
+            // Open delete confirmation modal
+            $('#deleteModal').modal('show');
+
+            // Store the user ID for deletion (use the correct key for user ID)
+            document.getElementById('deleteButton').setAttribute('data-user-id', user.id_kkprofiles);  // Using id_kkprofiles
+        });
+    });
+
+    // Attach click event listener to the actual delete confirmation button
+    document.getElementById('deleteButton').addEventListener('click', function () {
+        const userId = this.getAttribute('data-user-id');  // Get the user ID from the data attribute
+        console.log('Deleting user with ID:', userId);
+
+        if (!userId) {
+            console.error("User ID is undefined. Deletion failed.");
+            return;
+        }
+
+        // Send AJAX request to delete user
+        fetch(`/delete_kkprofile/${userId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(responseData => {
+            console.log('Response received:', responseData); // Log response
+            if (responseData.status === "success") {
+                showSuccessNotification("Profile deleted successfully!"); // Show success notification
+                $('#deleteModal').modal('hide'); // Close the modal after deletion
+                // Optionally, remove the deleted row from the table (if applicable)
+                // document.querySelector(`tr[data-user-id='${userId}']`).remove(); // Example
+            } else {
+                showErrorNotification("Failed to delete profile: " + responseData.message); // Show error notification
+            }
+        })
+        .catch(error => {
+            console.error('Error in fetch request:', error); // Log fetch error
+            showErrorNotification("An error occurred while deleting the profile.");
+        });
+    });
+
+    // Function to show success notification using SweetAlert
+    function showSuccessNotification(message) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: message,
+            showConfirmButton: false,
+            timer: 2000,  // Notification will be automatically closed after 2 seconds
+        });
+    }
+
+    // Function to show error notification using SweetAlert
+    function showErrorNotification(message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: message,
+            confirmButtonText: 'OK',  // User has to click 'OK' to close the notification
+        });
+    }
+});
+  </script>
+
+<script>
+  
+document.addEventListener('DOMContentLoaded', function () {
+  // Attach click event listener to update button
+  document.querySelectorAll('[data-target="#editModal"]').forEach(function (button) {
+      button.addEventListener('click', function (event) {
+          event.stopPropagation(); // Prevent triggering parent events
+          console.log('Update button clicked'); // Log button click
+
+          let user;
+          try {
+              user = JSON.parse(this.getAttribute('data-user'));
+          } catch (error) {
+              console.error('Error parsing data-user attribute:', error);
+              return;
+          }
+
+          console.log('Fetched user data:', user);
+          const userId = user.id || user.id_kkprofiles || ''; // Handle different key names for ID
+          console.log('User ID:', userId);
+
+          // Populate the modal fields with the user data
+          document.getElementById('userId').value = userId || ''; // Use empty string as fallback
+          document.getElementById('firstName').value = user.first_name || '';
+          document.getElementById('middleName').value = user.middle_name || '';
+          document.getElementById('lastName').value = user.last_name || '';
+          document.getElementById('suffix').value = user.suffix || '';
+
+          let birthday = new Date(user.birthday);
+          let formattedBirthday = birthday.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+          document.getElementById('birthday').value = formattedBirthday || '';
+
+          document.getElementById('gender').value = user.gender || '';
+          document.getElementById('email').value = user.email || '';
+          document.getElementById('phone').value = user.phone || '';
+          document.getElementById('purok').value = user.purok || '';
+          document.getElementById('voterStatus').value = user.voter_status || '';
+          document.getElementById('barangay').value = user.barangay || '';
+          document.getElementById('municipality').value = user.municipality || '';
+          document.getElementById('province').value = user.province || '';
+          document.getElementById('zipcode').value = user.zipcode || '';
+          document.getElementById('civilStatus').value = user.civil_status || '';
+          document.getElementById('youthClassification').value = user.youth_classification || '';
+          document.getElementById('specificNeeds').value = user.specific_needs || '';
+          document.getElementById('youthAgeGroup').value = user.youth_age_group || '';
+          document.getElementById('workStatus').value = user.work_status || '';
+          document.getElementById('educationalBg').value = user.educational_bg || '';
+
+          // Log modal population completion
+          console.log('Modal fields populated with user data');
+
+          // Show the modal manually
+          $('#editModal').modal('show');
+      });
+  });
+
+  // Attach submit event listener to the form
+  document.getElementById('updateUserForm').addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent form submission
+      console.log('Save button clicked'); // Log save button click
+
+      // Collect form data into an object
+      const data = {
+          name: document.getElementById('firstName').value,
+          middlename: document.getElementById('middleName').value,
+          lastname: document.getElementById('lastName').value,
+          suffix: document.getElementById('suffix').value,
+          birthday: document.getElementById('birthday').value,
+          gender: document.getElementById('gender').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value,
+          purok: document.getElementById('purok').value,
+          barangay: document.getElementById('barangay').value,
+          municipality: document.getElementById('municipality').value,
+          province: document.getElementById('province').value,
+          zipcode: document.getElementById('zipcode').value,
+          civilStatus: document.getElementById('civilStatus').value,
+          youthClassification: document.getElementById('youthClassification').value,
+          'Specific Needs': document.getElementById('specificNeeds').value, // Note the key's capitalization
+          youthAgeGroup: document.getElementById('youthAgeGroup').value,
+          workStatus: document.getElementById('workStatus').value,
+          educationalbg: document.getElementById('educationalBg').value,
+          voterStatus: document.getElementById('voterStatus').value
+      };
+
+      console.log('Form Data:', data);
+
+      const userId = document.getElementById('userId').value; // Get the userId field value
+      console.log('User ID from form:', userId); // Log userId from the form
+
+// Send AJAX request to update user
+fetch(`/update_kk_profile/${userId}`, {
+  method: 'POST',
+  body: new URLSearchParams(data)  // Convert form data to URLSearchParams for submission
+})
+.then(response => {
+  console.log('Response received:', response); // Log raw response
+  return response.json();
+})
+.then(responseData => {
+  console.log('Parsed response data:', responseData); // Log parsed response data
+  if (responseData.status === "success") {
+      showSuccessNotification("Profile updated successfully!"); // Show success notification
+      $('#editModal').modal('hide');  // Close the modal after success
+  } else {
+      showErrorNotification("Failed to update profile: " + responseData.message); // Show error notification
+  }
+})
+.catch(error => {
+  console.error('Error in fetch request:', error); // Log fetch error
+  showErrorNotification("An error occurred while updating the profile.");
+});
+});
+
+// Function to show success notification using SweetAlert
+function showSuccessNotification(message) {
+Swal.fire({
+  icon: 'success',
+  title: 'Success!',
+  text: message,
+  showConfirmButton: false,
+  timer: 2000,  // Notification will be automatically closed after 2 seconds
+});
+}
+
+// Function to show error notification using SweetAlert
+function showErrorNotification(message) {
+Swal.fire({
+  icon: 'error',
+  title: 'Error!',
+  text: message,
+  confirmButtonText: 'OK',  // User has to click 'OK' to close the notification
+});
+}
+});</script>
+
+<!-- Modal -->
+              <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="detailsModalLabel">User Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Profile Picture and Details Section -->
+                            <div class="d-flex flex-column align-items-center">
+                                <img
+                                    src="https://www.w3schools.com/howto/img_avatar.png"
+                                    alt="Default Profile Picture"
+                                    class="rounded-circle mb-3"
+                                    style="width: 120px; height: 120px;"
+                                />
+                            </div>
+                            <!-- Details Section -->
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Name:</strong> <span id="user-name"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Suffix:</strong> <span id="user-suffix"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Birthday:</strong> <span id="user-bday"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Gender:</strong> <span id="user-gender"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Email:</strong> <span id="user-email"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Purok:</strong> <span id="user-purok"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Barangay:</strong> <span id="user-barangay"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Municipality:</strong> <span id="user-municipality"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Province:</strong> <span id="user-province"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Zipcode:</strong> <span id="user-zipcode"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Civil Status:</strong> <span id="user-civil-status"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Youth Classification:</strong> <span id="user-youth-classification"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Youth Age Group:</strong> <span id="user-youth-age-group"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Work Status:</strong> <span id="user-work-status"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Educational Background:</strong> <span id="user-educational-background"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Voter Status:</strong> <span id="user-voter-status"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Voted Last Election:</strong> <span id="user-vote-last-election"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Attended KK Assembly?:</strong> <span id="user-attended-kk"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>If yes, How many times?:</strong> <span id="user-times-attended"></span></p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+      
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.querySelector('.toggle-btn'); // Button to collapse sidebar
+            const sidebar = document.querySelector('#sidebar');
+    
+            toggleButton.addEventListener('click', () => {
+                sidebar.classList.toggle('sidebar-collapsed');
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const ageFilter = document.getElementById("ageFilter");
+          const searchBar = document.getElementById("searchBar");
+          const voterStatusFilter = document.getElementById("voterStatusFilter");
+          const rows = document.querySelectorAll("tbody tr.clickable-row");
+          const noResultsMessage = document.getElementById("noResultsMessage");
+      
+          // Function to calculate age from a given birthday
+          function calculateAge(birthday) {
+              const today = new Date();
+              const birthDate = new Date(birthday);
+              let age = today.getFullYear() - birthDate.getFullYear();
+              const monthDiff = today.getMonth() - birthDate.getMonth();
+              if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                  age--;
+              }
+              return age;
+          }
+      
+          // Function to filter rows based on age, search text, and voter status
+          function filterTable() {
+              const searchText = searchBar.value.toLowerCase().trim();
+              const voterStatusFilterValue = voterStatusFilter.value.toLowerCase().trim();
+              const ageFilterValue = ageFilter.value;
+              let visibleRows = 0;
+      
+              rows.forEach(row => {
+                  const birthday = row.querySelector("td:nth-child(4)").innerText.trim(); // Get birthday column text
+                  const name = row.querySelector("td:nth-child(2)").innerText.toLowerCase().trim(); // Name column
+                  const email = row.querySelector("td:nth-child(6)").innerText.toLowerCase().trim(); // Email column
+                  const voterStatus = row.querySelector("td:nth-child(19)").innerText.toLowerCase().trim(); // Voter Status column
+                  
+                  const age = calculateAge(birthday);
+      
+                  // Check if row matches age filter
+                  const matchesAge =
+                      ageFilterValue === "" || // Show all if no age filter selected
+                      (ageFilterValue === "15-30" && age >= 15 && age <= 30) || // Show 15-30 age group
+                      (ageFilterValue === "31+" && age >= 31); // Show 31+ age group
+      
+                  // Check if row matches search text
+                  const matchesSearch = name.includes(searchText) || email.includes(searchText);
+      
+                  // Check if row matches voter status filter
+                  let matchesVoterStatus = false;
+                  if (voterStatusFilterValue === "") {
+                      matchesVoterStatus = true; // No filter applied, show all
+                  } else if (voterStatusFilterValue === "sk and national") {
+                      matchesVoterStatus = voterStatus === "sk voter" || voterStatus === "national voter"; // Matches either SK or National Voter
+                  } else {
+                      matchesVoterStatus = voterStatus.includes(voterStatusFilterValue); // Matches exact voter status
+                  }
+      
+                  if (matchesAge && matchesSearch && matchesVoterStatus) {
+                      row.style.display = ""; // Show row
+                      visibleRows++;
+                  } else {
+                      row.style.display = "none"; // Hide row
+                  }
+              });
+      
+              // Show or hide the "No results" message
+              noResultsMessage.style.display = visibleRows === 0 ? "" : "none";
+          }
+      
+          // Event listeners for filtering
+          ageFilter.addEventListener("change", filterTable);
+          searchBar.addEventListener("input", filterTable);
+          voterStatusFilter.addEventListener("change", filterTable);
+      
+            // Helper function to format the date
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toISOString().split('T')[0]; // Extract only the date part in 'YYYY-MM-DD' format
+            }
+    
+            // Modal functionality for displaying user details
+            $('.clickable-row').on('click', function (event) {
+                // Ignore clicks on buttons or dropdowns within the row
+                if ($(event.target).closest('.dropdown-item').length) return;
+    
+                const user = $(this).data('user');
+                console.log('Viewing Details modal triggered for:', user);
+                const fullName = `${user['first_name']} ${user['middle_name']} ${user['last_name']} `.trim();
+    
+                // Populate details in the modal
+                $('#user-name').text(fullName);
+                $('#user-suffix').text(user['suffix']);
+                $('#user-bday').text(formatDate(user['birthday']));
+                $('#user-gender').text(user['gender']);
+                $('#user-email').text(user['email']);
+                $('#user-phone').text(user['phone']);
+                $('#user-purok').text(user['purok']);
+                $('#user-barangay').text(user['barangay']);
+                $('#user-municipality').text(user['municipality']);
+                $('#user-province').text(user['province']);
+                $('#user-zipcode').text(user['zipcode']);
+                $('#user-civil-status').text(user['civil_status']);
+                $('#user-youth-classification').text(user['youth_classification']);
+                $('#user-youth-age-group').text(user['youth_age_group']);
+                $('#user-work-status').text(user['work_status']);
+                $('#user-educational-background').text(user['educational_bg']);
+                $('#user-voter-status').text(user['voter_status']);
+                $('#user-vote-last-election').text(user['vote_last_election']);
+                $('#user-attended-kk').text(user['attended_kk']);
+                $('#user-times-attended').text(user['times_attended']);
+            });
+    
+            // Initially hide "No Results" message
+            $('#noResultsMessage').hide();
+        });
+    </script>
+<script>
+  $('#exportButton').on('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape', 'mm', 'legal'); // Landscape mode, legal paper size
+
+    const ageFilter = $('#ageFilter').val(); // Age filter
+    const voterTypeFilter = $('#voterStatusFilter').val(); // Voter type filter (e.g., SK or National)
+    const data = [];
+    const headers = [
+        'No.', 'Name', 'Gender', 'Civil Status', 'Email', 'Phone', 'Purok', 'Educational Background',
+        'Work Status', 'Voter Status', 'Age', 'Birthday', 'Voted Last Election?', 'Youth Age Group',
+        'Youth Classification', 'Attended KK Assembly?', 'If Yes, how many times?'
+    ];
+
+    // Function to calculate age from birthday
+    function calculateAge(birthday) {
+        const today = new Date();
+        const birthDate = new Date(birthday);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    }
+
+    // Collect data based on filters
+    $('tbody tr.clickable-row').each(function () {
+        const row = $(this);
+        const birthday = row.find('td:nth-child(4)').text().trim();
+        const age = calculateAge(birthday);
+        const voter_status = row.find('td:nth-child(19)').text().toLowerCase().trim();
+
+        // Apply age filter
+        const matchesAge = 
+            ageFilter === "" || // Show all if no age filter selected
+            (ageFilter === "15-30" && age >= 15 && age <= 30) || // Show 15-30 age group
+            (ageFilter === "31+" && age >= 31); // Show 31+ age group
+
+        // Apply voter status filter (including "SK and National" option)
+        let matchesVoterStatus = false;
+        if (voterTypeFilter === "" || voterTypeFilter.toLowerCase() === "sk and national") {
+            matchesVoterStatus = voter_status === "sk voter" || voter_status === "national voter"; // Matches either SK or National Voter
+        } else {
+            matchesVoterStatus = voter_status.includes(voterTypeFilter.toLowerCase()); // Exact match for specific voter status
+        }
+
+        // Add to data if the row matches both filters (age and voter status)
+        if (matchesAge && matchesVoterStatus) {
+            const rowData = [
+                data.length + 1, // Row number
+                row.find('td:nth-child(2)').text().trim(), // Name
+                row.find('td:nth-child(5)').text().trim(), // Gender
+                row.find('td:nth-child(13)').text().trim(), // Civil Status
+                row.find('td:nth-child(6)').text().trim(), // Email
+                row.find('td:nth-child(7)').text().trim(), // Phone
+                row.find('td:nth-child(8)').text().trim(), // Purok
+                row.find('td:nth-child(18)').text().trim(), // Educational Background
+                row.find('td:nth-child(17)').text().trim(), // Work Status
+                voter_status, // Voter Status
+                age, // Age
+                birthday, // Birthday
+                row.find('td:nth-child(20)').text().trim(), // Voted Last Election?
+                row.find('td:nth-child(16)').text().trim(), // Youth Age Group
+                row.find('td:nth-child(14)').text().trim(), // Youth Classification
+                row.find('td:nth-child(21)').text().trim(), // Attended KK Assembly?
+                row.find('td:nth-child(22)').text().trim()  // If Yes, how many times?
+            ];
+            data.push(rowData);
+        }
+    });
+
+    // Now handle non-registered users aged 15-30, without duplicating any of them
+    $('tbody tr.clickable-row').each(function () {
+        const row = $(this);
+        const birthday = row.find('td:nth-child(4)').text().trim();
+        const age = calculateAge(birthday);
+        const voter_status = row.find('td:nth-child(19)').text().toLowerCase().trim();
+
+        // Check if the user is in the 15-30 age group and is non-registered
+        const isNonRegistered = (voter_status === "" || voter_status === "not registered");
+        if (age >= 15 && age <= 30 && isNonRegistered) {
+            // Prevent duplication by checking if this row is already added
+            const name = row.find('td:nth-child(2)').text().trim();
+            const alreadyAdded = data.some(rowData => rowData[1] === name); // Check if name already exists in the data array
+
+            if (!alreadyAdded) {
+                const rowData = [
+                    data.length + 1, // Row number
+                    name, // Name
+                    row.find('td:nth-child(5)').text().trim(), // Gender
+                    row.find('td:nth-child(13)').text().trim(), // Civil Status
+                    row.find('td:nth-child(6)').text().trim(), // Email
+                    row.find('td:nth-child(7)').text().trim(), // Phone
+                    row.find('td:nth-child(8)').text().trim(), // Purok
+                    row.find('td:nth-child(18)').text().trim(), // Educational Background
+                    row.find('td:nth-child(17)').text().trim(), // Work Status
+                    voter_status, // Voter Status
+                    age, // Age
+                    birthday, // Birthday
+                    row.find('td:nth-child(20)').text().trim(), // Voted Last Election?
+                    row.find('td:nth-child(16)').text().trim(), // Youth Age Group
+                    row.find('td:nth-child(14)').text().trim(), // Youth Classification
+                    row.find('td:nth-child(21)').text().trim(), // Attended KK Assembly?
+                    row.find('td:nth-child(22)').text().trim()  // If Yes, how many times?
+                ];
+                data.push(rowData);
+            }
+        }
+    });
+
+    if (data.length === 0) {
+        alert('No data to export for the selected filter!');
+        return;
+    }
+
+    // Set title based on filters
+    let title = '';
+    if (voterTypeFilter.toLowerCase() === "sk voter" && ageFilter === "15-30") {
+        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (SK Voters)';
+    } else if (voterTypeFilter.toLowerCase() === "national voter" && ageFilter === "15-30") {
+        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (National Voters)';
+    } else if (voterTypeFilter.toLowerCase() === "sk and national" && ageFilter === "15-30") {
+        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (SK and National Voters)';
+    } else if (voterTypeFilter.toLowerCase() === "not registered" && ageFilter === "15-30") {
+        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (Not Registered, Ages 15-30)';
+    } else {
+        title = 'Katipunan ng Kabataan Youth Profile';
+    }
+
+    // Set title in PDF
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text(title, 180, 80, { align: 'center' });
+
+    // Add Barangay details
+    const barangayDetails = `
+        Barangay: Malasila
+        Municipality: Makilala
+        Province: North Cotabato
+        Zipcode: 9401
+        Instructions:
+        Dear SK Officials,
+
+        Congratulations for being elected as primary movers in youth development in your locality. The fundamental purpose of youth profiling is to be able to come up with a complete list of all youth ages 15-30 years old in your respective barangay. The said data gathering also aims to come up with relevant interventions through programs and projects based on the profiles of the youth in the area and identified issues and recommendations.
+    `;
+    const wrappedDetails = doc.splitTextToSize(barangayDetails, 280);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(wrappedDetails, 10, 10);
+
+    // Add table using autoTable
+    doc.autoTable({
+        head: [headers],
+        body: data,
+        startY: 90,
+        theme: 'grid',
+        headStyles: { fillColor: [0, 102, 204], textColor: [255, 255, 255], fontSize: 8 },
+        styles: { fontSize: 8, cellPadding: 3 },
+        margin: { top: 10, left: 10, right: 10 },
+    });
+
+    // Send to backend
+    const pdfBlob = doc.output('blob');
+    const formData = new FormData();
+    formData.append('pdf_file', pdfBlob, title + '.pdf');
+    formData.append('report_name', title);
+
+    fetch('/save_pdf', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('PDF exported and saved successfully!');
+            } else {
+                alert('Failed to save the PDF.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while saving the PDF.');
+        });
+
+    // Save the PDF locally
+    doc.save(title + '.pdf');
+});
+</script>
+      <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js') }}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ url_for('static', filename='assets/js/off-canvas.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/misc.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/todolist.js') }}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- End custom js for this page -->
+  </body>
+</html>

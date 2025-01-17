@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    .fixed-logo {
+      width: 60px; /* Set your desired width */
+      height: auto; /* Maintain aspect ratio */
+      object-fit: contain; /* Prevent stretching */
+      margin-top: 10px;
+    }
+    .main-panel {
+      overflow-y: auto; /* Enables vertical scrolling */
+      height: 100vh; /* Adjust this value based on the height of your navbar */
+    }
+    .modal-content {
+      max-width: 100%; /* Ensures it adapts to the available width */
+  }
+  .modal-body {
+      padding: 20px;
+  }
+  .modal-dialog.modal-lg {
+      max-width: 900px; /* Larger container for landscape design */
+  }
+  .modal-body img {
+      display: block;
+      margin: 0 auto; /* Centers the profile picture */
+  }
+  .modal-body .container .row .col-md-4 {
+      margin-bottom: 10px;
+  }  
+
+  </style>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Malasila KK Profiling</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a class="fixed-logo" href="{{ url_for('static', filename='admin/index.html') }}" style="display: flex; align-items: center;">
+            <img class="fixed-logo" src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" style="margin-right: 8px;" />
+          </div>
+        <ul class="nav">
+          <li class="nav-item nav-category" style="margin-top:-50px; margin-bottom: -45px; line-height: .5; padding: 40px;">
+            <span class="nav-link">MALASILA KK PROFILING</span>
+          </li>
+          <!--<li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>-->
+          <li class="nav-item profile">
+            <div class="profile-desc">
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">{{ first_name }} {{ last_name }}</h5>
+                  <span>SK Secretary</span>
+                </div>
+              </div>
+              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+                <a href="{{ url_for('admin_account') }}" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('admin_index') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+         
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('sk_profiles') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">SK Officials</span>
+            </a>
+            <li class="nav-item menu-items">
+              <a class="nav-link" href=" {{ url_for('kk_list') }}">
+                <span class="menu-icon">
+                  <i class="mdi mdi-account-multiple-outline"></i>
+                </span>
+                <span class="menu-title">KK Members</span>
+              </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('charts') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-library-books"></i>
+              </span>
+              <span class="menu-title">Achievements</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('export') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-file"></i>
+              </span>
+              <span class="menu-title">Exports</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="{{ url_for('admin_index') }}"><img src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                  </a>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">{{ first_name }} {{ last_name }}</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Log out</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Account Settings </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Account Settings</a></li>
+                </ol>
+              </nav>
+            </div>
+
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Account Information</h4>
+                  <form class="forms-sample" method="POST" action="/admin/pages/account.html">
+                    <div class="form-group row">
+                      <label for="username" class="col-sm-3 col-form-label">Username</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="username" name="username" value="{{ username }}" readonly>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="email" class="col-sm-3 col-form-label">Email</label>
+                      <div class="col-sm-9">
+                        <input type="email" class="form-control" id="email" name="email" value="{{ email }}">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="first_name" class="col-sm-3 col-form-label">Firstname</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ first_name }}">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="last_name" class="col-sm-3 col-form-label">Lastname</label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ last_name }}">
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Change Password</h4>
+                  <form class="forms-sample" method="POST" action="/admin/pages/account.html">
+                    <div class="form-group row">
+                      <label for="email" class="col-sm-3 col-form-label">Email</label>
+                      <div class="col-sm-9">
+                        <input type="email" class="form-control" id="email" name="email" value="{{ email }}">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label for="password" class="col-sm-3 col-form-label">Password</label>
+                      <div class="col-sm-9">
+                        <input type="password" class="form-control" id="password" name="password" value="{{ password }}">
+                      </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary mr-2">Send</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            
+
+          
+          <!-- JavaScript for Sorting -->
+          <!-- Include SweetAlert2 CSS and JS -->
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>      
+          
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Malasila Profiling System 2024</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js') }}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ url_for('static', filename='assets/js/off-canvas.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/misc.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/todolist.js') }}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- End custom js for this page -->
+  </body>
+</html>

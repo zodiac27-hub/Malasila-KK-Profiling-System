@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    /* light-mode.css */
+    body {
+      background-color: white;
+      color: black;
+    }
+    .navbar {
+      background-color: #f8f9fa; /* Light background for navbar */
+    }
+    .card {
+      background-color: #ffffff; /* Light background for cards */
+      border: 1px solid #dee2e6; /* Light border */
+    }
+    body.light-mode {
+      background-color: white;
+      color: black;
+    }
+    body.light-mode .navbar  {
+      background-color: #f8f9fa;
+      color: black;
+    }
+
+    body.light-mode .sidebar {
+      background-color: #f8f9fa;
+    }
+
+    body.light-mode .sidebar .sidebar-brand-wrapper{
+      background-color: #f8f9fa;
+      }
+      
+    body.light-mode .card {
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+
+    }
+    body.light-mode .card-title {
+      background-color: #ffffff;
+      color: black;
+    }
+
+    body.light-mode .content-wrapper {
+      background-color: #cccc;
+    }
+    body.light-mode .navbar .navbar-menu-wrapper .search input{
+      background-color: #cccc;
+      border: #ffffff;
+    }
+
+    body.light-mode .navbar .navbar-menu-wrapper .navbar-nav.navbar-nav-right{
+      color: black}
+
+    #toggle-mode {
+      position: absolute;
+
+      background-color: #007bff;
+      color: white;
+      border: 1px solid #00151f;
+      top: 25px;
+      right: 355px;
+      width: 46px;
+      height: 20px;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #toggle-mode:hover {
+      background-color: #0056b3;
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+      border: 1px solid #0056b3;
+    }
+    .fixed-logo {
+      width: 60px; /* Set your desired width */
+      height: auto; /* Maintain aspect ratio */
+      object-fit: contain; /* Prevent stretching */
+      margin-top: 10px;
+    }
+
+        .main-panel {
+          overflow-y: auto; /* Enables vertical scrolling */
+          height: 100vh; /* Adjust this value based on the height of your navbar */
+        }
+      
+        .profile-name h5 {
+          white-space: nowrap; 
+          overflow: hidden;   
+          text-overflow: ellipsis;
+          font-size: .90rem;     
+          margin: 0;          
+          padding: 0;         
+      }
+      
+  </style>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Malasila KK Profiling System</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/jvectormap/jquery-jvectormap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/owl-carousel-2/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/owl-carousel-2/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+       <!-- End layout styles -->
+       <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a class="fixed-logo" href="{{ url_for('static', filename='admin/index.html') }}" style="display: flex; align-items: center;">
+            <img class="fixed-logo" src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" style="margin-right: 8px;" />
+          </div>
+        <ul class="nav">
+          <li class="nav-item nav-category" style="margin-top:-50px; margin-bottom: -45px; line-height: .5; padding: 40px;">
+            <span class="nav-link">MALASILA KK PROFILING</span>
+          </li>
+          <!--<li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>-->
+          <li class="nav-item profile">
+            <div class="profile-desc">
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">
+                    {{ first_name }} {{ last_name }}
+                </h5>
+                <span>SK Secretary</span>
+                </div>
+              </div>
+              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+                <a href="{{ url_for('admin_account') }}" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('admin_index') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('sk_profiles') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">SK Officials</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('kk_list') }}" >
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">KK Members</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('charts') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-library-books"></i>
+              </span>
+              <span class="menu-title">Achievements</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('export') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-file"></i>
+              </span>
+              <span class="menu-title">Exports</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="{{ url_for('admin_index') }}"><img src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+
+            <button id="toggle-mode">
+          </button>
+          
+            <ul class="navbar-nav navbar-nav-right">
+
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle" src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">{{ first_name }} {{ last_name }}</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1" id="logoutButton">Log out</p>
+                    </div>
+                  </a> 
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+          
+            <div class="row">
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h2 class="mb-0">{{ dashboard_data.total_kk_members }}</h2>
+                          <span class="text-success ml-2 font-weight-bold">+{{ dashboard_data.new_members_today }}</span>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success">
+                          <span class="mdi mdi-account-multiple"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Total KK Members</h6>
+                  </div>
+                </div>
+              </div>              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h2 class="mb-0">{{ dashboard_data.child_youth }}</h2>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success">
+                          <span class="mdi mdi-account-multiple"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Child Youth</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h2 class="mb-0">{{ dashboard_data.core_youth }}</h2>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success">
+                          <span class="mdi mdi-account-multiple"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Core Youth</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h2 class="mb-0">{{ dashboard_data.young_adult }}</h2>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <span class="mdi mdi-account-multiple"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Young Adult</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Gender</h4>
+                    <canvas id="transaction-history" class="transaction-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Voter Status</h4>
+                    <canvas id="voter-chart" class="transaction-chart"></canvas>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Youth Classification</h4>
+                    <canvas id="youth-chart" class="transaction-chart"></canvas>                    
+                  </div>
+                </div>
+              </div>
+
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script>
+                const toggleButton = document.getElementById('toggle-mode');
+                toggleButton.addEventListener('click', () => {
+                    document.body.classList.toggle('light-mode');
+                });
+
+
+
+                        // Fetch the gender data passed from the backend
+                        const genderData = {{ gender_data | tojson }};
+                        
+                        // Prepare the data for the chart
+                        const labels = Object.keys(genderData);
+                        const data = Object.values(genderData);
+                    
+                        // Create the donut chart
+                        var ctx = document.getElementById('transaction-history').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Gender Distribution',
+                                    data: data,
+                                    backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56'],  // Customize your colors here
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                        labels: {
+                                          usePointStyle: true, // Make legend markers circular
+                                          pointStyle: 'rect'
+                                      }
+                                  },                                    tooltip: {
+                                        callbacks: {
+                                            label: function(tooltipItem) {
+                                                return tooltipItem.label + ': ' + tooltipItem.raw + ' users';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                        // Voter Status Data
+              const voterData = {{ voter_data | tojson }};
+              const voterLabels = Object.keys(voterData);
+              const voterValues = Object.values(voterData);
+
+              var voterCtx = document.getElementById('voter-chart').getContext('2d');
+              var voterChart = new Chart(voterCtx, {
+                  type: 'doughnut',
+                  data: {
+                      labels: voterLabels,
+                      datasets: [{
+                          label: 'Voter Status',
+                          data: voterValues,
+                          backgroundColor: ['#4caf50', '#f44336', '#ffcd56'], // Example: green for voted, red for not voted
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
+                      responsive: true,
+                      plugins: {
+                          legend: { position: 'top' ,
+                          labels: {
+                            usePointStyle: true, // Make legend markers circular
+                            pointStyle: 'rect'
+                        }
+                    },
+                          
+                          tooltip: {
+                              callbacks: {
+                                  label: function(tooltipItem) {
+                                      return tooltipItem.label + ': ' + tooltipItem.raw + ' users';
+                                  }
+                              }
+                          }
+                      }
+                  }
+              });
+
+              // Youth Classification Data
+              const youthData = {{ classification_data | tojson }};
+              const youthLabels = Object.keys(youthData);
+              const youthValues = Object.values(youthData);
+
+              var youthCtx = document.getElementById('youth-chart').getContext('2d');
+              var youthChart = new Chart(youthCtx, {
+                  type: 'doughnut',
+                  data: {
+                      labels: youthLabels,
+                      datasets: [{
+                          label: 'Youth Classification',
+                          data: youthValues,
+                          backgroundColor: ['#8e44ad', '#3498db', '#f1c40f', '#f44336', '#4caf50'], // Customize colors
+                          borderWidth: 1
+                      }]
+                  },
+                  options: {
+                      responsive: true,
+                      plugins: {
+                          legend: { position: 'top',
+                          labels: {
+                            usePointStyle: true, // Make legend markers circular
+                            pointStyle: 'rect'
+                        }
+                    },
+                          tooltip: {
+                              callbacks: {
+                                  label: function(tooltipItem) {
+                                      return tooltipItem.label + ': ' + tooltipItem.raw + ' users';
+                                  }
+                              }
+                          }
+                      }
+                  }
+              });
+
+              document.getElementById('logoutButton').addEventListener('click', function() {
+                  window.location.href = '/admin/pages/samples/login.html'; // Replace with the actual login page URL
+              });        
+              </script>    
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Malasila KK Profiling System 2024</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js') }}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="{{ url_for('static', filename='assets/vendors/progressbar.js/progressbar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendors/jvectormap/jquery-jvectormap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='assets/vendors/owl-carousel-2/owl.carousel.min.js') }}"></script>
+
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ url_for('static', filename='assets/js/off-canvas.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/misc.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/todolist.js') }}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="{{ url_for('static', filename='assets/js/dashboard.js') }}"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

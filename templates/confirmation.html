@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation Page</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Fonts (Roboto) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB CSS -->
+    <link rel="stylesheet" href="/static/css/mdb.min.css" />
+    <style>
+        /* Gradient custom color scheme */
+        .gradient-custom {
+            background: #009688; /* Fallback for old browsers */
+            background: -webkit-linear-gradient(to bottom right, rgba(0, 150, 136, 1), rgba(76, 175, 80, 1)); /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to bottom right, rgba(0, 150, 136, 1), rgba(76, 175, 80, 1)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="gradient-custom">
+    <div class="container py-5 h-100">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col-12 col-lg-9 col-xl-7">
+                <div class="card shadow-2-strong" style="border-radius: 15px;">
+                    <div class="card-body p-4 p-md-5">
+                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 text-center">Thank You for Registering!</h3>
+                        <p class="text-center">
+                            Dear <strong>{{ name }}</strong>,<br>
+                            Your registration has been successfully submitted. We will contact you soon for further details.<br>
+                            <br>
+                            If you have any questions, feel free to reach out to us at <a href="mailto:example@example.com">example@example.com</a>.
+                        </p>
+                        <p class="text-center mt-4">
+                            To view your profile, please log in using your username.
+                        </p>
+                        <div class="text-center mt-4">
+                            <a href="{{ url_for('index') }}">
+                                <button class="btn btn-primary btn-lg">Login</button>
+                            </a>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="/" class="btn btn-secondary btn-lg">Go Back to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

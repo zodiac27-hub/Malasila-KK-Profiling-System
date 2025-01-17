@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .main-panel {
+          overflow-y: auto; /* Enables vertical scrolling */
+          height: 100vh; /* Adjust this value based on the height of your navbar */
+        }
+      </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Modern Styling -->
+    <style>
+        body {
+            background: linear-gradient(to right, #4CAF50, #2F8D46); /* Green Gradient Background */
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .container h2 {
+            text-align: center;
+            color: #444;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+            border-bottom: 3px solid #0077b6;
+            padding-bottom: 10px;
+        }
+
+        .profile-pic {
+            display: block;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #e0e0e0;
+            background-image: url('https://www.w3schools.com/w3images/avatar2.png');
+            background-size: cover;
+            background-position: center;
+            border: 3px solid #0077b6;
+        }
+
+        .profile-details {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .profile-details p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-details p:hover {
+            background-color: #f1f1f1;
+        }
+
+        .profile-details strong {
+            color: #444;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background-color: #0077b6;
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .btn-back:hover {
+            background-color: #005f8a;
+            transform: translateY(-2px);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .container h2 {
+                font-size: 1.6rem;
+            }
+
+            .btn-back {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+
+            .profile-pic {
+                width: 100px;
+                height: 100px;
+            }
+
+            .profile-details p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Extra Small Devices */
+        @media (max-width: 576px) {
+            .container h2 {
+                font-size: 1.4rem;
+            }
+
+            .profile-pic {
+                width: 90px;
+                height: 90px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Logout Dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a class="dropdown-item" href="{{ url_for('edit_profile') }}">Edit Details</a></li> <!-- Added Edit Details -->
+            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div class="profile-pic"></div>
+
+        <h2>Your Profile Details</h2>
+        <div class="profile-details">
+            <p><strong>First Name:</strong> {{ user[1] }}</p>
+            <p><strong>Middle Name:</strong> {{ user[2] }}</p>
+            <p><strong>Last Name:</strong> {{ user[3] }}</p>
+            <p><strong>Suffix:</strong> {{ user[4] }}</p>
+            <p><strong>Birthday:</strong> {{ user[5] }}</p>
+            <p><strong>Gender:</strong> {{ user[6] }}</p>
+            <p><strong>Email:</strong> {{ user[7] }}</p>
+            <p><strong>Phone Number:</strong> {{ user[8] }}</p>
+            <p><strong>Purok:</strong> {{ user[9] }}</p>
+            <p><strong>Barangay:</strong> {{ user[10] }}</p>
+            <p><strong>Municipality:</strong> {{ user[11] }}</p>
+            <p><strong>Province:</strong> {{ user[12] }}</p>
+            <p><strong>Zipcode:</strong> {{ user[13] }}</p>
+            <p><strong>Civil Status:</strong> {{ user[14] }}</p>
+            <p><strong>Youth Classification:</strong> {{ user[15] }}</p>
+            <p><strong>Specific Needs:</strong> {{ user[16] }}</p>
+            <p><strong>Youth Age Group:</strong> {{ user[17] }}</p>
+            <p><strong>Work Status:</strong> {{ user[18] }}</p>
+            <p><strong>Educational Background:</strong> {{ user[19] }}</p>
+            <p><strong>Voter Status:</strong> {{ user[20] }}</p>
+            <p><strong>Did you vote last election:</strong> {{ user[21] }}</p>
+            <p><strong>Attended KK:</strong> {{ user[22] }}</p>
+            <p><strong>Times Attended:</strong> {{ user[23] }}</p>
+            <p><strong>Reason for not attending:</strong> {{ user[24] }}</p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 Classic Profile Interface. All Rights Reserved.
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

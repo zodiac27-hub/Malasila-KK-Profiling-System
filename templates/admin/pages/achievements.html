@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+      /* light-mode.css */
+      body {
+        background-color: white;
+        color: black;
+      }
+      .navbar {
+        background-color: #f8f9fa; /* Light background for navbar */
+      }
+      .card {
+        background-color: #ffffff; /* Light background for cards */
+        border: 1px solid #dee2e6; /* Light border */
+      }
+      body.light-mode {
+        background-color: white;
+        color: black;
+      }
+      body.light-mode .navbar  {
+        background-color: #f8f9fa;
+        color: black;
+      }
+  
+      body.light-mode .sidebar {
+        background-color: #f8f9fa;
+      }
+  
+      body.light-mode .sidebar .sidebar-brand-wrapper{
+        background-color: #f8f9fa;
+        }
+        
+      body.light-mode .card {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+  
+      }
+      body.light-mode .card-title {
+        background-color: #ffffff;
+        color: black;
+      }
+  
+      body.light-mode .content-wrapper {
+        background-color: #cccc;
+      }
+      body.light-mode .navbar .navbar-menu-wrapper .search input{
+        background-color: #cccc;
+        border: #ffffff;
+      }
+  
+      body.light-mode .navbar .navbar-menu-wrapper .navbar-nav.navbar-nav-right{
+        color: black}
+  
+      #toggle-mode {
+        position: absolute;
+  
+        background-color: #007bff;
+        color: white;
+        border: 1px solid #00151f;
+        top: 25px;
+        right: 355px;
+        width: 46px;
+        height: 20px;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+  
+      #toggle-mode:hover {
+        background-color: #0056b3;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        border: 1px solid #0056b3;
+      }
+      .fixed-logo {
+        width: 60px; /* Set your desired width */
+        height: auto; /* Maintain aspect ratio */
+        object-fit: contain; /* Prevent stretching */
+        margin-top: 10px;
+      }
+  
+          .main-panel {
+            overflow-y: auto; /* Enables vertical scrolling */
+            height: 100vh; /* Adjust this value based on the height of your navbar */
+          }
+        
+        .modern-card {
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    .modern-card .card-body {
+      padding: 2rem;
+    }
+    
+    .horizontal-line {
+      height: 2px;
+      background-color: #000;
+      margin: 2rem 0;
+    }
+    
+    .modern-card .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+    
+    .modern-card .card-text {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .modern-card .text-muted {
+      font-weight: bold;
+    }
+    
+    .icon-md {
+      font-size: 3rem;
+    }
+    .achievement-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    
+    .achievement-card:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .profile-name h5 {
+      white-space: nowrap; 
+      overflow: hidden;   
+      text-overflow: ellipsis;
+      font-size: .90rem;     
+      margin: 0;          
+      padding: 0;         
+  }
+    
+  </style>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Malasila KK Profiling</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a class="fixed-logo" href="{{ url_for('static', filename='admin/index.html') }}" style="display: flex; align-items: center;">
+            <img class="fixed-logo" src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" style="margin-right: 8px;" />
+          </div>
+        <ul class="nav">
+          <li class="nav-item nav-category" style="margin-top:-50px; margin-bottom: -45px; line-height: .5; padding: 40px;">
+            <span class="nav-link">MALASILA KK PROFILING</span>
+          </li>
+          <!--<li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>-->
+          <li class="nav-item profile">
+            <div class="profile-desc">
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">{{ first_name }} {{ last_name }}</h5>
+                  <span>SK Secretary</span>
+                </div>
+              </div>
+              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+                <a href="{{ url_for('admin_account') }}" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('admin_index') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('sk_profiles') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">SK Officials</span>
+            </a>
+            <li class="nav-item menu-items">
+              <a class="nav-link" href=" {{ url_for('kk_list') }}">
+                <span class="menu-icon">
+                  <i class="mdi mdi-account-multiple-outline"></i>
+                </span>
+                <span class="menu-title">KK Members</span>
+              </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('charts') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-library-books"></i>
+              </span>
+              <span class="menu-title">Achievements</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('export') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-file"></i>
+              </span>
+              <span class="menu-title">Exports</span>
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../assets/images/logo-mini.svg" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle" src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">{{ first_name }} {{ last_name }}</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Log out</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+
+        <!-- Main Content -->
+
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Project Achievements </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Achievements</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Project Achievements</li>
+                </ol>
+                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="modal" data-target="#assignPositionModal" href="#">+ Add New Project</a>                <div class="modal fade" id="assignPositionModal" tabindex="-1" role="dialog" aria-labelledby="assignPositionModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="addAchievementModalLabel">Add New Project</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="addAchievementForm" method="POST" action="/add_achievement" enctype="multipart/form-data">                          <div class="form-group">
+                            <label for="project_name">Project Name</label>
+                            <input type="text" name="project_name" id="project_name" class="form-control" placeholder="Enter name" required autocomplete="off" />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="project_location">Location/Purok</label>
+                            <input type="text" name="project_location" id="project_location" class="form-control" placeholder="Enter details" autocomplete="off" />
+                          </div>
+
+                          <div class="form-group">
+                            <label for="date_achieved">Achievement Date</label>
+                            <input type="date" name="date_achieved" id="date_achieved" class="form-control" placeholder="Select date" required autocomplete="off" />
+                          </div>
+
+ <!-- File Upload -->
+ <div class="form-group">
+  <label for="project_image">File Upload</label>
+  <input type="file" name="img[]" id="project_image" class="form-control" accept="image/*" multiple>
+  
+  <!-- Preview images -->
+  <div id="image-preview-container"></div>              
+</div>                          <div class="form-group">
+                            <label for="project_details">Project Description</label>
+                            <textarea class="form-control" name="project_details" id="project_details" rows="4"></textarea>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </nav>
+            </div>
+
+            <div class="row">
+              {% for achievement in achievements %}
+                <div class="col-sm-4 grid-margin">
+                  <div class="card achievement-card" 
+                       data-id="{{ achievement.id_project }}"
+                       data-project-name="{{ achievement.project_name }}"
+                       data-project-location="{{ achievement.project_location }}"
+                       data-date-achieved="{{ achievement.date_achieved }}"
+                       data-project-details="{{ achievement.project_details }}"
+                       data-project-images="{{ achievement.image_urls }}"> <!-- Store multiple image URLs here -->
+                    <div class="card-body position-relative">
+                      <!-- Dropdown button in the upper-right -->
+                      <div class="dropdown position-absolute" style="top: 10px; right: 10px;">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="javascript:void(0);" onclick="editProject(this)">Edit</a>
+                          <a class="dropdown-item" href="javascript:void(0);" onclick="deleteProject(this)">Delete</a>
+                        </div>
+                      </div>
+            
+                      <h3>{{ achievement.project_name }}</h3>
+                      <div class="row">
+                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                          <h6 class="text-muted font-weight-normal">Purok: {{ achievement.project_location }}</h6>
+                          <h6 class="text-muted font-weight-normal">Date: {{ achievement.date_achieved }}</h6>
+                        </div>
+                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                          <i class="icon-lg mdi mdi-library-books text-primary ml-auto"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+                        
+            
+            <!-- Edit Modal -->
+<div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProjectModalLabel">Edit Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editProjectForm">
+          <div class="form-group">
+            <label for="projectName">Project Name</label>
+            <input type="text" class="form-control" id="projectName" name="project_name">
+          </div>
+          <div class="form-group">
+            <label for="projectLocation">Project Location</label>
+            <input type="text" class="form-control" id="projectLocation" name="project_location">
+          </div>
+          <div class="form-group">
+            <label for="dateAchieved">Date Achieved</label>
+            <input type="date" class="form-control" id="dateAchieved" name="date_achieved">
+          </div>
+          <div class="form-group">
+            <label for="projectDetails">Project Details</label>
+            <textarea class="form-control" id="projectDetails" name="project_details"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="projectImages">Project Images</label>
+            <input type="file" class="form-control-file" id="projectImages" name="project_images" accept="image/*" multiple onchange="previewImages(event)">
+            <div id="imagePreviews" class="mt-3"></div>
+        </div>
+        <div class="form-group">
+          <label for="imagePreviewContainer">Image Previews:</label>
+          <div id="imagePreviewContainer" style="display: flex; flex-wrap: wrap;"></div>
+      </div>
+      
+        <input type="hidden" id="projectId" name="id_project">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveProject()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Function to handle the "Edit" button click
+function editProject(element) {
+  const card = element.closest('.card'); // Find the closest parent card element
+  const id = card.getAttribute('data-id'); // Get the data-id attribute from the card
+  const name = card.getAttribute('data-project-name'); // Get the project name
+  const location = card.getAttribute('data-project-location'); // Get the project location
+  const date = card.getAttribute('data-date-achieved'); // Get the project date
+  const details = card.getAttribute('data-project-details'); // Get the project details
+  const imageUrls = card.getAttribute('data-project-images'); // Get the image URLs (comma-separated)
+
+  // Populate modal fields with existing project data
+  document.getElementById('projectId').value = id;
+  document.getElementById('projectName').value = name;
+  document.getElementById('projectLocation').value = location;
+  document.getElementById('dateAchieved').value = date;
+  document.getElementById('projectDetails').value = details;
+
+  // Split the image URLs if they are comma-separated
+  const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+  imagePreviewContainer.innerHTML = ''; // Clear previous image previews
+
+  if (imageUrls) {
+      const urls = imageUrls.split(','); // Split by commas
+      urls.forEach(url => {
+          const trimmedUrl = url.trim(); // Remove extra spaces
+          if (trimmedUrl) {
+              const img = document.createElement('img');
+              img.src = trimmedUrl;
+              img.style.maxWidth = '100px';
+              img.style.margin = '5px';
+              imagePreviewContainer.appendChild(img);
+          }
+      });
+  } else {
+      console.error('No image URLs provided');
+  }
+
+  // Show the modal (Bootstrap modal)
+  $('#editProjectModal').modal('show');
+}
+
+  // Function to handle image preview for multiple files
+  function previewImages(event) {
+    const imagePreviewContainer = document.getElementById('imagePreviews');
+    imagePreviewContainer.innerHTML = ''; // Clear any previous previews
+
+    // Get all selected files
+    const files = event.target.files;
+    
+    // Loop through all selected files and create a preview for each one
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      
+      // Create an image element for each file
+      reader.onload = function(e) {
+        const imgElement = document.createElement('img');
+        imgElement.src = e.target.result;
+        imgElement.style.maxWidth = '100px';
+        imgElement.style.margin = '5px';
+        imgElement.style.height = 'auto';
+        imagePreviewContainer.appendChild(imgElement);
+      };
+      
+      // Read the file as a Data URL to display the preview
+      reader.readAsDataURL(files[i]);
+    }
+  }
+
+  // Function to save project data
+  function saveProject() {
+    const form = document.getElementById('editProjectForm');
+    const formData = new FormData(form);
+
+    // Handle multiple images if selected
+    const images = document.getElementById('projectImages').files;
+    if (images.length > 0) {
+      // Append each image to FormData
+      for (let i = 0; i < images.length; i++) {
+        formData.append('project_images', images[i]);
+      }
+    }
+
+    // Send the form data to the server using fetch API
+    fetch('/update_project', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        // Handle success (e.g., close the modal and refresh the project list)
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: 'Project updated successfully!',
+          showConfirmButton: false,
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'btn-sm btn-success', // Smaller button with success color
+            popup: 'custom-toast-success custom-toast-mini', // Custom class for mini-size
+          },
+          timer: 3000, // Set the timer for 3 seconds (3000ms)
+          timerProgressBar: true, // Show a progress bar
+        });
+        $('#editProjectModal').modal('hide');
+      } else {
+        // Handle error (e.g., show an error message)
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: data.message || 'Failed to update the project. Please try again.',
+          showConfirmButton: true,
+          customClass: {
+            confirmButton: 'btn-sm btn-danger', // Smaller button with error color
+            popup: 'custom-toast-error custom-toast-mini', // Custom class for mini-size
+          },
+          timer: 3000, // Set the timer for 3 seconds (3000ms)
+          timerProgressBar: true, // Show a progress bar
+        });
+      }
+    })
+    .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'An error occurred. Please try again.',
+        showConfirmButton: true,
+        customClass: {
+          confirmButton: 'btn-sm btn-danger', // Smaller button with error color
+          popup: 'custom-toast-error custom-toast-mini', // Custom class for mini-size
+        },
+        timer: 3000, // Set the timer for 3 seconds (3000ms)
+        timerProgressBar: true, // Show a progress bar
+      });
+    });
+  }
+</script>
+                  <script>
+                    // Function to handle the "Delete" button click
+                    function deleteProject(element) {
+                      const card = element.closest('.card');
+                      const id = card.getAttribute('data-id');
+                      
+                      // Show a confirmation dialog before deleting
+                      Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'This project will be permanently deleted.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                          // Send the delete request to the server
+                          fetch(`/delete_project/${id}`, {
+                            method: 'DELETE',
+                          })
+                            .then(response => {
+                              if (!response.ok) {
+                                throw new Error('Network response was not OK');
+                              }
+                              return response.json();
+                            })
+                            .then(data => {
+                              if (data.status === 'success') {
+                                // Show success message
+                                Swal.fire({
+                                  icon: 'success',
+                                  title: 'Deleted!',
+                                  text: 'The project has been deleted.',
+                                  showConfirmButton: false,
+                                  timer: 2000,
+                                });
+                  
+                                // Remove the project card from the DOM
+                                card.remove(); 
+                              } else {
+                                throw new Error(data.message || 'Unknown error occurred.');
+                              }
+                            })
+                            .catch(error => {
+                              // Show error message if delete fails
+                              Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: error.message,
+                                confirmButtonText: 'OK',
+                              });
+                            });
+                        }
+                      });
+                    }
+                  </script>
+                           
+                                                
+            <!-- Add the CSS -->
+            <style>    
+ /* Custom position for success message */
+ .custom-toast-success {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050; /* Ensure it's on top of other elements */
+}
+
+/* Custom position for error message */
+.custom-toast-error {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+}
+
+/* Mini-size styling for SweetAlert2 popup */
+.custom-toast-mini {
+  width: 200px; /* Smaller width */
+  height: 100px; /* Smaller height */
+  font-size: 12px; /* Smaller font size */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center the content */
+  padding: 10px; /* Reduced padding */
+}
+
+/* Ensure the button remains small */
+.btn-sm {
+  padding: 3px 8px; /* Smaller button padding */
+  font-size: 10px; /* Smaller button text */
+}
+              /* Hover effect */
+              .achievement-card:hover {
+                background-color: #0F1015; /* Example: light blue on hover */
+                border-color:rgb(31, 31, 52);
+              }
+            </style>
+                                                            
+            <!-- Achievement Modal -->
+
+<!-- Achievement Modal -->
+<div class="modal fade" id="achievementModal" tabindex="-1" aria-labelledby="achievementModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" style="max-width: 90%; margin: 1.75rem auto;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="achievementModalLabel">Achievement Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h3 id="modalProjectName"></h3>
+        <p><strong>Location:</strong> <span id="modalProjectLocation"></span></p>
+        <p><strong>Date Achieved:</strong> <span id="modalDateAchieved"></span></p>
+        <p><strong>Project Description:</strong> <span id="modalProjectDetails"></span></p>
+
+        <!-- Container for multiple images -->
+        <div id="modalProjectImages" class="row"></div> <!-- Image elements will be added here -->
+      </div>
+    </div>
+  </div>
+</div>
+          </div>
+          
+          <style>
+            #achievementModal .modal-dialog {
+              max-width: 90%; /* Adjust modal width */
+              width: 800px;   /* Set a fixed width if needed */
+            }
+          
+            #achievementModal .modal-content {
+              height: auto;   /* Allow content to dictate height */
+              min-height: 400px; /* Set a minimum height */
+            }
+          </style>
+          
+
+            <!-- JQuery Scripts -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+            <!-- Include SweetAlert2 -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+            
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                // Attach click event to cards to populate the modal
+                document.querySelectorAll('.achievement-card').forEach(card => {
+                    card.addEventListener('click', function (event) {
+                        // Only populate the modal if the card itself is clicked (not the dropdown)
+                        if (event.target.closest('.dropdown') === null) {
+                            const projectName = this.dataset.projectName;
+                            const projectLocation = this.dataset.projectLocation;
+                            const dateAchieved = this.dataset.dateAchieved;
+                            const projectDetails = this.dataset.projectDetails;
+                            const projectImages = this.dataset.projectImages.split(','); // Get all image URLs
+                            const projectId = this.dataset.id;
+            
+                            // Debugging: Log the retrieved projectDetails and images
+                            console.log('Project Name:', projectName);
+                            console.log('Project Location:', projectLocation);
+                            console.log('Date Achieved:', dateAchieved);
+                            console.log('Project Images:', projectImages);
+                            console.log('Project Description:', projectDetails);
+                            console.log('Project ID:', projectId);
+            
+                            // Populate the modal with the data from the clicked card
+                            document.getElementById('modalProjectName').textContent = projectName;
+                            document.getElementById('modalProjectLocation').textContent = projectLocation;
+                            document.getElementById('modalDateAchieved').textContent = dateAchieved;
+                            document.getElementById('modalProjectDetails').textContent = projectDetails;
+            
+                            // Clear any existing images in the modal
+                            const modalImageContainer = document.getElementById('modalProjectImages');
+                            modalImageContainer.innerHTML = '';
+            
+                            // Add all images to the modal with landscape layout
+                            projectImages.forEach(imageUrl => {
+                              const imgElement = document.createElement('img');
+                              imgElement.classList.add('img-fluid'); // Ensures responsive resizing
+                              imgElement.src = imageUrl;
+                          
+                              // Add the image to a column
+                              const col = document.createElement('div');
+                              col.classList.add('col-4'); // Adjust columns as needed
+                              col.appendChild(imgElement);
+                          
+                              modalImageContainer.appendChild(col);
+                          });
+                                                      
+                          // Show the modal
+                            const modal = new bootstrap.Modal(document.getElementById('achievementModal'));
+                            modal.show();
+                        }
+                    });
+                });
+                                                  
+                    // Prevent the card click event when clicking a dropdown option
+                    document.querySelectorAll('.dropdown-item').forEach(dropdownItem => {
+                        dropdownItem.addEventListener('click', function (event) {
+                            event.stopPropagation();  // Stop the click event from propagating to the card
+                        });
+                    });
+                });
+
+
+// Handle form submission
+$('#addAchievementForm').on('submit', function (event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Use FormData to handle file uploads
+  var formData = new FormData(this);
+
+  $.ajax({
+      url: '/add_achievement', // Backend URL for adding achievements
+      method: 'POST',
+      data: formData, // Send form data
+      contentType: false,
+      processData: false,
+      success: function (response) {
+          if (response.success) {
+              // Show the success notification
+              Swal.fire({
+                  position: 'top-end', // Top-right position
+                  icon: 'success',     // Success icon
+                  title: 'Project Added!', // Title of the notification
+                  text: `${response.message}`, // Server's success message
+                  timer: 3000,         // Duration of 3 seconds
+                  showConfirmButton: false, // No "OK" button
+                  toast: true          // Compact, toast-style popup
+              });
+
+              // Reset form fields without closing the modal
+              $('#addAchievementForm')[0].reset();
+              $('#image-preview-container').empty(); // Clear image previews
+
+              // Delay closing the modal until after the SweetAlert finishes
+              setTimeout(() => {
+                  $('#assignPositionModal').modal('hide'); // Hide the modal
+              }, 500); // Small delay ensures smooth transitions
+          } else {
+              // Show error if adding project fails
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: response.error || 'Something went wrong!'
+              });
+          }
+      },
+      error: function () {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: 'There was an error with the request.'
+          });
+      }
+  });
+});
+
+// Handle image file preview
+$('#project_image').on('change', function (event) {
+  const previewContainer = $('#image-preview-container');
+  previewContainer.empty(); // Clear existing previews
+  const files = event.target.files;
+  
+  // Loop through selected files and display previews
+  for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      // Only show image files
+      if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+              const imgElement = $('<img>').attr('src', e.target.result).css({
+                  width: '100px', // Adjust the size
+                  margin: '10px'
+              });
+              previewContainer.append(imgElement);
+          };
+          reader.readAsDataURL(file);
+      }
+  }
+});
+
+
+
+              
+            </script>
+                      <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Malasila Profiling System 2024</span>
+            </div>
+          </footer>
+          
+      <!-- partial -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>  
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js') }}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ url_for('static', filename='assets/js/off-canvas.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/misc.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/todolist.js') }}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- End custom js for this page -->
+  </body>
+</html>

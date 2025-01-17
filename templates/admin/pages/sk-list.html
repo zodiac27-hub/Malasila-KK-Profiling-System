@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    .fixed-logo {
+      width: 60px; /* Set your desired width */
+      height: auto; /* Maintain aspect ratio */
+      object-fit: contain; /* Prevent stretching */
+      margin-top: 10px;
+    }
+    .main-panel {
+      overflow-y: auto; /* Enables vertical scrolling */
+      height: 100vh; /* Adjust this value based on the height of your navbar */
+    }
+    .modal-content {
+      max-width: 100%; /* Ensures it adapts to the available width */
+  }
+  .modal-body {
+      padding: 20px;
+  }
+  .modal-dialog.modal-lg {
+      max-width: 900px; /* Larger container for landscape design */
+  }
+  .modal-body img {
+      display: block;
+      margin: 0 auto; /* Centers the profile picture */
+  }
+  .modal-body .container .row .col-md-4 {
+      margin-bottom: 10px;
+  }  
+  .profile-name h5 {
+    white-space: nowrap; 
+    overflow: hidden;   
+    text-overflow: ellipsis;
+    font-size: .90rem;     
+    margin: 0;          
+    padding: 0;         
+}
+
+  </style>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Malasila KK Profiling</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a class="fixed-logo" href="{{ url_for('static', filename='admin/index.html') }}" style="display: flex; align-items: center;">
+            <img class="fixed-logo" src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" style="margin-right: 8px;" />
+          </div>
+        <ul class="nav">
+          <li class="nav-item nav-category" style="margin-top:-50px; margin-bottom: -45px; line-height: .5; padding: 40px;">
+            <span class="nav-link">MALASILA KK PROFILING</span>
+          </li>
+          <!--<li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>-->
+          <li class="nav-item profile">
+            <div class="profile-desc">
+              <div class="profile-pic">
+                <div class="count-indicator">
+                  <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                  <span class="count bg-success"></span>
+                </div>
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal">{{ first_name }} {{ last_name }}</h5>
+                  <span>SK Secretary</span>
+                </div>
+              </div>
+              <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+                <a href="{{ url_for('admin_account') }}" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-settings text-primary"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                  </div>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                      <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>
+
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('admin_index') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+         
+          <li class="nav-item menu-items">
+            <a class="nav-link" href=" {{ url_for('sk_profiles') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-account-multiple-outline"></i>
+              </span>
+              <span class="menu-title">SK Officials</span>
+            </a>
+            <li class="nav-item menu-items">
+              <a class="nav-link" href=" {{ url_for('kk_list') }}">
+                <span class="menu-icon">
+                  <i class="mdi mdi-account-multiple-outline"></i>
+                </span>
+                <span class="menu-title">KK Members</span>
+              </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('charts') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+              <span class="menu-title">Reports</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-library-books"></i>
+              </span>
+              <span class="menu-title">Achievements</span>
+            </a>
+          </li>
+          <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url_for('achievements') }}">
+              <span class="menu-icon">
+                <i class="mdi mdi-file"></i>
+              </span>
+              <span class="menu-title">Exports</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+            <a class="navbar-brand brand-logo-mini" href="{{ url_for('admin_index') }}"><img src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" /></a>
+          </div>
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+            <ul class="navbar-nav w-100">
+              <li class="nav-item w-100">
+                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                  <input type="text" class="form-control" placeholder="Search...">
+                </form>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown d-none d-lg-block">
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+                  <h6 class="p-3 mb-0">Projects</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-file-outline text-primary"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-web text-info"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">UI Development</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-layers text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject ellipsis mb-1">Software Testing</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all projects</p>
+                </div>
+              </li>
+              <li class="nav-item nav-settings d-none d-lg-block">
+                <a class="nav-link" href="#">
+                  <i class="mdi mdi-view-grid"></i>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+                  <h6 class="p-3 mb-0">Messages</h6>
+                  <div class="dropdown-divider"></div>
+                </div>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-calendar text-success"></i>
+                      </div>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">See all notifications</p>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <img class="img-xs rounded-circle " src="{{ url_for('static', filename='assets/images/faces/profile2.png') }}" alt="">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name">{{ first_name }} {{ last_name }}</p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-settings text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Settings</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Log out</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <p class="p-3 mb-0 text-center">Advanced settings</p>
+                </div>
+              </li>
+            </ul>
+            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+              <span class="mdi mdi-format-line-spacing"></span>
+            </button>
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> SK Officials </h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">SK Officials</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">SK Officials</li>
+                </ol>                
+                <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="modal" data-target="#assignPositionModal" href="#">+ Assign New Position</a>                
+                <div class="modal fade" id="assignPositionModal" tabindex="-1" role="dialog" aria-labelledby="assignPositionModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="assignPositionModalLabel">Assign New Position</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      
+                      <div class="modal-body">
+                        <form id="assignPositionForm" method="POST" action="{{ url_for('assign_position') }}">
+                          <div class="form-group">
+                            <label for="year_term">Year Term</label>
+                            <select name="year_term" id="year_term" class="form-control" required>
+                                <option value="" disabled selected>Select term</option>
+                                <option value="2024-2027">2024-2027</option>
+                                <option value="2021-2024">2021-2024</option>
+                                <option value="2018-2021">2018-2021</option>
+                                <option value="2015-2018">2015-2018</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="position">Position</label>
+                            <select name="position" id="position" class="form-control" required>
+                                <option value="" disabled selected>Select position</option>
+                                <option value="SK Chairmain">SK Chairman</option>
+                                <option value="SK Secretary">SK Secretary</option>
+                                <option value="SK Treasurer">SK Treasurer</option>
+                                <option value="SK Kagawad">SK Kagawad</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" class="form-control" placeholder="Enter name" required autocomplete="off" />
+                            <div id="nameSuggestions" class="list-group" style="position: absolute; z-index: 1000; display: none;">
+                          </div>
+                          <br>
+
+                          <br>
+                          <button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </nav>
+            </div>
+
+                          <!-- Search and Filter Controls -->
+                          <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" id="nameSearchInput" class="form-control" placeholder="Search by name">
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <select name="yearTermFilter" id="yearTermFilter" class="form-control" required>
+                                    <option value="" >All Year</option>
+                                    <option value="2024-2027">2024-2027</option>
+                                    <option value="2021-2024">2021-2024</option>
+                                    <option value="2018-2021">2018-2021</option>
+                                    <option value="2015-2018">2015-2018</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <select name="positions" id="positions" class="form-control" required>
+                                    <option value="" >All Positions</option>
+                                    <option value="SK Chairmain">SK Chairman</option>
+                                    <option value="SK Secretary">SK Secretary</option>
+                                    <option value="SK Treasurer">SK Treasurer</option>
+                                    <option value="SK Kagawad">SK Kagawad</option>
+                                    </select>
+                              </div>
+                            </div>
+                        </div>
+          
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-description">List of all SK Officials</p>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th class="d-none">Suffix</th>
+                                <th class="d-none">Bday</th>
+                                <th>Gender</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Purok</th>
+                                <th class="d-none">Barangay</th>
+                                <th class="d-none">Municipality</th>
+                                <th class="d-none">Province</th>
+                                <th class="d-none">Zipcode</th>
+                                <th class="d-none">Civil Status</th>
+                                <th class="d-none">Youth Classification</th>
+                                <th class="d-none">Specific Needs</th>
+                                <th class="d-none">Youth Age Group</th>
+                                <th class="d-none">Work Status</th>
+                                <th class="d-none">Educational Background</th>
+                                <th class="d-none">Voter Status</th>
+                                <th class="d-none">Voted Last Election</th>
+                                <th class="d-none">Attended KK Meeting</th>
+                                <th class="d-none">Times Attended</th>
+                                <th class="d-none">Reason Not Attended</th>
+                            </tr>
+                        </thead>
+                              <!-- Add this row for the "No Results" message -->
+                              <tr id="noResultsMessage" style="display:none;">
+                                <td colspan="20" class="text-center">No results found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="detailsModalLabel">SK Official Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Profile Picture and Details Section -->
+                            <div class="d-flex flex-column align-items-center">
+                                <img
+                                    src="https://www.w3schools.com/howto/img_avatar.png"
+                                    alt="Default Profile Picture"
+                                    class="rounded-circle mb-3"
+                                    style="width: 120px; height: 120px;"
+                                />
+                            </div>
+                            <!-- Details Section -->
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p><strong>Position:</strong> <span id="user-position"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Name:</strong> <span id="user-name"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Suffix:</strong> <span id="user-suffix"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Bday:</strong> <span id="user-bday"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Gender:</strong> <span id="user-gender"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Email:</strong> <span id="user-email"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Purok:</strong> <span id="user-purok"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Barangay:</strong> <span id="user-barangay"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Municipality:</strong> <span id="user-municipality"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Province:</strong> <span id="user-province"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Zipcode:</strong> <span id="user-zipcode"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p><strong>Civil Status:</strong> <span id="user-civil-status"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Youth Classification:</strong> <span id="user-youth-classification"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Youth Age Group:</strong> <span id="user-youth-age-group"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Work Status:</strong> <span id="user-work-status"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Educational Background:</strong> <span id="user-educational-background"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Voter Status:</strong> <span id="user-voter-status"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Voted Last Election:</strong> <span id="user-vote-last-election"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>Attended KK Assembly?:</strong> <span id="user-attended-kk"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                      <p><strong>If yes, How many times?:</strong> <span id="user-times-attended"></span></p>
+                                    </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            
+            <!-- JQuery Scripts -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+              <script>
+                $(document).ready(function() {
+                  // Modal functionality for displaying user details
+                  $('.-row').on('click', function () {
+                    try {
+                      const userData = $(this).data('user'); // Extract JSON data
+                      const user = JSON.parse(userData); // Parse it into an object
+              
+                      const fullName = `${user[1]} ${user[2]} ${user[3]}`.trim(); // Handle name formatting
+              
+                      // Populate details in the modal
+                      $('#user-position').text(user[0]);
+                      $('#user-name').text(fullName );
+                      $('#user-suffix').text(user[4] || "N/A");
+                      $('#user-bday').text(user[5] );
+                      $('#user-gender').text(user[6]);
+                      $('#user-email').text(user[7] || "N/A");
+                      $('#user-phone').text(user[8] || "N/A");
+                      $('#user-purok').text(user[9] );
+                      $('#user-barangay').text(user[10]);
+                      $('#user-municipality').text(user[11]);
+                      $('#user-province').text(user[12]);
+                      $('#user-zipcode').text(user[13]);
+                      $('#user-civil-status').text(user[14]);
+                      $('#user-youth-classification').text(user[15]);
+                      $('#user-youth-age-group').text(user[16]);
+                      $('#user-work-status').text(user[17]);
+                      $('#user-educational-background').text(user[18]);
+                      $('#user-voter-status').text(user[19]);
+                      $('#user-vote-last-election').text(user[20]);
+                      $('#user-attended-kk').text(user[21]);
+                      $('#user-times-attended').text(user[22]);
+              
+                      // Open the modal after populating details
+                      $('#detailsModal').modal('show');
+                    } catch (error) {
+                      console.error("Error parsing user data:", error);
+                    }
+                  });
+                });
+  
+                $(document).ready(function() {
+                  // Load positions with an optional year term filter
+                  function loadPositions(yearTerm = "", name = "") {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/get_positions',
+                        data: { year_term: yearTerm, name: name }, // Pass year_term and name as query parameters
+                        success: function(data) {
+                            $('table.table-hover tbody').empty(); // Clear existing rows
+                            data.forEach(function(row) {
+                                let year_term = row.year_term || 'N/A';
+                                let position = row.position || 'N/A';
+                                let name = row.name || 'N/A';
+                                let gender = row.gender || 'N/A';
+                                let email = row.email || 'N/A';
+                                let phone = row.phone || 'N/A';
+                                let purok = row.purok || 'N/A';
+                
+                                let newRow = `
+                                    <tr>
+                                        <td>${year_term}</td>
+                                        <td>${position}</td>
+                                        <td>${name}</td>
+                                        <td>${gender}</td>
+                                        <td>${email}</td>
+                                        <td>${phone}</td>
+                                        <td>${purok}</td>
+                                    </tr>
+                                `;
+                                $('table.table-hover tbody').append(newRow);
+                            });
+                        },
+                        error: function(error) {
+                            console.error('Error fetching positions:', error);
+                        }
+                    });
+                }
+                
+                // Fetch positions when the page loads
+                loadPositions();
+                
+                // Handle year term filter change
+                $('#yearTermFilter').on('change', function() {
+                    const selectedYearTerm = $(this).val();
+                    const nameSearch = $('#nameSearchInput').val(); // Get the current value of name search input
+                    loadPositions(selectedYearTerm, nameSearch); // Reload with the selected year term and name
+                });
+                
+                // Handle name search input change
+                $('#nameSearchInput').on('input', function() {
+                    const nameSearch = $(this).val();
+                    const selectedYearTerm = $('#yearTermFilter').val(); // Get the current value of year term filter
+                    loadPositions(selectedYearTerm, nameSearch); // Reload with the selected name and year term
+                });
+                                  
+                  // Autocomplete functionality for the name field
+                  $('#name').on('input', function() {
+                      let query = $(this).val();
+            
+                      if (query.length >= 2) {
+                          $.ajax({
+                              type: 'GET',
+                              url: '/get_names',
+                              data: { query: query },
+                              success: function(data) {
+                                  $('#nameSuggestions').empty().show();
+                                  data.forEach(function(item) {
+                                      let suggestion = `<a href="#" class="list-group-item list-group-item-action">${item.first_name} ${item.last_name}</a>`;
+                                      $('#nameSuggestions').append(suggestion);
+                                  });
+                              },
+                              error: function(error) {
+                                  console.error('Error fetching names:', error);
+                              }
+                          });
+                      } else {
+                          $('#nameSuggestions').hide();
+                      }
+                  });
+            
+                  // Handle click on a suggestion
+                  $('#nameSuggestions').on('click', '.list-group-item', function(e) {
+                      e.preventDefault();
+                      let selectedName = $(this).text();
+                      $('#name').val(selectedName);
+                      $('#nameSuggestions').hide();
+                  });
+            
+                  // Handle form submission
+                  $('#assignPositionForm').on('submit', function(e) {
+                      e.preventDefault();
+            
+                      const formData = $(this).serialize();
+                      console.log('Form Data:', formData); // Debugging
+            
+                      $.ajax({
+                          type: 'POST',
+                          url: $(this).attr('action'),
+                          data: formData,
+                          success: function(response) {
+                              console.log('Success:', response);
+            
+                              // Close modal
+                              $('#assignPositionModal').modal('hide');
+            
+                              // Show smaller success notification
+                              Swal.fire({
+                                  position: 'top-end',
+                                  icon: 'success',
+                                  title: 'Position Assigned!',
+                                  text: `${response.name} is now assigned as ${response.position}.`,
+                                  timer: 2000,
+                                  width: '300px', // Smaller width
+                                  showConfirmButton: false,
+                                  toast: true // Toast-style popup
+                              });
+            
+                              // Reload the positions table
+                              loadPositions();
+                          },
+                          error: function(error) {
+                              console.error('Error:', error.responseJSON?.error || 'Unknown error');
+                              Swal.fire({
+                                  icon: 'error',
+                                  title: 'Error',
+                                  text: error.responseJSON?.error || 'Error assigning position. Please try again.',
+                                  width: '300px', // Smaller width for error
+                                  timer: 3000,
+                                  toast: true,
+                                  showConfirmButton: false
+                              });
+                          }
+                      });
+                  });
+              });
+            
+            </script>
+            
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © Malasila Profiling System 2024</span>
+            </div>
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ url_for('static', filename='assets/vendors/js/vendor.bundle.base.js') }}"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ url_for('static', filename='assets/js/off-canvas.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/misc.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/settings.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/todolist.js') }}"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <!-- End custom js for this page -->
+  </body>
+</html>

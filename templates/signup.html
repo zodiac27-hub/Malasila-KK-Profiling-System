@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/images/sk-logo.png') }}">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <!-- Google Font (Roboto) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="/static/css/mdb.min.css"/>
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #009688, #4caf50);
+            color: #fff;
+        }
+        .card {
+            border-radius: 20px;
+        }
+        .card-body {
+            background-color: #ffffff;
+            color: #333;
+            border-radius: 20px;
+            padding: 40px;
+        }
+        .btn-primary {
+            background-color: #004d40;
+            border-color: #004d40;
+        }
+        .btn-primary:hover {
+            background-color: #003d33;
+            border-color: #003d33;
+        }
+        footer {
+            background-color: #004d40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5 h-100">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong">
+                    <div class="card-body p-5">
+                        <h3 class="mb-4 text-center">Register now</h3>
+                        <form action="{{url_for('signup')}}" method="POST"> <!-- Redirects to /signup -->
+                            <!-- Username -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="text" id="username" name="username" class="form-control form-control-lg" required/>
+                                <label class="form-label" for="username">Username</label>
+                            </div>
+                            
+                            <!-- Password -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="password" id="password" name="password" class="form-control form-control-lg" required/>
+                                <label class="form-label" for="password">Password</label>
+                            </div>
+    
+                            <!-- Confirm Password -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control form-control-lg" required/>
+                                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                            </div>
+    
+                            <!-- Checkbox -->
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="termsCheckbox" required/>
+                                <label class="form-check-label" for="termsCheckbox">
+                                    I have read and agree to the 
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a> and 
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
+                                </label>
+                            </div>
+    
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg btn-block">Sign Up</button>
+                            </div>
+                        </form>
+                        
+                        <div class="text-center mt-4">
+                            <p>Already have an account? <a href="/login">Login Here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Terms and Conditions Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        **Purpose of the Study**: The profiling aims to gather the information and data of participants to create an updated database managed by the National Youth Commission.
+                    </p>
+                    <p>
+                        **Terms and Duration of Participation**: Participation is voluntary and involves providing data as required. Data will be handled in compliance with RA No. 10742.
+                    </p>
+                    <p>
+                        **Confidentiality**: All information collected will be kept confidential and used solely for database management purposes.
+                    </p>
+                    <p>
+                        **Compensation**: There is no monetary compensation for participation. Your involvement is highly appreciated.
+                    </p>
+                    <p>
+                        **Inquiries**: For questions, you may contact the program organizers through the information provided in the consent document.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Privacy Policy Modal -->
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        We value your privacy. All personal information collected during the registration process will be securely stored and used only for the stated purposes of database management and program administration.
+                    </p>
+                    <p>
+                        No information will be shared with third parties without your consent, unless required by law.
+                    </p>
+                    <p>
+                        You have the right to review, update, or withdraw your information at any time by contacting the program organizers.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                
+    <script>
+        document.querySelector("form").addEventListener("submit", function(event) {
+          const password = document.getElementById("password").value;
+          const confirmPassword = document.getElementById("confirmPassword").value;
+          
+          if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            event.preventDefault();  // Prevent form submission
+          }
+        });
+      </script>
+      
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Malasila Katipunan ng Kabataan Profiling System. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap 5 JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/mdb.umd.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+</body>
+</html>
