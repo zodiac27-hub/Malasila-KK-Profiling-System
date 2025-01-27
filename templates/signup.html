@@ -17,7 +17,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to right, #009688, #4caf50);
+            background: linear-gradient(135deg, #FF6F61, #1D9C90);
             color: #fff;
         }
         .card {
@@ -37,40 +37,152 @@
             background-color: #003d33;
             border-color: #003d33;
         }
+        .form-control {
+            border-radius: 10px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #004d40;
+        }
+        .alert-warning {
+            background-color: #FF6F61;
+            border-color: #FF6F61;
+            color: #fff;
+        }
         footer {
             background-color: #004d40;
             color: white;
             padding: 20px 0;
             text-align: center;
         }
+        .btn-secondary {
+            background-color: #FFD700;
+            border-color: #FFD700;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background-color: #FFC107;
+            border-color: #FFC107;
+            color: #333;
+        }
+        .welcome-text {
+            color: white;
+            font-size: 2rem;
+            text-align: center;
+            margin-top: 20%;
+        }
+        .welcome-subtext {
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container py-5 h-100">
         <div class="row justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <!-- Left Column: Welcome Message -->
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="welcome-text">
+                    <h1>Welcome to the Registration Portal</h1>
+                </div>
+                <div class="welcome-subtext">
+                    <p>Register now to be part of the program. It's quick and easy!</p>
+                </div>
+            </div>
+            
+            <!-- Right Column: Registration Form -->
+            <div class="col-12 col-md-6 col-lg-6">
                 <div class="card shadow-2-strong">
                     <div class="card-body p-5">
-                        <h3 class="mb-4 text-center">Register now</h3>
+                        <h3 class="mb-4 text-center text-primary">Register now</h3>
+                         <!-- Display warning notification if name already exists -->
+ {% if name_exists %}
+ <div class="alert alert-warning alert-dismissible fade show" role="alert">
+     <strong>Warning!</strong> The name you entered is already registered in the system.
+     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+ </div>
+ {% endif %}  
+
                         <form action="{{url_for('signup')}}" method="POST"> <!-- Redirects to /signup -->
-                            <!-- Username -->
+                            <!-- First Name -->
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="text" id="username" name="username" class="form-control form-control-lg" required/>
-                                <label class="form-label" for="username">Username</label>
+                                <input type="text" id="firstname" name="firstname" class="form-control form-control-lg" required/>
+                                <label class="form-label" for="firstname">First Name</label>
+                            </div>
+                    
+                            <!-- Middle Name -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="text" id="middlename" name="middlename" class="form-control form-control-lg"/>
+                                <label class="form-label" for="middlename">Middle Name</label>
+                            </div>
+                    
+                            <!-- Last Name -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="text" id="lastname" name="lastname" class="form-control form-control-lg" required/>
+                                <label class="form-label" for="lastname">Last Name</label>
                             </div>
                             
+                            <!-- Username -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input 
+                                    type="text" 
+                                    id="username" 
+                                    name="username" 
+                                    class="form-control form-control-lg" 
+                                    required 
+                                    oninput="checkUsernameAvailability()" 
+                                />
+                                <label class="form-label" for="username">Username</label>
+                            </div>
+                            <span id="username-status" style="color: red; display: none;">Username already taken</span>
+                            <span id="username-available" style="color: green; display: none;">Username is available</span>
+
+                            
+                            <script>
+                                function checkUsernameAvailability() {
+                                    const username = document.getElementById('username').value;
+                                    
+                                    // Check if the username is empty or too short
+                                    if (username.length < 3) {
+                                        document.getElementById('username-status').style.display = 'none';
+                                        document.getElementById('username-available').style.display = 'none';
+                                        return;
+                                    }
+                            
+                                    // Send a request to check the username availability
+                                    fetch(`/check-username?username=${encodeURIComponent(username)}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.available) {
+                                                document.getElementById('username-status').style.display = 'none';
+                                                document.getElementById('username-available').style.display = 'inline';
+                                            } else {
+                                                document.getElementById('username-available').style.display = 'none';
+                                                document.getElementById('username-status').style.display = 'inline';
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error checking username availability:', error);
+                                            document.getElementById('username-status').style.display = 'none';
+                                            document.getElementById('username-available').style.display = 'none';
+                                        });
+                                }
+                            </script>
+                                                                                    
                             <!-- Password -->
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <input type="password" id="password" name="password" class="form-control form-control-lg" required/>
                                 <label class="form-label" for="password">Password</label>
                             </div>
-    
+                    
                             <!-- Confirm Password -->
                             <div data-mdb-input-init class="form-outline mb-4">
                                 <input type="password" id="confirmPassword" name="confirmPassword" class="form-control form-control-lg" required/>
                                 <label class="form-label" for="confirmPassword">Confirm Password</label>
                             </div>
-    
+                                        
                             <!-- Checkbox -->
                             <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" id="termsCheckbox" required/>
@@ -80,7 +192,7 @@
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">Privacy Policy</a>.
                                 </label>
                             </div>
-    
+                    
                             <!-- Submit Button -->
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary btn-lg btn-block">Sign Up</button>
@@ -91,7 +203,7 @@
                             <p>Already have an account? <a href="/login">Login Here</a></p>
                         </div>
                     </div>
-                </div>
+              </div>
             </div>
         </div>
     </div>
@@ -176,7 +288,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="/static/js/mdb.umd.min.js"></script>
-    <!-- Custom scripts -->
-    <script type="text/javascript"></script>
 </body>
 </html>

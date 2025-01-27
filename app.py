@@ -180,7 +180,6 @@ def admin_login():
 
 # Admin Dashboard Route
 from datetime import datetime
-
 @app.route('/admin/index', methods=['GET'])
 def admin_index():
     if not session.get('logged_in'):
@@ -195,52 +194,72 @@ def admin_index():
         # Fetch admin user details
         username = session.get('username')  # Username stored during login
         cursor.execute("SELECT first_name, last_name FROM admin_users WHERE username = %s", (username,))
-        user_details = cursor.fetchone()
+        user_details = cursor.fetchone()  # Fetch user details
 
         if not user_details:
             flash("Admin user details not found.", "danger")
             return redirect(url_for('admin_login'))
 
-        # Calculate age and classify members into groups (ages 15-30)
-        age_query = """
-        SELECT 
-            birthday,
-            CASE 
-                WHEN TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 17 THEN 'Child Youth'
-                WHEN TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 18 AND 24 THEN 'Core Youth'
-                WHEN TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 25 AND 30 THEN 'Young Adult'
-                ELSE NULL
-            END AS youth_age_group
-        FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30;
-        """
-        cursor.execute(age_query)
-        age_data = cursor.fetchall()
+        # Get the 'year' query parameter, if available
+        selected_year = request.args.get('year', default=None, type=int)
 
-        # Count total members and group-specific counts for ages 15-30
+        # Define base query for age classification
+        age_query = """
+            SELECT 
+                birthday,
+                CASE 
+                    WHEN TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 17 THEN 'Child Youth'
+                    WHEN TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 18 AND 24 THEN 'Core Youth'
+                    WHEN TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 25 AND 30 THEN 'Young Adult'
+                    WHEN TIMESTAMPDIFF(YEAR, birthday, CURDATE()) >= 31 THEN 'Adult'
+                    ELSE NULL
+                END AS age_group,
+                DATE(created_at) = CURDATE() AS is_new_today
+            FROM kk_profiles
+            WHERE 1=1
+        """
+
+        # Modify query to filter by account creation year if 'year' is provided
+        if selected_year:
+            age_query += " AND YEAR(created_at) = %s"
+            cursor.execute(age_query, (selected_year,))
+        else:
+            cursor.execute(age_query)
+
+        age_data = cursor.fetchall()  # Fetch all the data
+
+        # Count totals for all groups
         total_members = 0
         child_youth = 0
         core_youth = 0
         young_adult = 0
+        adult = 0
+        new_child_youth = 0
+        new_core_youth = 0
+        new_young_adult = 0
+        new_adult = 0
 
         for row in age_data:
-            if row['youth_age_group']:
+            if row['age_group']:
                 total_members += 1
-                if row['youth_age_group'] == 'Child Youth':
+                if row['age_group'] == 'Child Youth':
                     child_youth += 1
-                elif row['youth_age_group'] == 'Core Youth':
+                    if row['is_new_today']:
+                        new_child_youth += 1
+                elif row['age_group'] == 'Core Youth':
                     core_youth += 1
-                elif row['youth_age_group'] == 'Young Adult':
+                    if row['is_new_today']:
+                        new_core_youth += 1
+                elif row['age_group'] == 'Young Adult':
                     young_adult += 1
+                    if row['is_new_today']:
+                        new_young_adult += 1
+                elif row['age_group'] == 'Adult':
+                    adult += 1
+                    if row['is_new_today']:
+                        new_adult += 1
 
-        dashboard_data = {
-            'total_kk_members': total_members,
-            'child_youth': child_youth,
-            'core_youth': core_youth,
-            'young_adult': young_adult
-        }
-
-         # Query for new members registered today
+        # Fetch total new members registered today
         new_members_query = """
         SELECT COUNT(*) AS new_members_today
         FROM kk_profiles
@@ -252,66 +271,134 @@ def admin_index():
 
         # Prepare dashboard data
         dashboard_data = {
-        'total_kk_members': total_members,
-        'child_youth': child_youth,
-        'core_youth': core_youth,
-        'young_adult': young_adult,
-        'new_members_today': new_members_today  # Include the daily change
+            'total_kk_members': total_members,
+            'child_youth': child_youth,
+            'core_youth': core_youth,
+            'young_adult': young_adult,
+            'adult': adult,
+            'new_members_today': new_members_today,
+            'new_child_youth': new_child_youth,
+            'new_core_youth': new_core_youth,
+            'new_young_adult': new_young_adult,
+            'new_adult': new_adult
         }
 
-
-        # Query for gender distribution for ages 15-30
+        # Query for gender distribution for all age groups
         gender_query = """
         SELECT 
             gender, COUNT(*) AS gender_count
         FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-        GROUP BY gender;
+        WHERE 1=1
         """
-        cursor.execute(gender_query)
+        # Apply year filter for gender distribution
+        if selected_year:
+            gender_query += " AND YEAR(created_at) = %s GROUP BY gender"
+            cursor.execute(gender_query, (selected_year,))
+        else:
+            gender_query += " GROUP BY gender"
+            cursor.execute(gender_query)
         gender_data = cursor.fetchall()
 
-        # Query for voter status for ages 15-30
+        # Query for voter status for all age groups
         voter_status_query = """
         SELECT 
             voter_status, COUNT(*) AS voter_count
         FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-        GROUP BY voter_status;
+        WHERE 1=1
         """
-        cursor.execute(voter_status_query)
+        # Apply year filter for voter status distribution
+        if selected_year:
+            voter_status_query += " AND YEAR(created_at) = %s GROUP BY voter_status"
+            cursor.execute(voter_status_query, (selected_year,))
+        else:
+            voter_status_query += " GROUP BY voter_status"
+            cursor.execute(voter_status_query)
         voter_data = cursor.fetchall()
 
-        # Query for youth classification for ages 15-30
+        # Query for youth classification for all age groups
         youth_classification_query = """
         SELECT 
             youth_classification, COUNT(*) AS classification_count
         FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-        GROUP BY youth_classification;
+        WHERE 1=1
         """
-        cursor.execute(youth_classification_query)
+        # Apply year filter for youth classification distribution
+        if selected_year:
+            youth_classification_query += " AND YEAR(created_at) = %s GROUP BY youth_classification"
+            cursor.execute(youth_classification_query, (selected_year,))
+        else:
+            youth_classification_query += " GROUP BY youth_classification"
+            cursor.execute(youth_classification_query)
         classification_data = cursor.fetchall()
 
     finally:
         cursor.close()
         db.close()
 
-    # Prepare gender data for template
+    # Prepare data for the template
     gender_distribution = {gender['gender']: gender['gender_count'] for gender in gender_data}
     voter_distribution = {voter['voter_status']: voter['voter_count'] for voter in voter_data}
     classification_distribution = {classification['youth_classification']: classification['classification_count'] for classification in classification_data}
 
-    # Pass admin name and dashboard data to the template
+    # Pass data to the template
     return render_template(
         'admin/index.html',
-        first_name=user_details['first_name'],  # Add first name
-        last_name=user_details['last_name'],    # Add last name
+        first_name=user_details['first_name'],
+        last_name=user_details['last_name'],
         dashboard_data=dashboard_data,
         gender_data=gender_distribution,
         voter_data=voter_distribution,
-        classification_data=classification_distribution
+        classification_data=classification_distribution,
+        selected_year=selected_year
     )
+
+@app.route('/admin/filter_data', methods=['GET'])
+def filter_data():
+    filter_type = request.args.get('filter_type', default='yearly', type=str)
+
+    # Database connection
+    db = get_db_connection()
+    cursor = db.cursor(dictionary=True)
+
+    try:
+        query = ""
+        if filter_type == "daily":
+            # Daily data: Group by day
+            query = """
+                SELECT 
+                    DATE(created_at) AS date, COUNT(*) AS submissions 
+                FROM kk_profiles
+                GROUP BY DATE(created_at)
+                ORDER BY DATE(created_at);
+            """
+        elif filter_type == "monthly":
+            # Monthly data: Group by month
+            query = """
+                SELECT 
+                    DATE_FORMAT(created_at, '%Y-%m') AS date, COUNT(*) AS submissions 
+                FROM kk_profiles
+                GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+                ORDER BY DATE_FORMAT(created_at, '%Y-%m');
+            """
+        elif filter_type == "yearly":
+            # Yearly data: Group by year
+            query = """
+                SELECT 
+                    YEAR(created_at) AS date, COUNT(*) AS submissions 
+                FROM kk_profiles
+                GROUP BY YEAR(created_at)
+                ORDER BY YEAR(created_at);
+            """
+
+        cursor.execute(query)
+        data = cursor.fetchall()
+    finally:
+        cursor.close()
+        db.close()
+
+    # Return data in JSON format
+    return jsonify(data)
+
 
 # Admin SK Profiles Route
 @app.route('/admin/pages/sk-list')
@@ -431,6 +518,7 @@ def get_positions():
         # Get query parameters
         year_term = request.args.get('year_term', default=None)
         name = request.args.get('name', default=None)
+        position = request.args.get('position', default=None)  # New filter for position
 
         # Base SQL query
         query = """
@@ -459,7 +547,11 @@ def get_positions():
             params.append(f"%{name}%")
             params.append(f"%{name}%")
 
-        # Add conditions to query
+        if position:
+            conditions.append("p.position = %s")  # Add position filter condition
+            params.append(position)
+
+        # Add conditions to query if there are any
         if conditions:
             query += " WHERE " + " AND ".join(conditions)
 
@@ -500,6 +592,8 @@ def get_names():
         cursor.close()
         db.close()
 
+from datetime import datetime
+
 @app.route('/admin/pages/kk-list')
 def kk_list():
     if not session.get('logged_in'):
@@ -534,15 +628,28 @@ def kk_list():
         cursor.execute(query)
         users = cursor.fetchall()  # Fetch all records from the database
 
-        # Calculate age for each user
+        # Calculate age and assign youth age group for each user
         for user in users:
             if user['birthday']:
                 birthdate = user['birthday']  # Already a datetime.date object
                 today = datetime.today().date()  # Convert to date object
                 age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
                 user['age'] = age
+
+                # Determine the youth age group
+                if 15 <= age <= 17:
+                    user['youth_age_group'] = "Child Youth"
+                elif 18 <= age <= 24:
+                    user['youth_age_group'] = "Core Youth"
+                elif 25 <= age <= 30:
+                    user['youth_age_group'] = "Young Adult"
+                elif age >= 31:
+                    user['youth_age_group'] = "Adult"
+                else:
+                    user['youth_age_group'] = "N/A"  # Not in the youth age range
             else:
                 user['age'] = None  # Handle cases where birthday is missing or invalid
+                user['youth_age_group'] = "Unknown"
 
     finally:
         cursor.close()
@@ -554,6 +661,7 @@ def kk_list():
         users=users,
         first_name=user_details['first_name'],  # Add first name
         last_name=user_details['last_name'],    # Add last name
+        admin_details=user_details
     )
 
 @app.route('/update_kk_profile/<int:user_id>', methods=['POST'])
@@ -653,219 +761,115 @@ def delete_kkprofile(id_kkprofiles):
 # Admin Reports Route
 @app.route('/admin/pages/charts')
 def charts():
-    
-    # Query for the count of profiles grouped by purok with date filter
-    from_date = request.args.get('from_date')
-    to_date = request.args.get('to_date')
+    if not session.get('logged_in'):
+        flash("Please log in to access the KK List page.", "danger")
+        return redirect(url_for('admin_login'))
 
-    query = "SELECT purok, COUNT(*) AS count FROM kk_profiles"
-    params = []
-
-    query += " WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30"  # Filter by age 15-30
-    
-    if from_date or to_date:
-        query += " AND"
-        if from_date:
-            query += " created_at >= %s"
-            params.append(from_date)
-            if to_date:
-                query += " AND"
-        if to_date:
-            query += " created_at <= %s"
-            params.append(to_date)
-
-    query += " GROUP BY purok"
-
+    # Database connection
     db = get_db_connection()
-    cursor = db.cursor()
-    cursor.execute(query, tuple(params))
-    purok_data = cursor.fetchall()
-    purok_data = [{"purok": row[0], "count": row[1]} for row in purok_data]
- 
-    # Query for the count of youth age groups per purok with date filter
-    query = """
-        SELECT purok, youth_age_group, COUNT(*) AS count
-        FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-    """
-    params = []
+    cursor = db.cursor(dictionary=True)
 
-    if from_date or to_date:
-        query += " AND"
-        if from_date:
-            query += " created_at >= %s"
-            params.append(from_date)
+    try:
+        # Fetch admin user details
+        username = session.get('username')
+        cursor.execute("SELECT first_name, last_name FROM admin_users WHERE username = %s", (username,))
+        user_details = cursor.fetchone()
+
+        if not user_details:
+            flash("Admin user details not found.", "danger")
+            return redirect(url_for('admin_login'))
+
+        # Initialize date filters
+        from_date = request.args.get('from_date')
+        to_date = request.args.get('to_date')
+
+        # Helper function to append date filters
+        def append_date_filters(query, params):
+            if from_date:
+                query += " created_at >= %s"
+                params.append(from_date)
+                if to_date:
+                    query += " AND"
             if to_date:
+                query += " created_at <= %s"
+                params.append(to_date)
+            return query, params
+
+        # Common query base
+        base_query = " WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30"
+
+        # Function to execute grouped queries
+        def execute_grouped_query(select_fields, group_by_field):
+            query = f"SELECT {select_fields}, COUNT(*) AS count FROM kk_profiles {base_query}"
+            params = []
+            if from_date or to_date:
                 query += " AND"
-        if to_date:
-            query += " created_at <= %s"
-            params.append(to_date)
+                query, params = append_date_filters(query, params)
+            query += f" GROUP BY {group_by_field}"
+            cursor.execute(query, tuple(params))
+            return cursor.fetchall()
 
-    query += " GROUP BY purok, youth_age_group"
+        # Query data
+        purok_data = execute_grouped_query("purok", "purok")
+        purok_data = [{"purok": row["purok"], "count": row["count"]} for row in purok_data]
 
-    cursor.execute(query, tuple(params))
-    age_group_results = cursor.fetchall()
-    age_group_data = {}
-    for row in age_group_results:
-        purok, age_group, count = row
-        if purok not in age_group_data:
-            age_group_data[purok] = {}
-        age_group_data[purok][age_group] = count        
+        age_group_results = execute_grouped_query("purok, youth_age_group", "purok, youth_age_group")
+        age_group_data = {}
+        for row in age_group_results:
+            purok, age_group = row["purok"], row["youth_age_group"]
+            if purok not in age_group_data:
+                age_group_data[purok] = {}
+            age_group_data[purok][age_group] = row["count"]
 
-    # Query for the count of voter statuses per purok with age filter
-    query = """
-        SELECT purok, voter_status, COUNT(*) AS count
-        FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-    """
-    params = []
+        voter_status_results = execute_grouped_query("purok, voter_status", "purok, voter_status")
+        voter_status_data = {}
+        for row in voter_status_results:
+            purok, voter_status = row["purok"], row["voter_status"]
+            if purok not in voter_status_data:
+                voter_status_data[purok] = {}
+            voter_status_data[purok][voter_status] = row["count"]
 
-    if from_date or to_date:
-        query += " AND"
-        if from_date:
-            query += " created_at >= %s"
-            params.append(from_date)
-        if to_date:
-            query += " AND"
-    if to_date:
-        query += " created_at <= %s"
-        params.append(to_date)
+        work_status_results = execute_grouped_query("purok, work_status", "purok, work_status")
+        work_status_data = {}
+        for row in work_status_results:
+            purok, work_status = row["purok"], row["work_status"]
+            if purok not in work_status_data:
+                work_status_data[purok] = {}
+            work_status_data[purok][work_status] = row["count"]
 
-    query += " GROUP BY purok, voter_status"
+        vote_last_election_results = execute_grouped_query("purok, vote_last_election", "purok, vote_last_election")
+        vote_last_elections = ['No', 'Yes']
+        vote_last_election_data = {}
+        for row in vote_last_election_results:
+            purok, vote_last_election = row["purok"], row["vote_last_election"]
+            if purok not in vote_last_election_data:
+                vote_last_election_data[purok] = {vle: 0 for vle in vote_last_elections}
+            vote_last_election_data[purok][vote_last_election] = row["count"]
 
-    cursor.execute(query, tuple(params))
-    voter_status_results = cursor.fetchall()
-    voter_status_data = {}
-    for row in voter_status_results:
-        purok, voter_status, count = row
-        if purok not in voter_status_data:
-            voter_status_data[purok] = {}
-        voter_status_data[purok][voter_status] = count
+        gender_results = execute_grouped_query("purok, gender", "purok, gender")
+        gender_data = {}
+        for row in gender_results:
+            purok, gender = row["purok"], row["gender"]
+            if purok not in gender_data:
+                gender_data[purok] = {}
+            gender_data[purok][gender] = row["count"]
 
-    # Query for the count of work status by purok with date filter and age range
-    query = """
-        SELECT purok, work_status, COUNT(*) AS count
-        FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-    """
-    params = []
+        classification_results = execute_grouped_query("purok, youth_classification", "purok, youth_classification")
+        classification_data = {}
+        for row in classification_results:
+            purok, youth_classification = row["purok"], row["youth_classification"]
+            if purok not in classification_data:
+                classification_data[purok] = {}
+            classification_data[purok][youth_classification] = row["count"]
 
-    if from_date or to_date:
-        query += " AND"
-        if from_date:
-            query += " created_at >= %s"
-            params.append(from_date)
-        if to_date:
-            query += " AND"
-    if to_date:
-        query += " created_at <= %s"
-        params.append(to_date)
+    finally:
+        cursor.close()
+        db.close()
 
-    query += " GROUP BY purok, work_status"
-
-    cursor.execute(query, tuple(params))
-    work_status_results = cursor.fetchall()
-    work_status_data = {}
-    for row in work_status_results:
-        purok, work_status, count = row
-        if purok not in work_status_data:
-            work_status_data[purok] = {}
-        work_status_data[purok][work_status] = count
-
-    # Query for vote last election grouped by purok with date filter and age range
-    query = """
-        SELECT purok, vote_last_election, COUNT(*) AS count
-        FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-    """
-    params = []
-
-    if from_date or to_date:
-        query += " AND"
-        if from_date:
-            query += " created_at >= %s"
-            params.append(from_date)
-        if to_date:
-            query += " AND"
-    if to_date:
-        query += " created_at <= %s"
-        params.append(to_date)
-
-    query += " GROUP BY purok, vote_last_election"
-
-    cursor.execute(query, tuple(params))
-    vote_last_election_results = cursor.fetchall()
-    vote_last_elections = ['No', 'Yes']
-    vote_last_election_data = {}
-    for purok, vote_last_election, count in vote_last_election_results:
-        if purok not in vote_last_election_data:
-            vote_last_election_data[purok] = {vle: 0 for vle in vote_last_elections}
-        vote_last_election_data[purok][vote_last_election] = count
-
-    # Query for Gender Status grouped by purok with date filter and age range
-    query = """
-        SELECT purok, gender, COUNT(*) AS count
-        FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-    """
-    params = []
-
-    if from_date or to_date:
-        query += " AND"
-        if from_date:
-            query += " created_at >= %s"
-            params.append(from_date)
-            if to_date:
-                query += " AND"
-        if to_date:
-            query += " created_at <= %s"
-            params.append(to_date)
-
-    query += " GROUP BY purok, gender"
-
-    cursor.execute(query, tuple(params))
-    gender_results = cursor.fetchall()
-    gender_data = {}
-    for row in gender_results:
-        purok, gender, count = row
-        if purok not in gender_data:
-            gender_data[purok] = {}
-        gender_data[purok][gender] = count
-
-    # Query for Youth Classification grouped by purok with date filter and age range
-    query = """
-        SELECT purok, youth_classification, COUNT(*) AS count
-        FROM kk_profiles
-        WHERE TIMESTAMPDIFF(YEAR, birthday, CURDATE()) BETWEEN 15 AND 30
-    """
-    params = []
-
-    if from_date or to_date:
-        query += " AND"
-        if from_date:
-            query += " created_at >= %s"
-            params.append(from_date)
-            if to_date:
-                query += " AND"
-        if to_date:
-            query += " created_at <= %s"
-            params.append(to_date)
-
-    query += " GROUP BY purok, youth_classification"
-
-    cursor.execute(query, tuple(params))
-    classification_results = cursor.fetchall()
-    classification_data = {}
-    for row in classification_results:
-        purok, youth_classification, count = row
-        if purok not in classification_data:
-            classification_data[purok] = {}
-        classification_data[purok][youth_classification] = count
-
-    cursor.close()  # Close the cursor
-    db.close()  # Close the database connection
     return render_template(
         'admin/pages/charts.html',
+        first_name=user_details['first_name'],
+        last_name=user_details['last_name'],
         purok_data=purok_data,
         age_group_data=age_group_data,
         voter_status_data=voter_status_data,
@@ -876,7 +880,6 @@ def charts():
         from_date=from_date,
         to_date=to_date
     )
-
 # Admin SK Achievement Route
 @app.route('/admin/pages/achievements')
 def achievements():
@@ -904,6 +907,7 @@ def achievements():
                 pa.project_location,
                 pa.date_achieved,
                 pa.project_details,
+                pa.date_started,
                 GROUP_CONCAT(pi.image_url) AS image_urls
             FROM 
                 project_achievements pa
@@ -938,6 +942,7 @@ def add_achievement():
     # Get data from the request
     project_name = request.form.get('project_name')
     project_details = request.form.get('project_details')
+    date_started = request.form.get('date_started')
     date_achieved = request.form.get('date_achieved')
     project_location = request.form.get('project_location')
 
@@ -980,10 +985,10 @@ def add_achievement():
         # Insert project details
         query = """
             INSERT INTO project_achievements 
-            (project_name, project_details, date_achieved, project_location) 
-            VALUES (%s, %s, %s, %s)
+            (project_name, project_details, date_started, date_achieved, project_location) 
+            VALUES (%s, %s, %s, %s, %s)
         """
-        cursor.execute(query, (project_name, project_details, date_achieved, project_location))
+        cursor.execute(query, (project_name, project_details, date_started, date_achieved, project_location))
         db.commit()
 
         # Get the project ID of the newly inserted project
@@ -1028,6 +1033,7 @@ def update_project():
         project_id = request.form['id_project']
         project_name = request.form['project_name']
         project_location = request.form['project_location']
+        date_started = request.form['date_started']  # Expecting a string in YYYY-MM-DD format
         date_achieved = request.form['date_achieved']  # Expecting a string in YYYY-MM-DD format
         project_details = request.form['project_details']
 
@@ -1056,10 +1062,10 @@ def update_project():
         # Update project details (storing date_achieved as string directly)
         query = """
             UPDATE project_achievements
-            SET project_name=%s, project_location=%s, date_achieved=%s, project_details=%s
+            SET project_name=%s, project_location=%s, date_started=%s, date_achieved=%s, project_details=%s
             WHERE id_project=%s
         """
-        cursor.execute(query, (project_name, project_location, date_achieved, project_details, project_id))
+        cursor.execute(query, (project_name, project_location,  date_started, date_achieved, project_details, project_id))
 
         # Check for existing images in project_images and add only new ones
         if image_urls:
@@ -1253,46 +1259,170 @@ def delete_export(id):
 def index():
 
     return render_template('index.html')
+@app.route('/check-username', methods=['GET'])
+def check_username():
+    db = get_db_connection()  # Get DB connection
+    cursor = db.cursor()
+
+    username = request.args.get('username')  # Get the username from the query parameter
+
+    if not username:
+        return jsonify({'error': 'Username is required'}), 400
+
+    try:
+        # Check if the username already exists in the kk_users table (case-insensitive)
+        cursor.execute("SELECT * FROM kk_users WHERE LOWER(kk_username) = LOWER(%s)", (username,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            return jsonify({'available': False})  # Username is taken
+        else:
+            return jsonify({'available': True})  # Username is available
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        db.close()
+
+from werkzeug.security import generate_password_hash
+
+from werkzeug.security import generate_password_hash
+from flask import render_template, request, redirect, url_for
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     db = get_db_connection()  # Get DB connection
     cursor = db.cursor()
+
     if request.method == 'POST':
+        # Fetch form data
         kk_username = request.form.get('username')
         kk_password = request.form.get('password')
         kk_confirm_password = request.form.get('confirmPassword')
+        firstname = request.form.get('firstname')
+        middlename = request.form.get('middlename')
+        lastname = request.form.get('lastname')
 
+        # Check if passwords match
         if kk_password != kk_confirm_password:
-            return "Passwords do not match, please try again."
+            return render_template('signup.html', error_message="Passwords do not match, please try again.")
 
-        # Insert the user into `kk_users`
-        query = "INSERT INTO kk_users (kk_username, kk_password, kk_confirm_password) VALUES (%s, %s, %s)"
-        values = (kk_username, kk_password, kk_confirm_password)
-        cursor.execute(query, values)
-        db.commit()
+        # Check if username is already taken (case insensitive)
+        cursor.execute("SELECT * FROM kk_users WHERE LOWER(kk_username) = LOWER(%s)", (kk_username,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            return render_template('signup.html', username_taken=True)
 
-        # Get the last inserted ID
-        id_kk = cursor.lastrowid
+        # Check if the combination of first, middle, and last name already exists (case-insensitive)
+        cursor.execute("""
+            SELECT * FROM kk_profiles
+            WHERE LOWER(first_name) = LOWER(%s) 
+            AND LOWER(middle_name) = LOWER(%s) 
+            AND LOWER(last_name) = LOWER(%s)
+        """, (firstname, middlename, lastname))
 
-        # Redirect to the registration form, passing the `user_id`
-        return redirect(url_for('register', id_kk=id_kk))
+        existing_profile = cursor.fetchone()
+        if existing_profile:
+            return render_template('signup.html', name_exists=True)
+
+        try:
+            # Hash the password before saving it to the database
+            hashed_password = generate_password_hash(kk_password)
+
+            # Insert the user into `kk_users` table with the hashed password
+            user_query = """
+                INSERT INTO kk_users (kk_username, kk_password, profile_complete)
+                VALUES (%s, %s, %s)
+            """
+            user_values = (kk_username, hashed_password, False)
+            cursor.execute(user_query, user_values)
+            db.commit()
+
+            # Get the last inserted ID (this will be `id_kk`)
+            user_id = cursor.lastrowid
+
+            # Insert user profile into `kk_profiles` table with `id_kkprofiles` matching `id_kk`
+            profile_query = """
+                INSERT INTO kk_profiles (id_kkprofiles, first_name, middle_name, last_name)
+                VALUES (%s, %s, %s, %s)
+            """
+            profile_values = (user_id, firstname, middlename, lastname)
+            cursor.execute(profile_query, profile_values)
+            db.commit()
+
+            # Redirect to profile creation page with `id_kkprofiles`
+            return redirect(url_for('register', id_kkprofiles=user_id))
+
+        except Exception as e:
+            db.rollback()
+            return render_template('signup.html', error_message=f"An error occurred: {e}")
+
+        finally:
+            cursor.close()
+            db.close()
+
+    # If method is GET or no errors
+    return render_template('signup.html', name_exists=False, username_taken=False)
+
+def calculate_youth_age_group(birthday):
+    """
+    Calculate the youth age group based on the given birthday.
+    """
+    if not birthday:
+        raise ValueError("Birthday is required")
+
+    try:
+        # Convert the birthday to a datetime object
+        birth_date = datetime.strptime(birthday, "%Y-%m-%d")
+    except ValueError:
+        # Handle case where the birthday is in an invalid format
+        raise ValueError("Invalid birthday format. Please use YYYY-MM-DD.")
     
-    cursor.close()  # Close the cursor
-    db.close()
+    today = datetime.now()
+    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
 
-    return render_template('signup.html')
+    if 15 <= age <= 17:
+        return "Child Youth"
+    elif 18 <= age <= 24:
+        return "Core Youth"
+    elif 25 <= age <= 30:
+        return "Young Adult"
+    return None
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     db = get_db_connection()  # Get DB connection
     cursor = db.cursor()
-    id_kk = request.args.get('id_kk')  # Retrieve `user_id` passed from signup
+
+    # Retrieve id_kkprofiles from query string or form data
+    id_kkprofiles = request.args.get('id_kkprofiles') or request.form.get('id_kkprofiles')
+
+    if not id_kkprofiles:
+        print("Error: id_kkprofiles is missing from the query parameters.")
+        return "Error: Missing id_kkprofiles parameter.", 400
+
+    # Fetch first_name, middle_name, and last_name from the kk_profiles table
+    try:
+        query = "SELECT first_name, middle_name, last_name FROM kk_profiles WHERE id_kkprofiles = %s"
+        cursor.execute(query, (id_kkprofiles,))
+        user_data = cursor.fetchone()
+
+        if not user_data:
+            print(f"No record found in kk_profiles for id_kkprofiles: {id_kkprofiles}")
+            return "Error: User not found.", 404
+
+        # Extract the name data
+        first_name, middle_name, last_name = user_data
+        print(f"Fetched User Data - ID: {id_kkprofiles}, First Name: {first_name}, Middle Name: {middle_name}, Last Name: {last_name}")
+    except Exception as e:
+        print(f"Database Error while fetching user data: {e}")
+        return f"Database error: {e}", 500
 
     if request.method == 'POST':
-        first_name = request.form.get('firstName')
-        last_name = request.form.get('lastName')
-        middle_name = request.form.get('middleName')
+        # Debug: Log form submission
+        print("Form submitted via POST method")
+
+        # Retrieve the rest of the form data (the user has already inputted username and password during signup)
         suffix = request.form.get('suffix')
         birthday = request.form.get('birthdayDate')
         gender = request.form.get('inlineRadioOptions')
@@ -1306,7 +1436,7 @@ def register():
         civil_status = request.form.get('civilStatus')
         youth_classification = request.form.get('youthClassification')
         specific_needs = request.form.get('specificNeeds')
-        youth_age_group = request.form.get('youthAgeGroup')
+        youth_age_group = request.form.get('youthAgeGroup')  # Submitted from frontend
         work_status = request.form.get('workStatus')
         educational_bg = request.form.get('educationalbg')
         voter_status = request.form.get('voterStatus')
@@ -1315,31 +1445,72 @@ def register():
         times_attended = request.form.get('timesAttended')
         reason_not_attended = request.form.get('reasonNotAttended')
 
-        # Insert into `kk_profiles`
+        # Debug: Log form data
+        print(f"Form Data: {request.form}")
+
+        # Validate and recalculate the youth age group based on birthday
+        try:
+            calculated_youth_age_group = calculate_youth_age_group(birthday)
+            if calculated_youth_age_group != youth_age_group:
+                # Debug: Log age group mismatch
+                print(f"Age Group Mismatch: Frontend ({youth_age_group}), Calculated ({calculated_youth_age_group})")
+                youth_age_group = calculated_youth_age_group  # Overwrite to ensure consistency
+        except Exception as e:
+            print(f"Error calculating youth age group: {e}")
+            return f"Error calculating age group: {e}", 400
+
+        # Insert into `kk_profiles` using the existing id_kkprofiles
         query = """
-        INSERT INTO kk_profiles (
-            id_kkprofiles, first_name, last_name, middle_name, suffix, birthday, gender, email, phone,
-            purok, barangay, municipality, province, zipcode, civil_status, youth_classification,
-            specific_needs, youth_age_group, work_status, educational_bg, voter_status, vote_last_election,
-            attended_kk, times_attended, reason_not_attended
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        UPDATE kk_profiles 
+        SET 
+            suffix = %s, birthday = %s, gender = %s, email = %s, phone = %s,
+            purok = %s, barangay = %s, municipality = %s, province = %s, zipcode = %s, 
+            civil_status = %s, youth_classification = %s, specific_needs = %s, 
+            youth_age_group = %s, work_status = %s, educational_bg = %s, 
+            voter_status = %s, vote_last_election = %s, attended_kk = %s, 
+            times_attended = %s, reason_not_attended = %s
+        WHERE id_kkprofiles = %s
         """
         values = (
-            id_kk, first_name, last_name, middle_name, suffix, birthday, gender, email, phone,
-            purok, barangay, municipality, province, zipcode, civil_status, youth_classification,
-            specific_needs, youth_age_group, work_status, educational_bg, voter_status, vote_last_election,
-            attended_kk, times_attended, reason_not_attended
+            suffix, birthday, gender, email, phone, purok, barangay, municipality,
+            province, zipcode, civil_status, youth_classification, specific_needs,
+            youth_age_group, work_status, educational_bg, voter_status, vote_last_election,
+            attended_kk, times_attended, reason_not_attended, id_kkprofiles
         )
 
-        cursor.execute(query, values)
-        db.commit()
+        # Debug: Log query and values before execution
+        print(f"Executing Query: {query}")
+        print(f"With Values: {values}")
+
+        try:
+            cursor.execute(query, values)
+            db.commit()
+            # Debug: Log successful database update
+            print("Profile data successfully updated in database")
+        except Exception as e:
+            db.rollback()
+            print(f"Database Error: {e}")
+            return f"Database error: {e}", 500
 
         # Redirect to confirmation page
+        cursor.close()
+        db.close()
+        print(f"Redirecting to confirmation page for {first_name}")
         return redirect(url_for('confirmation', name=first_name))
+
+    # Debug: Log when rendering the form
+    print("Rendering form page")
     cursor.close()
     db.close()
 
-    return render_template('form.html', id_kk=id_kk)
+    # Pass first, middle, and last name to pre-populate the form (only for display purposes)
+    return render_template(
+        'form.html',
+        id_kkprofiles=id_kkprofiles,
+        first_name=first_name,
+        middle_name=middle_name,
+        last_name=last_name
+    )
 
 @app.route('/confirmation')
 def confirmation():
@@ -1347,28 +1518,38 @@ def confirmation():
     return render_template('confirmation.html', name=name)
 
 # Login route
+from werkzeug.security import check_password_hash
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     db = get_db_connection()  # Get DB connection
     cursor = db.cursor()
+    
     if request.method == 'POST':
         # Collect login credentials
         kk_username = request.form.get('username')  # Match the name attribute in your HTML
         kk_password = request.form.get('password')
 
-        # Validate credentials
-        query = "SELECT id_kk FROM kk_users WHERE kk_username = %s AND kk_password = %s"
-        cursor.execute(query, (kk_username, kk_password))
+        # Validate credentials (fetch the hashed password from DB)
+        query = "SELECT id_kk, kk_password FROM kk_users WHERE kk_username = %s"
+        cursor.execute(query, (kk_username,))
         user = cursor.fetchone()
 
         if user:
-            # Login successful
-            session['username'] = kk_username
-            session['id_kk'] = user[0]  # Save user ID in session for easier profile lookup
-            return redirect(url_for('profile'))  # Redirect to the profile page
+            # Check if the password matches the hashed password
+            stored_hashed_password = user[1]
+            if check_password_hash(stored_hashed_password, kk_password):
+                # Password is correct
+                session['username'] = kk_username
+                session['id_kk'] = user[0]  # Save user ID in session for easier profile lookup
+                return redirect(url_for('profile'))  # Redirect to the profile page
+            else:
+                # Password is incorrect
+                return render_template('login.html', error="Invalid username or password")
         else:
-            # Login failed
+            # Username doesn't exist
             return render_template('login.html', error="Invalid username or password")
+    
     cursor.close()
     db.close()
     return render_template('login.html')

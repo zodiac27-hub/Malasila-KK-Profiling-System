@@ -150,7 +150,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
-              <span class="menu-title">Reports</span>
+              <span class="menu-title">Graph Reports</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -166,7 +166,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-file"></i>
               </span>
-              <span class="menu-title">Exports</span>
+              <span class="menu-title">Export History</span>
             </a>
           </li>
         </ul>
@@ -384,16 +384,16 @@
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
-                                <select name="positions" id="positions" class="form-control" required>
-                                    <option value="" >All Positions</option>
-                                    <option value="SK Chairmain">SK Chairman</option>
-                                    <option value="SK Secretary">SK Secretary</option>
-                                    <option value="SK Treasurer">SK Treasurer</option>
-                                    <option value="SK Kagawad">SK Kagawad</option>
-                                    </select>
+                                <select name="positions" id="positionFilter" class="form-control" required>
+                                  <option value="">All Positions</option>
+                                  <option value="SK Chairman">SK Chairman</option>
+                                  <option value="SK Secretary">SK Secretary</option>
+                                  <option value="SK Treasurer">SK Treasurer</option>
+                                  <option value="SK Kagawad">SK Kagawad</option>
+                                </select>
                               </div>
                             </div>
-                        </div>
+                                                    </div>
           
             <div class="row">
               <div class="col-lg-12 grid-margin stretch-card">
@@ -477,6 +477,9 @@
                                         <p><strong>Bday:</strong> <span id="user-bday"></span></p>
                                     </div>
                                     <div class="col-md-4">
+                                        <p><strong>Age:</strong> <span id="user-age"></span></p>
+                                    </div>
+                                    <div class="col-md-4">
                                         <p><strong>Gender:</strong> <span id="user-gender"></span></p>
                                     </div>
                                     <div class="col-md-4">
@@ -542,22 +545,32 @@
               <script>
                 $(document).ready(function() {
                   // Modal functionality for displaying user details
-                  $('.-row').on('click', function () {
+                  $('.-row').on('click', function() {
                     try {
                       const userData = $(this).data('user'); // Extract JSON data
                       const user = JSON.parse(userData); // Parse it into an object
-              
+                
                       const fullName = `${user[1]} ${user[2]} ${user[3]}`.trim(); // Handle name formatting
-              
+                
+                      // Calculate age based on birthday
+                      const birthday = new Date(user[5]);
+                      const today = new Date();
+                      let age = today.getFullYear() - birthday.getFullYear();
+                      const monthDiff = today.getMonth() - birthday.getMonth();
+                      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthday.getDate())) {
+                        age--; // Adjust age if the birthday hasn't occurred yet this year
+                      }
+                
                       // Populate details in the modal
                       $('#user-position').text(user[0]);
-                      $('#user-name').text(fullName );
+                      $('#user-name').text(fullName);
                       $('#user-suffix').text(user[4] || "N/A");
-                      $('#user-bday').text(user[5] );
+                      $('#user-bday').text(user[5]);
+                      $('#user-age').text(age); // Display the calculated age
                       $('#user-gender').text(user[6]);
                       $('#user-email').text(user[7] || "N/A");
                       $('#user-phone').text(user[8] || "N/A");
-                      $('#user-purok').text(user[9] );
+                      $('#user-purok').text(user[9]);
                       $('#user-barangay').text(user[10]);
                       $('#user-municipality').text(user[11]);
                       $('#user-province').text(user[12]);
@@ -571,7 +584,7 @@
                       $('#user-vote-last-election').text(user[20]);
                       $('#user-attended-kk').text(user[21]);
                       $('#user-times-attended').text(user[22]);
-              
+                
                       // Open the modal after populating details
                       $('#detailsModal').modal('show');
                     } catch (error) {
@@ -579,66 +592,89 @@
                     }
                   });
                 });
-  
+                  
                 $(document).ready(function() {
-                  // Load positions with an optional year term filter
-                  function loadPositions(yearTerm = "", name = "") {
-                    $.ajax({
-                        type: 'GET',
-                        url: '/get_positions',
-                        data: { year_term: yearTerm, name: name }, // Pass year_term and name as query parameters
-                        success: function(data) {
-                            $('table.table-hover tbody').empty(); // Clear existing rows
-                            data.forEach(function(row) {
-                                let year_term = row.year_term || 'N/A';
-                                let position = row.position || 'N/A';
-                                let name = row.name || 'N/A';
-                                let gender = row.gender || 'N/A';
-                                let email = row.email || 'N/A';
-                                let phone = row.phone || 'N/A';
-                                let purok = row.purok || 'N/A';
-                
-                                let newRow = `
-                                    <tr>
-                                        <td>${year_term}</td>
-                                        <td>${position}</td>
-                                        <td>${name}</td>
-                                        <td>${gender}</td>
-                                        <td>${email}</td>
-                                        <td>${phone}</td>
-                                        <td>${purok}</td>
-                                    </tr>
-                                `;
-                                $('table.table-hover tbody').append(newRow);
-                            });
-                        },
-                        error: function(error) {
-                            console.error('Error fetching positions:', error);
-                        }
-                    });
-                }
-                
-                // Fetch positions when the page loads
-                loadPositions();
-                
-                // Handle year term filter change
-                $('#yearTermFilter').on('change', function() {
-                    const selectedYearTerm = $(this).val();
-                    const nameSearch = $('#nameSearchInput').val(); // Get the current value of name search input
-                    loadPositions(selectedYearTerm, nameSearch); // Reload with the selected year term and name
-                });
-                
-                // Handle name search input change
-                $('#nameSearchInput').on('input', function() {
-                    const nameSearch = $(this).val();
-                    const selectedYearTerm = $('#yearTermFilter').val(); // Get the current value of year term filter
-                    loadPositions(selectedYearTerm, nameSearch); // Reload with the selected name and year term
-                });
-                                  
+                  // Load positions with optional filters: year term, name, and position
+                  function loadPositions(yearTerm = "", name = "", position = "") {
+                      $.ajax({
+                          type: 'GET',
+                          url: '/get_positions',
+                          data: { 
+                              year_term: yearTerm, 
+                              name: name, 
+                              position: position  // Include position as a filter
+                          },
+                          success: function(data) {
+                              $('table.table-hover tbody').empty(); // Clear existing rows
+                              
+                              if (data.length === 0) {
+                                  // Add a "No results found" row if the data array is empty
+                                  $('table.table-hover tbody').append(`
+                                      <tr>
+                                          <td colspan="7" class="text-center">No results found</td>
+                                      </tr>
+                                  `);
+                              } else {
+                                  data.forEach(function(row) {
+                                      let year_term = row.year_term || 'N/A';
+                                      let position = row.position || 'N/A';
+                                      let name = row.name || 'N/A';
+                                      let gender = row.gender || 'N/A';
+                                      let email = row.email || 'N/A';
+                                      let phone = row.phone || 'N/A';
+                                      let purok = row.purok || 'N/A';
+                          
+                                      let newRow = `
+                                          <tr>
+                                              <td>${year_term}</td>
+                                              <td>${position}</td>
+                                              <td>${name}</td>
+                                              <td>${gender}</td>
+                                              <td>${email}</td>
+                                              <td>${phone}</td>
+                                              <td>${purok}</td>
+                                          </tr>
+                                      `;
+                                      $('table.table-hover tbody').append(newRow);
+                                  });
+                              }
+                          },
+                          error: function(error) {
+                              console.error('Error fetching positions:', error);
+                          }
+                      });
+                  }
+              
+                  // Fetch positions when the page loads
+                  loadPositions();
+              
+                  // Handle year term filter change
+                  $('#yearTermFilter').on('change', function() {
+                      const selectedYearTerm = $(this).val();
+                      const nameSearch = $('#nameSearchInput').val(); // Get the current value of name search input
+                      const positionFilter = $('#positionFilter').val(); // Get the selected position filter
+                      loadPositions(selectedYearTerm, nameSearch, positionFilter); // Reload with the selected filters
+                  });
+              
+                  // Handle name search input change
+                  $('#nameSearchInput').on('input', function() {
+                      const nameSearch = $(this).val();
+                      const selectedYearTerm = $('#yearTermFilter').val(); // Get the current value of year term filter
+                      const positionFilter = $('#positionFilter').val(); // Get the current value of position filter
+                      loadPositions(selectedYearTerm, nameSearch, positionFilter); // Reload with the selected filters
+                  });
+              
+                  // Handle position filter change
+                  $('#positionFilter').on('change', function() {
+                      const selectedPosition = $(this).val();
+                      const selectedYearTerm = $('#yearTermFilter').val(); // Get the current value of year term filter
+                      const nameSearch = $('#nameSearchInput').val(); // Get the current value of name search input
+                      loadPositions(selectedYearTerm, nameSearch, selectedPosition); // Reload with the selected filters
+                  });
+              
                   // Autocomplete functionality for the name field
                   $('#name').on('input', function() {
                       let query = $(this).val();
-            
                       if (query.length >= 2) {
                           $.ajax({
                               type: 'GET',
@@ -659,7 +695,7 @@
                           $('#nameSuggestions').hide();
                       }
                   });
-            
+              
                   // Handle click on a suggestion
                   $('#nameSuggestions').on('click', '.list-group-item', function(e) {
                       e.preventDefault();
@@ -667,24 +703,20 @@
                       $('#name').val(selectedName);
                       $('#nameSuggestions').hide();
                   });
-            
+              
                   // Handle form submission
                   $('#assignPositionForm').on('submit', function(e) {
                       e.preventDefault();
-            
                       const formData = $(this).serialize();
                       console.log('Form Data:', formData); // Debugging
-            
                       $.ajax({
                           type: 'POST',
                           url: $(this).attr('action'),
                           data: formData,
                           success: function(response) {
                               console.log('Success:', response);
-            
                               // Close modal
                               $('#assignPositionModal').modal('hide');
-            
                               // Show smaller success notification
                               Swal.fire({
                                   position: 'top-end',
@@ -696,7 +728,6 @@
                                   showConfirmButton: false,
                                   toast: true // Toast-style popup
                               });
-            
                               // Reload the positions table
                               loadPositions();
                           },
@@ -715,7 +746,7 @@
                       });
                   });
               });
-            
+                          
             </script>
             
           <!-- content-wrapper ends -->

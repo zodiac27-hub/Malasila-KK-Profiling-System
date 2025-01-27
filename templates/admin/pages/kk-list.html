@@ -171,7 +171,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
-              <span class="menu-title">Reports</span>
+              <span class="menu-title">Graph Reports</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -187,7 +187,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-file"></i>
               </span>
-              <span class="menu-title">Exports</span>
+              <span class="menu-title">Export History</span>
             </a>
           </li>
         </ul>
@@ -337,7 +337,7 @@
                     <select class="form-control" id="ageFilter">
                         <option value="">All Ages</option>
                         <option value="15-30">15-30 Years Old</option>
-                        <option value="31+">31 Years Old and Above</option>
+                        <option value="31+">Adult</option>
                     </select>
                 </div>
                   <div class="col-md-3">
@@ -464,19 +464,19 @@
               </div>
               
 
-<!-- Modal for Editing User Details -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="editModalLabel">Update User Details</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-                          <!-- Notification Container -->
-<div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
+              <!-- Modal for Editing User Details -->
+              <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Update User Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+              <!-- Notification Container -->
+              <div id="notification-container" style="position: fixed; top: 20px; right: 20px; z-index: 1050;"></div>
 
               <form id="updateUserForm">
                   <input type="hidden" id="userId" name="id">
@@ -577,9 +577,11 @@
                 <div class="form-group">
                     <label for="youthAgeGroup">Youth Age Group</label>
                     <select class="form-control" id="youthAgeGroup" name="youth_age_group">
-                      <option value="Child Youth ">Child Youth (15-17 years old)</option>
+                      <option value="Child Youth">Child Youth (15-17 years old)</option>
                       <option value="Core Youth">Core Youth (18-24 years old)</option>
                       <option value="Young Adult">Young Adult (25-30 years old)</option>
+                      <option value="Adult">Adult (31+ years old)</option>
+
                   </select>
                 </div>
                 
@@ -838,97 +840,170 @@ Swal.fire({
 });</script>
 
 <!-- Modal -->
-              <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="detailsModalLabel">User Details</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Profile Picture and Details Section -->
-                            <div class="d-flex flex-column align-items-center">
-                                <img
-                                    src="https://www.w3schools.com/howto/img_avatar.png"
-                                    alt="Default Profile Picture"
-                                    class="rounded-circle mb-3"
-                                    style="width: 120px; height: 120px;"
-                                />
-                            </div>
-                            <!-- Details Section -->
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Name:</strong> <span id="user-name"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Suffix:</strong> <span id="user-suffix"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Birthday:</strong> <span id="user-bday"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Gender:</strong> <span id="user-gender"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Email:</strong> <span id="user-email"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Phone:</strong> <span id="user-phone"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Purok:</strong> <span id="user-purok"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Barangay:</strong> <span id="user-barangay"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Municipality:</strong> <span id="user-municipality"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Province:</strong> <span id="user-province"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Zipcode:</strong> <span id="user-zipcode"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p><strong>Civil Status:</strong> <span id="user-civil-status"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>Youth Classification:</strong> <span id="user-youth-classification"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>Youth Age Group:</strong> <span id="user-youth-age-group"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>Work Status:</strong> <span id="user-work-status"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>Educational Background:</strong> <span id="user-educational-background"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>Voter Status:</strong> <span id="user-voter-status"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>Voted Last Election:</strong> <span id="user-vote-last-election"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>Attended KK Assembly?:</strong> <span id="user-attended-kk"></span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                      <p><strong>If yes, How many times?:</strong> <span id="user-times-attended"></span></p>
-                                    </div>
+<style>
+  body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
+  }
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  .modal-content {
+    background-color: #191C24;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-header {
+    border-bottom: 1px solid #333;
+    padding: 20px;
+  }
+
+  .modal-title {
+    color: #ffffff;
+    font-size: 1rem;
+  }
+
+  .close {
+    color: #999;
+    opacity: 0.8;
+  }
+
+  .close:hover {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .modal-body {
+    padding: 30px;
+  }
+
+  .rounded-circle {
+    border: 3px solid #555;
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+  .profile-header img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  }
+
+  .profile-info {
+    flex: 1;
+}
+
+
+  .profile-info h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color:rgb(104, 148, 244);
+
+}
+
+.profile-info p {
+  font-size: 1.1rem;
+  margin: 5px 0;
+  color: #666;
+}
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background-color: #252830;
+    border-radius: 10px;
+  }
+
+  .details-grid p {
+    margin: 2px 0;
+  }
+
+  .details-grid p strong {
+    color:rgb(111, 112, 113);
+  }
+
+  .details-grid p span {
+    color: #e0e0e0;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .modal-dialog {
+      width: 90%;
+      margin: auto;
+    }
+
+    .details-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailsModalLabel">KK Member Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+<div class="modal-body">
+  <div
+    class="profile-header"
+  >
+    <img
+      src="https://www.w3schools.com/howto/img_avatar.png"
+      alt="Default Profile Picture"
+      class="rounded-circle"
+      style="width: 120px; height: 120px;"
+    />
+    <div class="profile-info">
+      <h2 id="user-name"></h2>
+      <p><strong>Email:</strong> <span id="user-email"></span></p>
+      <p><strong>Phone:</strong> <span id="user-phone"></span></p>
+      <p><strong>Purok:</strong> <span id="user-purok"></span></p>
+    </div>
+  </div>
+  <hr />
+  <div class="details-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+    <p><strong>First Name:</strong> <span id="user-first-name"></span></p>
+    <p><strong>Middle Name:</strong> <span id="user-middle-name"></span></p>
+    <p><strong>Last Name:</strong> <span id="user-last-name"></span></p>
+    <p><strong>Suffix:</strong> <span id="user-suffix"></span></p>
+    <p><strong>Birthday:</strong> <span id="user-bday"></span></p>
+    <p><strong>Age:</strong> <span id="user-age"></span></p>
+    <p><strong>Gender:</strong> <span id="user-gender"></span></p>
+    <p><strong>Youth Age Group:</strong> <span id="user-youth-age-group"></span></p>
+    <p><strong>Barangay:</strong> <span id="user-barangay"></span></p>
+    <p><strong>Municipality:</strong> <span id="user-municipality"></span></p>
+    <p><strong>Province:</strong> <span id="user-province"></span></p>
+    <p><strong>Zipcode:</strong> <span id="user-zipcode"></span></p>
+    <p><strong>Civil Status:</strong> <span id="user-civil-status"></span></p>
+    <p><strong>Youth Classification:</strong> <span id="user-youth-classification"></span></p>
+    <p><strong>Work Status:</strong> <span id="user-work-status"></span></p>
+    <p><strong>Educational Background:</strong> <span id="user-educational-background"></span></p>
+    <p><strong>Voter Status:</strong> <span id="user-voter-status"></span></p>
+    <p><strong>Voted Last Election:</strong> <span id="user-vote-last-election"></span></p>
+    <p><strong>Attended KK Assembly?:</strong> <span id="user-attended-kk"></span></p>
+    <p><strong>If yes, How many times?:</strong> <span id="user-times-attended"></span></p>
+  </div>
+</div>
+          </div>
+  </div>
+</div>
           </div>
         </div>
       </div>
@@ -939,14 +1014,6 @@ Swal.fire({
 
       
       <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleButton = document.querySelector('.toggle-btn'); // Button to collapse sidebar
-            const sidebar = document.querySelector('#sidebar');
-    
-            toggleButton.addEventListener('click', () => {
-                sidebar.classList.toggle('sidebar-collapsed');
-            });
-        });
 
         document.addEventListener("DOMContentLoaded", function () {
           const ageFilter = document.getElementById("ageFilter");
@@ -1026,36 +1093,54 @@ Swal.fire({
     
             // Modal functionality for displaying user details
             $('.clickable-row').on('click', function (event) {
-                // Ignore clicks on buttons or dropdowns within the row
-                if ($(event.target).closest('.dropdown-item').length) return;
-    
-                const user = $(this).data('user');
-                console.log('Viewing Details modal triggered for:', user);
-                const fullName = `${user['first_name']} ${user['middle_name']} ${user['last_name']} `.trim();
-    
-                // Populate details in the modal
-                $('#user-name').text(fullName);
-                $('#user-suffix').text(user['suffix']);
-                $('#user-bday').text(formatDate(user['birthday']));
-                $('#user-gender').text(user['gender']);
-                $('#user-email').text(user['email']);
-                $('#user-phone').text(user['phone']);
-                $('#user-purok').text(user['purok']);
-                $('#user-barangay').text(user['barangay']);
-                $('#user-municipality').text(user['municipality']);
-                $('#user-province').text(user['province']);
-                $('#user-zipcode').text(user['zipcode']);
-                $('#user-civil-status').text(user['civil_status']);
-                $('#user-youth-classification').text(user['youth_classification']);
-                $('#user-youth-age-group').text(user['youth_age_group']);
-                $('#user-work-status').text(user['work_status']);
-                $('#user-educational-background').text(user['educational_bg']);
-                $('#user-voter-status').text(user['voter_status']);
-                $('#user-vote-last-election').text(user['vote_last_election']);
-                $('#user-attended-kk').text(user['attended_kk']);
-                $('#user-times-attended').text(user['times_attended']);
+              // Ignore clicks on buttons or dropdowns within the row
+              if ($(event.target).closest('.dropdown-item').length) return;
+            
+              const user = $(this).data('user');
+              console.log('Viewing Details modal triggered for:', user);
+              const fullName = `${user['first_name']} ${user['middle_name']} ${user['last_name']} `.trim();
+            
+              // Function to calculate age based on birthday
+              function calculateAge(birthday) {
+                const birthDate = new Date(birthday);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                  age--; // Adjust age if the birthday hasn't occurred yet this year
+                }
+                return age;
+              }
+            
+              const userAge = calculateAge(user['birthday']); // Calculate age
+            
+              // Populate details in the modal
+              $('#user-first-name').text(user['first_name']);
+              $('#user-middle-name').text(user['middle_name']);
+              $('#user-last-name').text(user['last_name']);
+              $('#user-name').text(fullName);
+              $('#user-suffix').text(user['suffix']);
+              $('#user-bday').text(formatDate(user['birthday']));
+              $('#user-age').text(userAge); // Display the calculated age
+              $('#user-gender').text(user['gender']);
+              $('#user-email').text(user['email']);
+              $('#user-phone').text(user['phone']);
+              $('#user-purok').text(user['purok']);
+              $('#user-barangay').text(user['barangay']);
+              $('#user-municipality').text(user['municipality']);
+              $('#user-province').text(user['province']);
+              $('#user-zipcode').text(user['zipcode']);
+              $('#user-civil-status').text(user['civil_status']);
+              $('#user-youth-classification').text(user['youth_classification']);
+              $('#user-youth-age-group').text(user['youth_age_group']);
+              $('#user-work-status').text(user['work_status']);
+              $('#user-educational-background').text(user['educational_bg']);
+              $('#user-voter-status').text(user['voter_status']);
+              $('#user-vote-last-election').text(user['vote_last_election']);
+              $('#user-attended-kk').text(user['attended_kk']);
+              $('#user-times-attended').text(user['times_attended']);
             });
-    
+                
             // Initially hide "No Results" message
             $('#noResultsMessage').hide();
         });
@@ -1187,7 +1272,7 @@ Swal.fire({
     } else if (voterTypeFilter.toLowerCase() === "not registered" && ageFilter === "15-30") {
         title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (Not Registered, Ages 15-30)';
     } else {
-        title = 'Katipunan ng Kabataan Youth Profile';
+        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES';
     }
 
     // Set title in PDF

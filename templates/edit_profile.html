@@ -9,284 +9,363 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Classic Styling -->
+    <!-- Modern Styling -->
     <style>
         body {
-            background: linear-gradient(to right, #4CAF50, #2F8D46); /* Green Gradient Background */
+            background-color: #f4f7fc;
             font-family: 'Arial', sans-serif;
-            color: #333;
             margin: 0;
             padding: 0;
         }
 
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            background-color: #0077b6;
+            color: white;
+            padding-top: 40px;
+            padding-left: 20px;
+            transition: width 0.3s;
+        }
+
+        .sidebar h2 {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #005f8a;
+        }
+
+        .sidebar.collapsed {
+            width: 0;
+            padding-top: 15px;
+            padding-left: 0;
+        }
+
+        .sidebar.collapsed h2, .sidebar.collapsed a {
+            display: none;
+        }
+
+
+        .toggle-btn {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 1.8rem;
+            color:rgb(188, 191, 193);
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+
+        .menu-toggle:hover {
+            background-color: #005f8a;
+        }
+
+        /* Main content */
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+            transition: 0.3s;
+        }
+        .main-content.collapsed {
+            margin-left: 0;
+        }
+
+
+        /* Profile Picture */
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #0077b6;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Styling */
         .container {
-            width: 75%;
-            max-width: 900px;
             background: white;
-            border: 1px solid #ddd;
             border-radius: 10px;
             padding: 40px;
-            margin: 40px auto;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
 
         .container h2 {
             text-align: center;
-            color: #444;
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin-bottom: 30px;
-            font-weight: bold;
-            border-bottom: 2px solid #444;
+            font-weight: 700;
+            border-bottom: 3px solid #0077b6;
             padding-bottom: 10px;
         }
 
-        .profile-pic {
-            display: block;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: #e0e0e0;
-            background-image: url('https://www.w3schools.com/w3images/avatar2.png');
-            background-size: cover;
-            background-position: center;
-            border: 2px solid #555;
+        .form-label {
+            font-weight: 600;
         }
 
-        .form-group {
-            margin-top: 20px;
-            padding: 10px;
-        }
-
-        .form-group label {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .form-group input {
-            font-size: 1rem;
-            padding: 10px;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
         }
 
         .btn-back {
-            display: inline-block;
-            background-color: #444;
+            background-color: #0077b6;
             color: white;
             padding: 10px 20px;
             text-align: center;
             font-weight: bold;
             border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
         }
 
         .btn-back:hover {
-            background-color: #666;
+            background-color: #005f8a;
         }
 
-        .dropdown {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #888;
-        }
-
-        .d-flex {
-            margin-top: 30px;
-            justify-content: space-between;
-        }
-
-        /* Notification Styles */
-        .notification {
-            margin-bottom: 20px;
-        }
-        .notification-success {
+        .btn-save {
             background-color: #28a745;
             color: white;
-            padding: 10px;
+            padding: 10px 20px;
+            font-weight: bold;
             border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .notification-error {
-            background-color: #dc3545;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
         }
 
+        .btn-save:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive Design for Mobile and Tablets */
         @media (max-width: 768px) {
-            .container {
-                width: 90%;
-                padding: 20px;
+            .sidebar {
+                width: 0;
+                height: 100%;
+                padding-top: 60px;
+                transition: 0.3s;
+            }
+
+            .sidebar a {
+                padding: 8px 10px;
+                font-size: 1rem;
+            }
+
+            .sidebar.show {
+                width: 250px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .profile-pic {
+                width: 120px;
+                height: 120px;
             }
 
             .container h2 {
-                font-size: 1.8rem;
-            }
-
-            .btn-back {
-                padding: 8px 16px;
-                font-size: 0.9rem;
+                font-size: 1.6rem;
             }
 
             .form-group {
                 margin-top: 10px;
             }
+
+            .btn-back, .btn-save {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Logout Dropdown -->
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-            Menu
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('edit_profile') }}">Edit Details</a></li>
-            <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-        </ul>
-    </div>
 
-    <div class="container">
-        <!-- Notification Section -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="notification {% if category == 'success' %}notification-success{% else %}notification-error{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+        <br><h2>Edit Profile</h2>
+        <a href="{{ url_for('profile') }}">View Profile</a>
+        <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <!-- Toggle Button -->
+    <span class="toggle-btn" onclick="toggleSidebar()">☰</span>
+
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="container">
+            <div class="text-center">
+                <img src="https://www.w3schools.com/w3images/avatar2.png" class="profile-pic" alt="Profile Picture">
+            </div>
+
+            <h2>Edit Your Profile Details</h2>
+
+            <!-- Notification Section -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="notification {% if category == 'success' %}notification-success{% else %}notification-error{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if user %}
+            <form method="POST" action="{{ url_for('edit_profile') }}">
+                <div class="form-group">
+                    <label for="firstName" class="form-label">First Name:</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" value="{{ user[1] }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="middleName" class="form-label">Middle Name:</label>
+                    <input type="text" class="form-control" id="middleName" name="middleName" value="{{ user[2] }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Last Name:</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" value="{{ user[3] }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="suffix" class="form-label">Suffix:</label>
+                    <input type="text" class="form-control" id="suffix" name="suffix" value="{{ user[4] }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="birthday" class="form-label">Birthday:</label>
+                    <input type="date" class="form-control" id="birthday" name="birthday" value="{{ user[5] }}" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender" class="form-label">Gender:</label>
+                    <input type="text" class="form-control" id="gender" name="gender" value="{{ user[6] }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user[7] }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone Number:</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ user[8] }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="purok" class="form-label">Purok:</label>
+                    <input type="text" class="form-control" id="purok" name="purok" value="{{ user[9] }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="barangay" class="form-label">Barangay:</label>
+                    <input type="text" class="form-control" id="barangay" name="barangay" value="{{ user[10] }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="municipality" class="form-label">Municipality:</label>
+                    <input type="text" class="form-control" id="municipality" name="municipality" value="{{ user[11] }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="province"><strong>Province:</strong></label>
+                    <input type="text" class="form-control" id="province" name="province" value="{{ user[12] }}">
+                </div>
+                                
+                <div class="form-group">
+                    <label for="zipcode"><strong>Zipcode:</strong></label>
+                    <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ user[13] }}">
+                </div>
+                <div class="form-group">
+                    <label for="civil_status"><strong>Civil Status:</strong></label>
+                    <input type="text" class="form-control" id="civil_status" name="civil_status" value="{{ user[14] }}">
+                </div>
+                <div class="form-group">
+                    <label for="youth_classification"><strong>Youth Classification:</strong></label>
+                    <input type="text" class="form-control" id="youth_classification" name="youth_classification" value="{{ user[15] }}">
+                </div>
+                <div class="form-group">
+                    <label for="specific_needs"><strong>Specific Needs:</strong></label>
+                    <input type="text" class="form-control" id="specific_needs" name="specific_needs" value="{{ user[16] }}">
+                </div>
+                <div class="form-group">
+                    <label for="youth_age_group"><strong>Youth Age Group:</strong></label>
+                    <input type="text" class="form-control" id="youth_age_group" name="youth_age_group" value="{{ user[17] }}">
+                </div>
+                <div class="form-group">
+                    <label for="work_status"><strong>Work Status:</strong></label>
+                    <input type="text" class="form-control" id="work_status" name="work_status" value="{{ user[18] }}">
+                </div>
+                <div class="form-group">
+                    <label for="education"><strong>Education:</strong></label>
+                    <input type="text" class="form-control" id="education" name="education" value="{{ user[19] }}">
+                </div>
+                <div class="form-group">
+                    <label for="voter_status"><strong>Voter Status:</strong></label>
+                    <input type="text" class="form-control" id="voter_status" name="voter_status" value="{{ user[20] }}">
+                </div>
+                <div class="form-group">
+                    <label for="voted_last_election"><strong>Voted Last Election:</strong></label>
+                    <input type="text" class="form-control" id="voted_last_election" name="voted_last_election" value="{{ user[21] }}">
+                </div>
+                <div class="form-group">
+                    <label for="attended_kk"><strong>Attended KK:</strong></label>
+                    <input type="text" class="form-control" id="attended_kk" name="attended_kk" value="{{ user[22] }}">
+                </div>
+                <div class="form-group">
+                    <label for="times_attended"><strong>Times Attended:</strong></label>
+                    <input type="text" class="form-control" id="times_attended" name="times_attended" value="{{ user[23] }}">
+                </div>
+                <div class="form-group">
+                    <label for="reason_not_attended"><strong>Reason Not Attended:</strong></label>
+                    <input type="text" class="form-control" id="reason_not_attended" name="reason_not_attended" value="{{ user[24] }}">
+                </div>                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('profile') }}" class="btn-back">Back to Profile</a>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+            {% else %}
+                <p class="text-danger">No profile found or session expired.</p>
             {% endif %}
-        {% endwith %}
+        </div>
 
-        <div class="profile-pic"></div>
-
-        <h2>Edit Your Profile Details</h2>
-        {% if user %}
-        <form method="POST" action="{{ url_for('edit_profile') }}">
-            <div class="form-group">
-                <label for="firstName"><strong>First Name:</strong></label>
-                <input type="text" class="form-control" id="firstName" name="firstName" value="{{ user[1] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="middleName"><strong>Middle Name:</strong></label>
-                <input type="text" class="form-control" id="middleName" name="middleName" value="{{ user[2] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="lastName"><strong>Last Name:</strong></label>
-                <input type="text" class="form-control" id="lastName" name="lastName" value="{{ user[3] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="suffix"><strong>Suffix:</strong></label>
-                <input type="text" class="form-control" id="suffix" name="suffix" value="{{ user[4] }}">
-            </div>
-            <div class="form-group">
-                <label for="birthday"><strong>Birthday:</strong></label>
-                <input type="date" class="form-control" id="birthday" name="birthday" value="{{ user[5] }}" readonly>
-            </div>
-            <div class="form-group">
-                <label for="gender"><strong>Gender:</strong></label>
-                <input type="text" class="form-control" id="gender" name="gender" value="{{ user[6] }}">
-            </div>
-            <div class="form-group">
-                <label for="email"><strong>Email:</strong></label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ user[7] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="phone"><strong>Phone Number:</strong></label>
-                <input type="text" class="form-control" id="phone" name="phone" value="{{ user[8] }}" required>
-            </div>
-            <div class="form-group">
-                <label for="purok"><strong>Purok:</strong></label>
-                <input type="text" class="form-control" id="purok" name="purok" value="{{ user[9] }}">
-            </div>
-            <div class="form-group">
-                <label for="barangay"><strong>Barangay:</strong></label>
-                <input type="text" class="form-control" id="barangay" name="barangay" value="{{ user[10] }}">
-            </div>
-            <div class="form-group">
-                <label for="municipality"><strong>Municipality:</strong></label>
-                <input type="text" class="form-control" id="municipality" name="municipality" value="{{ user[11] }}">
-            </div>
-            <div class="form-group">
-                <label for="province"><strong>Province:</strong></label>
-                <input type="text" class="form-control" id="province" name="province" value="{{ user[12] }}">
-            </div>
-            <div class="form-group">
-                <label for="zipcode"><strong>Zipcode:</strong></label>
-                <input type="text" class="form-control" id="zipcode" name="zipcode" value="{{ user[13] }}">
-            </div>
-            <div class="form-group">
-                <label for="civil_status"><strong>Civil Status:</strong></label>
-                <input type="text" class="form-control" id="civil_status" name="civil_status" value="{{ user[14] }}">
-            </div>
-            <div class="form-group">
-                <label for="youth_classification"><strong>Youth Classification:</strong></label>
-                <input type="text" class="form-control" id="youth_classification" name="youth_classification" value="{{ user[15] }}">
-            </div>
-            <div class="form-group">
-                <label for="specific_needs"><strong>Specific Needs:</strong></label>
-                <input type="text" class="form-control" id="specific_needs" name="specific_needs" value="{{ user[16] }}">
-            </div>
-            <div class="form-group">
-                <label for="youth_age_group"><strong>Youth Age Group:</strong></label>
-                <input type="text" class="form-control" id="youth_age_group" name="youth_age_group" value="{{ user[17] }}">
-            </div>
-            <div class="form-group">
-                <label for="work_status"><strong>Work Status:</strong></label>
-                <input type="text" class="form-control" id="work_status" name="work_status" value="{{ user[18] }}">
-            </div>
-            <div class="form-group">
-                <label for="education"><strong>Education:</strong></label>
-                <input type="text" class="form-control" id="education" name="education" value="{{ user[19] }}">
-            </div>
-            <div class="form-group">
-                <label for="voter_status"><strong>Voter Status:</strong></label>
-                <input type="text" class="form-control" id="voter_status" name="voter_status" value="{{ user[20] }}">
-            </div>
-            <div class="form-group">
-                <label for="voted_last_election"><strong>Voted Last Election:</strong></label>
-                <input type="text" class="form-control" id="voted_last_election" name="voted_last_election" value="{{ user[21] }}">
-            </div>
-            <div class="form-group">
-                <label for="attended_kk"><strong>Attended KK:</strong></label>
-                <input type="text" class="form-control" id="attended_kk" name="attended_kk" value="{{ user[22] }}">
-            </div>
-            <div class="form-group">
-                <label for="times_attended"><strong>Times Attended:</strong></label>
-                <input type="text" class="form-control" id="times_attended" name="times_attended" value="{{ user[23] }}">
-            </div>
-            <div class="form-group">
-                <label for="reason_not_attended"><strong>Reason Not Attended:</strong></label>
-                <input type="text" class="form-control" id="reason_not_attended" name="reason_not_attended" value="{{ user[24] }}">
-            </div>
-
-            <div class="d-flex justify-content-between mt-4">
-                <a href="{{ url_for('profile') }}" class="btn-back">Back to Profile</a>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </div>
-        </form>
-        {% else %}
-            <p class="text-danger">No profile found or session expired.</p>
-        {% endif %}
+        <footer>
+            &copy; 2024 Modern Profile Interface. All Rights Reserved.
+        </footer>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS and Custom Script -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript for Menu Toggle -->
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+            document.querySelector('.main-content').classList.toggle('collapsed');
+        }
+    </script>
 </body>
 </html>

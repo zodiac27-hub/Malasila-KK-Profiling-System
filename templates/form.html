@@ -88,35 +88,55 @@
 </div>
 
                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Create Your Profile</h3>
-                <form method="POST" action="/register">
-    
+                <form method="POST" action="{{ url_for('register', id_kkprofiles=id_kkprofiles) }}">
+
+                  <!-- Hidden input to pass id_kkprofiles -->
+                  <input type="hidden" name="id_kkprofiles" value="{{ id_kkprofiles }}" />
+
                   <div class="row">
                     <div class="col-md-6 mb-4">
-    
                       <div data-mdb-input-init class="form-outline">
-                        <input type="text" id="firstName" name="firstName" class="form-control form-control-lg" required />
-                        <label class="form-label" for="firstName">First Name</label>
+                        <input 
+                        type="text" 
+                        id="firstName" 
+                        name="firstName" 
+                        class="form-control form-control-lg" 
+                        value="{{ first_name }}" 
+                        readonly 
+                      />                        
+                      <label class="form-label" for="firstName">First Name</label>
                       </div>
-    
                     </div>
                     <div class="col-md-6 mb-4">
     
                       <div data-mdb-input-init class="form-outline">
-                        <input type="text" id="middleName" name="middleName" class="form-control form-control-lg" required/>
-                        <label class="form-label" for="middleName">Middle Name</label>
+                        <input 
+                        type="text" 
+                        id="middleName" 
+                        name="middleName" 
+                        class="form-control form-control-lg" 
+                        value="{{ middle_name }}"
+                        readonly 
+                      />
+                                        
+                      <label class="form-label" for="middleName">Middle Name</label>
                       </div>
-    
                     </div>
                   </div>
 
                   <div class="row">
                     <div class="col-md-6 mb-4">
-    
                       <div data-mdb-input-init class="form-outline">
-                        <input type="text" id="lastName" name="lastName" class="form-control form-control-lg" required/>
-                        <label class="form-label" for="lastName">Last Name</label>
+                        <input 
+                        type="text" 
+                        id="lastName" 
+                        name="lastName" 
+                        class="form-control form-control-lg" 
+                        value="{{ last_name }}"
+                        readonly 
+                      />
+                      <label class="form-label" for="lastName">Last Name</label>
                       </div>
-    
                     </div>
                     <div class="col-md-6 mb-4">
     
@@ -136,16 +156,46 @@
                       </div>
                     </div>
             
-                <!-- Flatpickr JS -->
-                <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-                <script>
-                    // Initialize Flatpickr
-                    flatpickr("#birthdayDate", {
+                    <!-- Flatpickr JS -->
+                    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+                    <script>
+                      // Initialize Flatpickr
+                      flatpickr("#birthdayDate", {
                         dateFormat: "Y-m-d", // Format: YYYY-MM-DD
                         maxDate: "today", // Disable future dates
-                    });
-                </script>
+                        onChange: function(selectedDates) {
+                          calculateAge(selectedDates[0]); // Trigger calculation when the date is selected
+                        }
+                      });
 
+                      function calculateAge(birthDate) {
+                        const today = new Date();
+                        const age = today.getFullYear() - birthDate.getFullYear();
+                        const month = today.getMonth() - birthDate.getMonth();
+
+                        // Adjust age if the birthdate has not yet occurred this year
+                        const isBeforeBirthday = month < 0 || (month === 0 && today.getDate() < birthDate.getDate());
+                        const userAge = age - (isBeforeBirthday ? 1 : 0);
+
+                        let ageGroup = '';
+
+                        // Determine the youth age group based on the age
+                        if (userAge >= 15 && userAge <= 17) {
+                          ageGroup = 'Child Youth'; // 15-17 years old
+                        } else if (userAge >= 18 && userAge <= 24) {
+                          ageGroup = 'Core Youth'; // 18-24 years old
+                        } else if (userAge >= 25 && userAge <= 30) {
+                          ageGroup = 'Young Adult'; // 25-30 years old
+                        }
+
+                        // Set the default option for the youth age group and disable the dropdown
+                        const youthAgeGroupSelect = document.getElementById('youthAgeGroup');
+                        if (ageGroup) {
+                          youthAgeGroupSelect.value = ageGroup;
+                        }
+                        youthAgeGroupSelect.disabled = false; // Disable the dropdown to prevent manual selection
+                      }
+                    </script>
                     <div class="col-md-6 mb-4">
     
                       <h6 class="mb-2 pb-1">Gender: </h6>
@@ -179,19 +229,19 @@
                         <small id="emailFeedback" class="text-danger" style="display:none;">Please enter a valid email address.</small>
                     </div>
                 
-                <script>
-                    const emailInput = document.getElementById('emailAddress');
-                    const emailFeedback = document.getElementById('emailFeedback');
-                
-                    emailInput.addEventListener('input', () => {
-                        const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-                        if (!emailPattern.test(emailInput.value)) {
-                            emailFeedback.style.display = 'block';
-                        } else {
-                            emailFeedback.style.display = 'none';
-                        }
-                    });
-                </script>
+                  <script>
+                      const emailInput = document.getElementById('emailAddress');
+                      const emailFeedback = document.getElementById('emailFeedback');
+                  
+                      emailInput.addEventListener('input', () => {
+                          const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+                          if (!emailPattern.test(emailInput.value)) {
+                              emailFeedback.style.display = 'block';
+                          } else {
+                              emailFeedback.style.display = 'none';
+                          }
+                      });
+                  </script>
     
 
 
@@ -285,7 +335,7 @@
                                 <option value="In School Youth">In School Youth</option>
                                 <option value="Out Of School Youth">Out of School Youth</option>
                                 <option value="Working Youth">Working Youth</option>
-                                <option value="Youth with Specific Needs">Youth w/ Specific Needs</option>
+                                <option value="Youth with Specific needs">Youth w/ Specific Needs</option>
                             </select>
                         </div>
                     </div>
@@ -302,27 +352,27 @@
                         </div>
                     </div>
             
-                <script>
-                    function toggleSpecificNeeds() {
-                        const youthClassification = document.getElementById('youthClassification').value;
-                        const specificNeedsOptions = document.getElementById('specificNeedsOptions');
-            
-                        if (youthClassification === 'Specific Needs') {
-                            specificNeedsOptions.style.display = 'block'; // Show the specific needs dropdown
-                        } else {
-                            specificNeedsOptions.style.display = 'none'; // Hide it
-                        }
-                    }
-                </script>
+                  <script>
+                      function toggleSpecificNeeds() {
+                          const youthClassification = document.getElementById('youthClassification').value;
+                          const specificNeedsOptions = document.getElementById('specificNeedsOptions');
+              
+                          if (youthClassification === 'Specific Needs') {
+                              specificNeedsOptions.style.display = 'block'; // Show the specific needs dropdown
+                          } else {
+                              specificNeedsOptions.style.display = 'none'; // Hide it
+                          }
+                      }
+                  </script>
 
                
 
                   <div class="col-12 mb-4">   
                   <div class="form-outline">
                     <label for="youthAgeGroup" class="form-label">Youth Age Group:</label>
-                      <select class="form-select" id="youthAgeGroup" name="youthAgeGroup">
+                      <select class="form-select" id="youthAgeGroup" name="youthAgeGroup" readonly>
                         <option value="" disabled selected>Choose option</option>
-                        <option value="Child Youth ">Child Youth (15-17 years old)</option>
+                        <option value="Child Youth">Child Youth (15-17 years old)</option>
                         <option value="Core Youth">Core Youth (18-24 years old)</option>
                         <option value="Young Adult">Young Adult (25-30 years old)</option>
                       </select>
@@ -396,56 +446,56 @@
                             <option value="No">NO</option>
                         </select>
                     </div>
-                </div>
-                
-                <!-- If YES: How many times? -->
-                <div id="yesOptions" class="col-12 mb-4 conditional" style="display: none;">   
-                    <div class="form-outline">
-                        <label for="timesAttended" class="form-label">If YES, how many times?</label>
-                        <select class="form-select" id="timesAttended" name="timesAttended">
-                            <option value="" disabled selected>Choose option</option>
-                            <option value="1-2 times">1-2 times</option>
-                            <option value="3-4 times">3-4 times</option>
-                            <option value="5 and above">5 and above</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- If NO: Why? -->
-                <div id="noOptions" class="col-12 mb-4 conditional" style="display: none;">   
-                    <div class="form-outline">
-                        <label for="reasonNotAttended" class="form-label">If NO, why?</label>
-                        <select class="form-select" id="reasonNotAttended" name="reasonNotAttended">
-                            <option value="" disabled selected>Choose option</option>
-                            <option value="There's no KK Assembly Meeting">There's no KK Assembly Meeting</option>
-                            <option value="Not interested to attend">Not interested to attend</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <script>
-                    function handleAttendanceChange() {
-                        const attendedDropdown = document.getElementById('attendedKK');
-                        const yesOptions = document.getElementById('yesOptions');
-                        const noOptions = document.getElementById('noOptions');
-                
-                        if (attendedDropdown.value === 'Yes') {
-                            yesOptions.style.display = 'block'; // Show "how many times" options
-                            noOptions.style.display = 'none';  // Hide "why" options
-                        } else if (attendedDropdown.value === 'No') {
-                            noOptions.style.display = 'block';  // Show "why" options
-                            yesOptions.style.display = 'none'; // Hide "how many times" options
-                        } else {
-                            yesOptions.style.display = 'none';
-                            noOptions.style.display = 'none';
-                        }
-                    }
-                </script>
-                
-                <div class="mt-4 pt-2">
-                  <button class="btn btn-primary btn-lg" type="submit">Submit</button>
-                </div>
-                </a>
+                  </div>
+                  
+                  <!-- If YES: How many times? -->
+                  <div id="yesOptions" class="col-12 mb-4 conditional" style="display: none;">   
+                      <div class="form-outline">
+                          <label for="timesAttended" class="form-label">If YES, how many times?</label>
+                          <select class="form-select" id="timesAttended" name="timesAttended">
+                              <option value="" disabled selected>Choose option</option>
+                              <option value="1-2 times">1-2 times</option>
+                              <option value="3-4 times">3-4 times</option>
+                              <option value="5 and above">5 and above</option>
+                          </select>
+                      </div>
+                  </div>
+                  
+                  <!-- If NO: Why? -->
+                  <div id="noOptions" class="col-12 mb-4 conditional" style="display: none;">   
+                      <div class="form-outline">
+                          <label for="reasonNotAttended" class="form-label">If NO, why?</label>
+                          <select class="form-select" id="reasonNotAttended" name="reasonNotAttended">
+                              <option value="" disabled selected>Choose option</option>
+                              <option value="There's no KK Assembly Meeting">There's no KK Assembly Meeting</option>
+                              <option value="Not interested to attend">Not interested to attend</option>
+                          </select>
+                      </div>
+                  </div>
+                  
+                  <script>
+                      function handleAttendanceChange() {
+                          const attendedDropdown = document.getElementById('attendedKK');
+                          const yesOptions = document.getElementById('yesOptions');
+                          const noOptions = document.getElementById('noOptions');
+                  
+                          if (attendedDropdown.value === 'Yes') {
+                              yesOptions.style.display = 'block'; // Show "how many times" options
+                              noOptions.style.display = 'none';  // Hide "why" options
+                          } else if (attendedDropdown.value === 'No') {
+                              noOptions.style.display = 'block';  // Show "why" options
+                              yesOptions.style.display = 'none'; // Hide "how many times" options
+                          } else {
+                              yesOptions.style.display = 'none';
+                              noOptions.style.display = 'none';
+                          }
+                      }
+                  </script>
+                  
+                  <div class="mt-4 pt-2">
+                    <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+                  </div>
+                  </a>
               </form>
               </div>
             </div>

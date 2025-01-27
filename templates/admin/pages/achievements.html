@@ -149,8 +149,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/vendors/css/vendor.bundle.base.css') }}">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<!-- Load jQuery first -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Load jQuery UI CSS -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<!-- Load jQuery UI JS -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
@@ -244,7 +250,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
-              <span class="menu-title">Reports</span>
+              <span class="menu-title">Graph Reports</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -260,7 +266,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-file"></i>
               </span>
-              <span class="menu-title">Exports</span>
+              <span class="menu-title">Export History</span>
             </a>
           </li>
           
@@ -271,7 +277,7 @@
         <!-- partial:../../partials/_navbar.html -->
         <nav class="navbar p-0 fixed-top d-flex flex-row">
           <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo-mini" href="../../index.html"><img src="../../assets/images/logo-mini.svg" alt="logo" /></a>
+            <a class="navbar-brand brand-logo-mini" href="{{ url_for('admin_index') }}"><img src="{{ url_for('static', filename='assets/images/logo/sk-logo.png') }}" alt="logo" /></a>
           </div>
           <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -413,6 +419,18 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
+                      <style>
+                        #assignPositionModal .modal-dialog {
+                          max-width: 90%; /* Adjust modal width */
+                          width: 800px;   /* Set a fixed width if needed */
+                        }
+                      
+                        #assignPositionModal .modal-content {
+                          height: auto;   /* Allow content to dictate height */
+                          min-height: 400px; /* Set a minimum height */
+                        }
+                      
+                        </style>
                       <div class="modal-body">
                         <form id="addAchievementForm" method="POST" action="/add_achievement" enctype="multipart/form-data">                          <div class="form-group">
                             <label for="project_name">Project Name</label>
@@ -423,20 +441,26 @@
                             <label for="project_location">Location/Purok</label>
                             <input type="text" name="project_location" id="project_location" class="form-control" placeholder="Enter details" autocomplete="off" />
                           </div>
+                          <div class="form-group">
+                            <label for="date_started">Date Started</label>
+                            <input type="date" name="date_started" id="date_started" class="form-control" placeholder="Select date" required autocomplete="off" />
+                          </div>
+
 
                           <div class="form-group">
-                            <label for="date_achieved">Achievement Date</label>
+                            <label for="date_achieved">Date Achieved</label>
                             <input type="date" name="date_achieved" id="date_achieved" class="form-control" placeholder="Select date" required autocomplete="off" />
                           </div>
 
- <!-- File Upload -->
- <div class="form-group">
-  <label for="project_image">File Upload</label>
-  <input type="file" name="img[]" id="project_image" class="form-control" accept="image/*" multiple>
-  
-  <!-- Preview images -->
-  <div id="image-preview-container"></div>              
-</div>                          <div class="form-group">
+                            <!-- File Upload -->
+                            <div class="form-group">
+                              <label for="project_image">File Upload</label>
+                              <input type="file" name="img[]" id="project_image" class="form-control" accept="image/*" multiple>
+                              
+                              <!-- Preview images -->
+                              <div id="image-preview-container"></div>              
+                            </div>                         
+                            <div class="form-group">
                             <label for="project_details">Project Description</label>
                             <textarea class="form-control" name="project_details" id="project_details" rows="4"></textarea>
                           </div>
@@ -448,7 +472,7 @@
                 </div>
               </nav>
             </div>
-
+            <!--Display modal achievements details--> 
             <div class="row">
               {% for achievement in achievements %}
                 <div class="col-sm-4 grid-margin">
@@ -456,20 +480,21 @@
                        data-id="{{ achievement.id_project }}"
                        data-project-name="{{ achievement.project_name }}"
                        data-project-location="{{ achievement.project_location }}"
+                       data-date-started="{{ achievement.date_started }}"
                        data-date-achieved="{{ achievement.date_achieved }}"
                        data-project-details="{{ achievement.project_details }}"
                        data-project-images="{{ achievement.image_urls }}"> <!-- Store multiple image URLs here -->
                     <div class="card-body position-relative">
                       <!-- Dropdown button in the upper-right -->
-                      <div class="dropdown position-absolute" style="top: 10px; right: 10px;">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <div class="dropdown position-absolute dropdown-dark" style="top: 10px; right: 10px;">
+                        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
                           <a class="dropdown-item" href="javascript:void(0);" onclick="editProject(this)">Edit</a>
                           <a class="dropdown-item" href="javascript:void(0);" onclick="deleteProject(this)">Delete</a>
                         </div>
                       </div>
-            
+                                  
                       <h3>{{ achievement.project_name }}</h3>
                       <div class="row">
                         <div class="col-8 col-sm-12 col-xl-8 my-auto">
@@ -486,7 +511,49 @@
               {% endfor %}
             </div>
                         
-            
+<style>
+/*toggle button */
+  .dropdown-dark .btn-dark {
+    background-color: #252830;
+    color: #fff;
+    border: 1px solid #2E3139;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .dropdown-dark .btn-dark:hover {
+    background-color: #444;
+    box-shadow: 0px 0px 8px rgba(64, 63, 63, 0.3);
+  }
+  
+  .dropdown-menu-dark {
+    background-color: #222;
+    border: 1px solid #444;
+    color: #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+  
+  .dropdown-menu-dark .dropdown-item {
+    color: #ddd;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .dropdown-menu-dark .dropdown-item:hover {
+    background-color: #333;
+    color: #fff;
+  }
+
+  
+  #editProjectModal .modal-dialog {
+    max-width: 90%; /* Adjust modal width */
+    width: 800px;   /* Set a fixed width if needed */
+  }
+
+  #editProjectModal .modal-content {
+    height: auto;   /* Allow content to dictate height */
+    min-height: 400px; /* Set a minimum height */
+  }
+
+</style>            
             <!-- Edit Modal -->
 <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -507,6 +574,11 @@
             <label for="projectLocation">Project Location</label>
             <input type="text" class="form-control" id="projectLocation" name="project_location">
           </div>
+          <div class="form-group">
+            <label for="dateStarted">Date Started</label>
+            <input type="date" class="form-control" id="dateStarted" name="date_started">
+          </div>
+
           <div class="form-group">
             <label for="dateAchieved">Date Achieved</label>
             <input type="date" class="form-control" id="dateAchieved" name="date_achieved">
@@ -529,7 +601,6 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="saveProject()">Save changes</button>
       </div>
     </div>
@@ -544,6 +615,7 @@ function editProject(element) {
   const id = card.getAttribute('data-id'); // Get the data-id attribute from the card
   const name = card.getAttribute('data-project-name'); // Get the project name
   const location = card.getAttribute('data-project-location'); // Get the project location
+  const dateStarted = card.getAttribute('data-date-started'); // Get the date started
   const date = card.getAttribute('data-date-achieved'); // Get the project date
   const details = card.getAttribute('data-project-details'); // Get the project details
   const imageUrls = card.getAttribute('data-project-images'); // Get the image URLs (comma-separated)
@@ -552,6 +624,7 @@ function editProject(element) {
   document.getElementById('projectId').value = id;
   document.getElementById('projectName').value = name;
   document.getElementById('projectLocation').value = location;
+  document.getElementById('dateStarted').value = dateStarted;
   document.getElementById('dateAchieved').value = date;
   document.getElementById('projectDetails').value = details;
 
@@ -777,19 +850,20 @@ function editProject(element) {
               }
             </style>
                                                             
-            <!-- Achievement Modal -->
-
 <!-- Achievement Modal -->
 <div class="modal fade" id="achievementModal" tabindex="-1" aria-labelledby="achievementModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm" style="max-width: 90%; margin: 1.75rem auto;">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="achievementModalLabel">Achievement Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
+        <h5 class="modal-title" id="achievementModalLabel">Project Achievement Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+              </div>
       <div class="modal-body">
         <h3 id="modalProjectName"></h3>
         <p><strong>Location:</strong> <span id="modalProjectLocation"></span></p>
+        <p><strong>Date Started:</strong> <span id="modalDateStarted"></span></p>
         <p><strong>Date Achieved:</strong> <span id="modalDateAchieved"></span></p>
         <p><strong>Project Description:</strong> <span id="modalProjectDetails"></span></p>
 
@@ -802,7 +876,127 @@ function editProject(element) {
           </div>
           
           <style>
-            #achievementModal .modal-dialog {
+
+/* Modern Dark Mode for Modal */
+
+.modal.fade {
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent backdrop */
+}
+
+.modal-dialog {
+  margin: 1.75rem auto;
+  max-width: 90%;
+}
+
+.modal-content {
+  background-color: #191C24; /* Dark background */
+  color: #ffffff; /* Light text */
+  border: none; /* Remove border */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); /* Subtle shadow */
+}
+
+.close {
+  color: #999;
+  opacity: 0.8;
+}
+
+.close:hover {
+  color: #fff;
+  opacity: 1;
+}
+
+
+.modal-header {
+  border-bottom: 1px solid #333333; /* Thin divider */
+  background-color: #191C24; /* Slightly lighter than body */
+  color: #ffffff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.modal-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #d3d3e3; /* Softer white */
+}
+
+.modal-body h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.modal-body p {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #cfcfd7; /* Slightly lighter text */
+}
+
+.modal-body strong {
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.modal-body #modalProjectName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.modal-body #modalProjectLocation {
+  font-size: 0.95rem;
+  color: #c0c0d0;
+}
+
+.modal-body #modalDateStarted, 
+.modal-body #modalDateAchieved {
+  font-size: 0.95rem;
+  color: #c0c0d0;
+}
+
+.modal-body #modalProjectDetails {
+  font-size: 0.95rem;
+  color: #d0d0e0;
+}
+
+#modalProjectImages {
+  margin-top: 1rem;
+}
+
+#modalProjectImages .row {
+  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#modalProjectImages img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem; /* Add space below images */
+}
+
+/* Add responsive styling for smaller screens */
+@media (max-width: 576px) {
+  .modal-title {
+      font-size: 1.3rem;
+  }
+
+  .modal-body {
+      font-size: 0.9rem;
+  }
+}
+          #achievementModal .modal-dialog {
               max-width: 90%; /* Adjust modal width */
               width: 800px;   /* Set a fixed width if needed */
             }
@@ -831,6 +1025,7 @@ function editProject(element) {
                         if (event.target.closest('.dropdown') === null) {
                             const projectName = this.dataset.projectName;
                             const projectLocation = this.dataset.projectLocation;
+                            const dateStarted = this.dataset.dateStarted;
                             const dateAchieved = this.dataset.dateAchieved;
                             const projectDetails = this.dataset.projectDetails;
                             const projectImages = this.dataset.projectImages.split(','); // Get all image URLs
@@ -838,7 +1033,8 @@ function editProject(element) {
             
                             // Debugging: Log the retrieved projectDetails and images
                             console.log('Project Name:', projectName);
-                            console.log('Project Location:', projectLocation);
+                            console.log('Project Location:', projectLocation)
+                            console.log('Date Started:', dateStarted);
                             console.log('Date Achieved:', dateAchieved);
                             console.log('Project Images:', projectImages);
                             console.log('Project Description:', projectDetails);
@@ -847,6 +1043,7 @@ function editProject(element) {
                             // Populate the modal with the data from the clicked card
                             document.getElementById('modalProjectName').textContent = projectName;
                             document.getElementById('modalProjectLocation').textContent = projectLocation;
+                            document.getElementById('modalDateStarted').textContent = dateStarted;
                             document.getElementById('modalDateAchieved').textContent = dateAchieved;
                             document.getElementById('modalProjectDetails').textContent = projectDetails;
             
@@ -862,7 +1059,7 @@ function editProject(element) {
                           
                               // Add the image to a column
                               const col = document.createElement('div');
-                              col.classList.add('col-4'); // Adjust columns as needed
+                              col.classList.add('col-6'); // Adjust columns as needed
                               col.appendChild(imgElement);
                           
                               modalImageContainer.appendChild(col);

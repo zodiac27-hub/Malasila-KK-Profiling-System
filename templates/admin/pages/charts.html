@@ -217,7 +217,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
-              <span class="menu-title">Reports</span>
+              <span class="menu-title">Graph Reports</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -233,7 +233,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-file"></i>
               </span>
-              <span class="menu-title">Exports</span>
+              <span class="menu-title">Export History</span>
             </a>
           </li>          
         </ul>
@@ -422,151 +422,203 @@
               <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                       <div class="card-body">
-                          <h4 class="card-title">KK Members Distribution per Purok</h4>
-                          <canvas id="barChart" style="height:300px; width:100%;"></canvas>
+                          <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">KK Members Distribution per Purok</h4>
+                          <canvas id="barChart" style="height:350px; width:100%;"></canvas>
                       </div>
                   </div>
               </div>
-          </div>
+            </div>
 
           <div id="stackedBarChartContainer" class="chart-container">
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Youth Age Group Count per Purok</h4>
                   
-                  <!-- Checkbox placed above the chart -->
-                  <div class="mb-3">
-                    <label>
-                      <input type="checkbox" id="toggleStacked"> Stacked
+                  <!-- Title and Checkbox Row -->
+                  <div class="d-flex align-items-center mb-3">
+                    <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">Youth Age Group Count per Purok</h4>
+                    <label class="ms-3 toggle-label">
+                      <input type="checkbox" id="toggleStacked" class="toggle-checkbox">
+                      <span class="toggle-slider"></span>
                     </label>
                   </div>
-          
+                  
                   <!-- Chart Canvas with fixed size -->
-                  <div style="position: relative; width: 100%; height: 300px;">
+                  <div style="position: relative; width: 100%; height: 350px;">
                     <canvas id="stackedBarChart" style="height: 100%; width: 100%;"></canvas>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-                              <style>#toggleStacked {
-  margin-left: 5px;
-}
+                    <style>
+            #toggleStacked {
+            margin-left: 5px;
+          }
 
   </style>                    
-  <div id="workStatusByPurokChartContainer" class="chart-container">
+  <div id="workStatusByPurokChartContainer" class="chart-container"> 
     <div class="col-lg-12 grid-margin stretch-card">
       <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Work Status by Purok</h4>
-  
-          <!-- Checkbox for toggling stacked/unstacked -->
-          <div class="mb-3">
-            <label>
-              <input type="checkbox" id="toggleWorkStatusStacked"> Stacked
+        <div class="card-body">  
+          <!-- Title and Checkbox Row -->
+          <div class="d-flex align-items-center mb-3">
+            <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">Work Status per Purok</h4>
+            <label class="ms-3 toggle-label">
+              <input type="checkbox" id="toggleWorkStatusStacked" class="toggle-checkbox">
+              <span class="toggle-slider"></span>
             </label>
           </div>
-  
+          
           <!-- Chart Canvas with fixed size -->
-          <div style="position: relative; width: 100%; height: 300px;">
+          <div style="position: relative; width: 100%; height: 350px;">
             <canvas id="workStatusByPurokChart" style="height: 100%; width: 100%;"></canvas>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
-  
-          <div id="voter-stackedbarContainer" class="chart-container">
-            <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Voter Status Count by Purok</h4>
-                  
-                  <!-- Checkbox for toggling stacked/unstacked -->
-                  <div class="mb-3">
-                    <label>
-                      <input type="checkbox" id="toggleVoterStatusStacked"> Stacked
-                    </label>
-                  </div>
-          
-                  <!-- Chart Canvas with fixed size -->
-                  <div style="position: relative; width: 100%; height: 300px;">
-                    <canvas id="voter-stackedbar" style="height: 100%; width: 100%;"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="voteLastElectionChartContainer" class="chart-container">
-            <div class="col-lg-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Vote Last Election by Purok</h4>
-          
-                  <!-- Checkbox for toggling stacked/unstacked -->
-                  <div class="mb-3">
-                    <label>
-                      <input type="checkbox" id="toggleVoteLastElectionStacked"> Stacked
-                    </label>
-                  </div>
-          
-                  <!-- Chart Canvas with fixed size -->
-                  <div style="position: relative; width: 100%; height: 300px;">
-                    <canvas id="voteLastElectionChart" style="height: 100%; width: 100%;"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-      <div id="genderstackedbarContainer" class="chart-container">
-        <div class="col-lg-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Gender Distribution by Purok</h4>
-              
-              <!-- Checkbox for toggling stacked/unstacked -->
-              <div class="mb-3">
-                <label>
-                  <input type="checkbox" id="toggleGenderStacked"> Stacked
-                </label>
-              </div>
-      
-              <!-- Chart Canvas with fixed size -->
-              <div style="position: relative; width: 100%; height: 300px;">
-                <canvas id="genderstackedbar" style="height: 100%; width: 100%;"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div id="youthClassificationbarChartContainer" class="chart-container">
-        <div class="col-lg-12 grid-margin stretch-card">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Youth Classification by Purok</h4>
-      
-              <!-- Checkbox for toggling stacked/unstacked -->
-              <div class="mb-3">
-                <label>
-                  <input type="checkbox" id="toggleYouthClassificationStacked"> Stacked
-                </label>
-              </div>
-      
-              <!-- Chart Canvas with fixed size -->
-              <div style="position: relative; width: 100%; height: 300px;">
-                <canvas id="youthClassificationbarChart" style="height: 100%; width: 100%;"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <style>
+    /* Styling the toggle switch */
+    .toggle-label {
+      position: relative;
+      display: inline-block;
+      width: 32px; /* Reduced width */
+      height: 16px; /* Reduced height */
+    }
+    
+    .toggle-checkbox {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color:rgb(70, 69, 71);
+      border-radius: 16px; /* Adjusted for smaller height */
+      transition: 0.4s;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 12px; /* Reduced size */
+      width: 12px; /* Reduced size */
+      left: 2px; /* Adjusted for smaller dimensions */
+      bottom: 2px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+    
+    .toggle-checkbox:checked + .toggle-slider {
+      background-color: rgb(63, 68, 78); /* "On" state color */
+    }
+    
+    .toggle-checkbox:checked + .toggle-slider:before {
+      transform: translateX(16px); /* Adjusted for smaller slider */
+    }
+    </style>
+                
+    <div id="voter-stackedbarContainer" class="chart-container">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
             
-<!--================No Backend-->
+            <!-- Title and Checkbox Row -->
+            <div class="d-flex align-items-center mb-3">
+              <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">Voter Status per Putok</h4>
+              <label class="ms-3 toggle-label">
+                <input type="checkbox" id="toggleVoterStatusStacked" class="toggle-checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Chart Canvas with fixed size -->
+            <div style="position: relative; width: 100%; height: 350px;">
+              <canvas id="voter-stackedbar" style="height: 100%; width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="voteLastElectionChartContainer" class="chart-container">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            
+            <!-- Title and Checkbox Row -->
+            <div class="d-flex align-items-center mb-3">
+              <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">Vote Last Election per Purok</h4>
+              <label class="ms-3 toggle-label">
+                <input type="checkbox" id="toggleVoteLastElectionStacked" class="toggle-checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            
+            <!-- Chart Canvas with fixed size -->
+            <div style="position: relative; width: 100%; height: 350px;">
+              <canvas id="voteLastElectionChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+              
+    <div id="genderstackedbarContainer" class="chart-container">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+    
+            <!-- Title and Checkbox Row -->
+            <div class="d-flex align-items-center mb-3">
+              <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">Gender Distribution per Purok</h4>
+              <label class="ms-3 toggle-label">
+                <input type="checkbox" id="toggleGenderStacked" class="toggle-checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+    
+            <!-- Chart Canvas with fixed size -->
+            <div style="position: relative; width: 100%; height: 350px;">
+              <canvas id="genderstackedbar" style="height: 100%; width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+          
+    <div id="youthClassificationbarChartContainer" class="chart-container">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+    
+            <!-- Title and Checkbox Row -->
+            <div class="d-flex align-items-center mb-3">
+              <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">Youth Classification per Purok</h4>
+              <label class="ms-3 toggle-label">
+                <input type="checkbox" id="toggleYouthClassificationStacked" class="toggle-checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+    
+            <!-- Chart Canvas with fixed size -->
+            <div style="position: relative; width: 100%; height: 350px;">
+              <canvas id="youthClassificationbarChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+                
+<!--================No Backend
 
         <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
@@ -575,7 +627,7 @@
                 <canvas id="kkAssemblybarChart" style="height:250px"></canvas>
             </div>
         </div>
-      </div>
+      </div>-->
 
 <!--==========-----======-->
 <!-- Modern Sidebar -->
@@ -585,12 +637,12 @@
     <h4 id="chartTitle" class="sidebar-heading">Chart Title</h4>
     <p id="sidebarDetails" class="sidebar-text">Click on a bar to see details here.</p>
 
-    <!-- For Purok Count Chart -->
+    <!-- For Purok Count Chart 
     <div class="chart-section">
       <button id="barChartOverallBtn" class="sidebar-btn">Show Overall Data</button>
       <button id="barChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
       <div id="barChartOverallData" class="overall-data"></div>
-    </div>
+    </div>-->
 
     <!-- For Age Group Chart -->
     <div class="chart-section">
@@ -651,7 +703,7 @@
     right: -320px; /* Hidden by default */
     top: 70px;
     height: 100%;
-    background-color: #1e1e2f; /* Dark background */
+    background-color: #191C24; /* Dark background */
     box-shadow: -2px 0 15px rgba(0, 0, 0, 0.5);
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth transition */
     overflow-y: auto;
@@ -713,7 +765,7 @@
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    background-color: #33354a; /* Match button with sidebar */
+    background-color: #191C24; /* Match button with sidebar */
     color: #ffffff;
     border: none;
     border-radius: 50%;
@@ -739,7 +791,7 @@
           
           <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
           <script>
-            document.getElementById("chartFilter").addEventListener("change", function() {
+            document.getElementById("chartFilter").addEventListener("change", function () {
               const selectedChart = this.value;
           
               // Select all chart containers
@@ -757,7 +809,7 @@
                   });
           
                   // Show the selected chart container
-                  const selectedContainer = document.getElementById(selectedChart + "Container");
+                  const selectedContainer = document.getElementById(`${selectedChart}Container`);
                   if (selectedContainer) {
                       selectedContainer.style.display = "block";
                   }
@@ -765,19 +817,19 @@
           });
           
           // Initially show all charts on page load
-          window.addEventListener("load", () => {
+          window.addEventListener("DOMContentLoaded", () => {
               document.querySelectorAll(".chart-container").forEach(container => {
                   container.style.display = "block";
               });
           });
-
+          
 // Declare global variables once
 const toggleBtn = document.getElementById('toggleBtn');
 const sidebar = document.querySelector('.right-sidebar');
 const sidebarDetails = document.getElementById('sidebarDetails');
 const overallDataSection = document.getElementById('overallData');
 const hideOverallBtn = document.getElementById('hideOverallBtn');
-const overallBtn = document.getElementById('overallBtn');
+const overallBtn = document.getElementById('barChartOverallBtn');
 
 // Global toggle button behavior
 toggleBtn.addEventListener('click', () => {
@@ -821,56 +873,47 @@ function setupPurokChart() {
   const ctx1 = document.getElementById('barChart').getContext('2d');
 
   const barChart = new Chart(ctx1, {
-      type: 'bar',
-      data: {
-          labels: purokLabels,
-          datasets: [{
-              label: 'Purok Count',
-              data: purokCounts,
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 1
-          }]
+    type: 'bar',
+    data: {
+      labels: purokLabels,
+      datasets: [{
+        label: 'Purok Count',
+        data: purokCounts,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
       },
-      options: {
-          responsive: true,
-          scales: { y: { beginAtZero: true } },
-          onClick: (event, elements) => {
-              if (elements.length > 0) {
-                  const index = elements[0].index;
-                  const label = purokLabels[index];
-                  const value = purokCounts[index];
-                  updateSidebarTitle('Purok Count');
-                  updateSidebarDetails(`<strong>Purok:</strong> ${label}<br><strong>Count:</strong> ${value}`);
-              }
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(37, 40, 48, 0.97)'
           }
+        },
+        x: {
+          grid: {
+            color: 'rgb(37, 40, 48)'
+          }
+        }
+      },
+      onClick: (event, elements) => {
+        if (elements.length > 0) {
+          const index = elements[0].index;
+          const label = purokLabels[index];
+          const value = purokCounts[index];
+          updateSidebarTitle('Purok Count');
+          updateSidebarDetails(`<strong>Purok:</strong> ${label}<br><strong>Count:</strong> ${value}`);
+        }
       }
+    }
   });
-
-  // Handle Overall Data for Purok Count Chart
-  const overallDataSection = document.getElementById('barChartOverallData');
-  const overallBtn = document.getElementById('barChartOverallBtn');
-  const hideOverallBtn = document.getElementById('barChartHideOverallBtn');
-
-  overallBtn.addEventListener('click', () => {
-      let overallDataHtml = `<h3>Overall Purok Data:</h3><ul>`;
-      for (let i = 0; i < purokLabels.length; i++) {
-          overallDataHtml += `<li><strong>${purokLabels[i]}:</strong> ${purokCounts[i]}</li>`;
-      }
-      overallDataHtml += `</ul>`;
-      overallDataSection.innerHTML = overallDataHtml;
-      overallDataSection.style.display = 'block';
-      overallBtn.style.display = 'none';
-      hideOverallBtn.style.display = 'inline-block';
-  });
-
-  hideOverallBtn.addEventListener('click', () => {
-      overallDataSection.style.display = 'none';
-      overallBtn.style.display = 'inline-block';
-      hideOverallBtn.style.display = 'none';
-  });
-}
-
+}  
+//Age group data
 function setupAgeGroupChart() {
   const ageGroupData = {{ age_group_data | tojson }};
   const purok = Object.keys(ageGroupData);
@@ -890,45 +933,57 @@ function setupAgeGroupChart() {
 
   // Generate distinct colors dynamically for both background and border
   function generateColor(index) {
-    const backgroundRed = (index * 70 + 100) % 255;
-    const backgroundGreen = (index * 90 + 50) % 255;
-    const backgroundBlue = (index * 110 + 150) % 255;
-
-    const borderRed = (index * 50 + 50) % 255;
-    const borderGreen = (index * 60 + 100) % 255;
-    const borderBlue = (index * 90 + 200) % 255;
-
+    // Define a palette of muted but distinct colors
+    const colors = [
+      { backgroundColor: "rgba(188, 39, 39, 0.68)", borderColor: "rgba(188, 0, 0, 1)" }, 
+      { backgroundColor: "rgba(0, 128, 128, 0.68)", borderColor: "rgba(0, 128, 128, 1)" }, 
+      { backgroundColor: "rgba(255, 140, 0, 0.68)", borderColor: "rgba(255, 140, 0, 1)" }, 
+    ];
+  
+    // Cycle through the colors if more datasets than colors
+    const color = colors[index % colors.length];
+  
     return {
-      backgroundColor: `rgba(${backgroundRed}, ${backgroundGreen}, ${backgroundBlue}, 0.6)`,
-      borderColor: `rgba(${borderRed}, ${borderGreen}, ${borderBlue}, 1)`
+      backgroundColor: color.backgroundColor,
+      borderColor: color.borderColor,
     };
   }
-
+    
   const ctx2 = document.getElementById('stackedBarChart').getContext('2d');
   let stackedBarChart = createChart(false);
 
-  // Create or update the chart
-  function createChart(isStacked) {
-    return new Chart(ctx2, {
-      type: 'bar',
-      data: {
-        labels: purok,
-        datasets: ageGroupDatasets
+// Create or update the chart
+function createChart(isStacked) {
+  return new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: purok,
+      datasets: ageGroupDatasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+      plugins: {
+        legend: { position: 'top' },
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
-        plugins: {
-          legend: { position: 'top' },
-          title: { display: true, text: 'Youth Age Group Count per Purok' }
+      scales: { 
+        x: { 
+          stacked: isStacked,
+          grid: {
+            color: 'rgba(37, 40, 48, 0.97)'
+          }
         },
-        scales: { 
-          x: { stacked: isStacked }, 
-          y: { stacked: isStacked, beginAtZero: true } 
+        y: { 
+          stacked: isStacked, 
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(37, 40, 48, 0.97)'
+          }
         }
       }
-    });
-  }
+    }
+  });
+}
 
   // Toggle stacked/unstucked chart
   const toggleStacked = document.getElementById('toggleStacked');
@@ -962,6 +1017,7 @@ function setupAgeGroupChart() {
     hideOverallBtn.style.display = 'none';
   });
 }
+
 //voter status
 function setupVoterStatusChart() {
   const voterStatusData = {{ voter_status_data | tojson }};
@@ -984,20 +1040,22 @@ function setupVoterStatusChart() {
 
   // Generate distinct colors dynamically for both background and border
   function generateColor(index) {
-    const backgroundRed = (index * 70 + 100) % 255;
-    const backgroundGreen = (index * 90 + 50) % 255;
-    const backgroundBlue = (index * 110 + 150) % 255;
-
-    const borderRed = (index * 50 + 50) % 255;
-    const borderGreen = (index * 60 + 100) % 255;
-    const borderBlue = (index * 90 + 200) % 255;
-
+    // Define a muted and visually distinct palette
+    const colors = [
+      { backgroundColor: "rgba(165, 55, 55, 0.6)", borderColor: "rgba(165, 55, 55, 1)" }, // Maroon
+      { backgroundColor: "rgba(51, 51, 205, 0.6)", borderColor: "rgba(51, 51, 205, 1)" }, // Navy
+      { backgroundColor: "rgba(188, 175, 29, 0.6)", borderColor: "rgba(188, 175, 29, 1)" }, // Brown
+    ];
+  
+    // Cycle through the colors if more datasets than colors
+    const color = colors[index % colors.length];
+  
     return {
-      backgroundColor: `rgba(${backgroundRed}, ${backgroundGreen}, ${backgroundBlue}, 0.6)`,
-      borderColor: `rgba(${borderRed}, ${borderGreen}, ${borderBlue}, 1)`
+      backgroundColor: color.backgroundColor,
+      borderColor: color.borderColor,
     };
   }
-
+  
   const ctx3 = document.getElementById('voter-stackedbar').getContext('2d');
 
   let voterStatusChart = createChart(false);
@@ -1015,16 +1073,26 @@ function setupVoterStatusChart() {
         maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
         plugins: {
           legend: { position: 'top' },
-          title: { display: true, text: 'Voter Status Count by Purok' }
         },
         scales: { 
-          x: { stacked: isStacked }, 
-          y: { stacked: isStacked, beginAtZero: true } 
+          x: { 
+            stacked: isStacked,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          }, 
+          y: { 
+            stacked: isStacked, 
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          }
         }
       }
     });
   }
-
+  
   // Toggle stacked/unstucked chart
   const toggleVoterStatusStacked = document.getElementById('toggleVoterStatusStacked');
   toggleVoterStatusStacked.addEventListener('change', (event) => {
@@ -1070,14 +1138,25 @@ function setupVoterStatusChart() {
     ));
     
     // Organize data for Chart.js
-    const datasets = gender.map((gender, index) => ({
-      label: gender,
-      data: puroks.map(purok => genderData[purok][gender] || 0),
-      backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
-      borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
-      borderWidth: 1
-    }));
+    const datasets = gender.map((gender, index) => {
+      // Define two colors for the datasets
+      const colors = [
+        { backgroundColor: "rgba(0, 123, 255, 0.5)", borderColor: "rgba(0, 123, 255, 1)" }, // Blue
+        { backgroundColor: "rgba(220, 53, 69, 0.5)", borderColor: "rgba(220, 53, 69, 1)" }  // Red
+      ];
     
+      // Use the index to select one of the two colors
+      const color = colors[index % 2];
+    
+      return {
+        label: gender,
+        data: puroks.map(purok => genderData[purok][gender] || 0),
+        backgroundColor: color.backgroundColor,
+        borderColor: color.borderColor,
+        borderWidth: 1,
+      };
+    });
+        
     // Render the Chart
     const ctx = document.getElementById('genderstackedbar').getContext('2d');
     let genderChart = createChart(false);  // Initial chart without stacking
@@ -1087,30 +1166,34 @@ function setupVoterStatusChart() {
       return new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: puroks,
+          labels: puroks, // Use Puroks as the labels for the x-axis
           datasets: datasets
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
           plugins: {
-            tooltip: {
-              mode: 'index',
-              intersect: false
-            },
-            legend: {
-              display: true,
-              position: 'top'
-            }
+            legend: { position: 'top' },
           },
-          scales: {
-            x: { stacked: isStacked },
-            y: { stacked: isStacked, beginAtZero: true }
+          scales: { 
+            x: { 
+              stacked: isStacked,
+              grid: {
+                color: 'rgba(37, 40, 48, 0.97)'
+              }
+            }, 
+            y: { 
+              stacked: isStacked, 
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(37, 40, 48, 0.97)'
+              }
+            }
           }
         }
       });
     }
-  
+              
     // Toggle stacked/unstucked chart
     const toggleGenderStacked = document.getElementById('toggleGenderStacked');
     toggleGenderStacked.addEventListener('change', (event) => {
@@ -1158,14 +1241,28 @@ function setupYouthClassificationChart() {
   ));
 
   // Organize data for Chart.js
-  const datasets = classification.map((youth_classification, index) => ({
-    label: youth_classification,
-    data: puroks.map(purok => classificationData[purok][youth_classification] || 0),
-    backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
-    borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
-    borderWidth: 1
-  }));
-
+  const datasets = classification.map((youth_classification, index) => {
+    // Define a color palette
+    const colors = [
+      { backgroundColor: "rgba(0, 123, 255, 0.5)", borderColor: "rgba(0, 123, 255, 1)" }, // Blue
+      { backgroundColor: "rgba(40, 167, 69, 0.5)", borderColor: "rgba(40, 167, 69, 1)" }, // Green
+      { backgroundColor: "rgba(255, 193, 7, 0.5)", borderColor: "rgba(255, 193, 7, 1)" }, // Yellow
+      { backgroundColor: "rgba(220, 53, 69, 0.5)", borderColor: "rgba(220, 53, 69, 1)" }, // Red
+      { backgroundColor: "rgba(23, 162, 184, 0.5)", borderColor: "rgba(23, 162, 184, 1)" } // Teal
+    ];
+  
+    // Cycle through colors if there are more datasets than colors
+    const color = colors[index % colors.length];
+  
+    return {
+      label: youth_classification,
+      data: puroks.map(purok => classificationData[purok][youth_classification] || 0),
+      backgroundColor: color.backgroundColor,
+      borderColor: color.borderColor,
+      borderWidth: 1,
+    };
+  });
+  
   // Render the Chart
   const ctx = document.getElementById('youthClassificationbarChart').getContext('2d');
   let youthClassificationChart = createChart(true);  // Initial chart with stacking enabled
@@ -1189,16 +1286,27 @@ function setupYouthClassificationChart() {
           legend: {
             display: true,
             position: 'top'
-          }
+          },
         },
         scales: {
-          x: { stacked: isStacked },
-          y: { stacked: isStacked, beginAtZero: true }
+          x: { 
+            stacked: isStacked,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          },
+          y: { 
+            stacked: isStacked, 
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          }
         }
       }
     });
   }
-
+    
   // Toggle stacked/unstucked chart
   const toggleYouthClassificationStacked = document.getElementById('toggleYouthClassificationStacked');
   toggleYouthClassificationStacked.addEventListener('change', (event) => {
@@ -1245,14 +1353,29 @@ function setupWorkStatusChart() {
   ));
 
   // Organize data for Chart.js
-  const datasets = workStatuses.map((status, index) => ({
-    label: status,
-    data: puroks.map(purok => workStatusData[purok][status] || 0),
-    backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
-    borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
-    borderWidth: 1
-  }));
-
+  const datasets = workStatuses.map((status, index) => {
+    // Define a color palette
+    const colors = [
+      { backgroundColor: "rgba(255, 99, 132, 0.5)", borderColor: "rgba(255, 99, 132, 1)" }, // Light Red
+      { backgroundColor: "rgba(54, 162, 235, 0.5)", borderColor: "rgba(54, 162, 235, 1)" }, // Light Blue
+      { backgroundColor: "rgba(75, 192, 192, 0.5)", borderColor: "rgba(75, 192, 192, 1)" }, // Light Teal
+      { backgroundColor: "rgba(255, 206, 86, 0.5)", borderColor: "rgba(255, 206, 86, 1)" }, // Light Yellow
+      { backgroundColor: "rgba(153, 102, 255, 0.5)", borderColor: "rgba(153, 102, 255, 1)" }, // Light Purple
+      { backgroundColor: "rgba(255, 159, 64, 0.5)", borderColor: "rgba(255, 159, 64, 1)" }  // Light Orange
+    ];
+  
+    // Cycle through colors if more datasets than colors
+    const color = colors[index % colors.length];
+  
+    return {
+      label: status,
+      data: puroks.map(purok => workStatusData[purok][status] || 0),
+      backgroundColor: color.backgroundColor,
+      borderColor: color.borderColor,
+      borderWidth: 1,
+    };
+  });
+  
   // Render the Chart
   const ctx = document.getElementById('workStatusByPurokChart').getContext('2d');
   let workStatusChart = createChart(true);  // Initial chart with stacking enabled
@@ -1267,7 +1390,7 @@ function setupWorkStatusChart() {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+        maintainAspectRatio: false, // Allow the chart to maintain a specific size based on container
         plugins: {
           tooltip: {
             mode: 'index',
@@ -1276,16 +1399,27 @@ function setupWorkStatusChart() {
           legend: {
             display: true,
             position: 'top'
-          }
+          },
         },
         scales: {
-          x: { stacked: isStacked },
-          y: { stacked: isStacked, beginAtZero: true }
+          x: {
+            stacked: isStacked,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          },
+          y: {
+            stacked: isStacked,
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          }
         }
       }
     });
   }
-
+    
   // Toggle stacked/unstucked chart
   const toggleWorkStatusStacked = document.getElementById('toggleWorkStatusStacked');
   toggleWorkStatusStacked.addEventListener('change', (event) => {
@@ -1341,14 +1475,28 @@ function setupVoteLastElectionChart() {
   });
 
   // Organize data for Chart.js
-  const datasets = votingStatuses.map((status, index) => ({
-    label: status,
-    data: puroks.map(purok => voteLastElectionData[purok][status]),
-    backgroundColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 0.5)`,
-    borderColor: `rgba(${index * 50}, ${index * 100 % 255}, ${index * 150 % 255}, 1)`,
-    borderWidth: 1
-  }));
-
+  const datasets = votingStatuses.map((status, index) => {
+    // Define a color palette
+    const colors = [
+      { backgroundColor: "rgba(78, 115, 223, 0.5)", borderColor: "rgba(78, 115, 223, 1)" }, // Soft Blue
+      { backgroundColor: "rgba(28, 200, 138, 0.5)", borderColor: "rgba(28, 200, 138, 1)" }, // Soft Green
+      { backgroundColor: "rgba(246, 194, 62, 0.5)", borderColor: "rgba(246, 194, 62, 1)" }, // Soft Yellow
+      { backgroundColor: "rgba(231, 74, 59, 0.5)", borderColor: "rgba(231, 74, 59, 1)" },  // Soft Red
+      { backgroundColor: "rgba(133, 135, 150, 0.5)", borderColor: "rgba(133, 135, 150, 1)" } // Gray
+    ];
+  
+    // Cycle through colors if more datasets than colors
+    const color = colors[index % colors.length];
+  
+    return {
+      label: status,
+      data: puroks.map(purok => voteLastElectionData[purok][status] || 0),
+      backgroundColor: color.backgroundColor,
+      borderColor: color.borderColor,
+      borderWidth: 1,
+    };
+  });
+  
   // Render the Chart
   const ctx = document.getElementById('voteLastElectionChart').getContext('2d');
   let voteLastElectionChart = createChart(false);  // Initial chart with stacking disabled
@@ -1363,7 +1511,7 @@ function setupVoteLastElectionChart() {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,  // Allow the chart to maintain a specific size based on container
+        maintainAspectRatio: false, // Allow the chart to maintain a specific size based on container
         plugins: {
           tooltip: {
             mode: 'index',
@@ -1372,16 +1520,27 @@ function setupVoteLastElectionChart() {
           legend: {
             display: true,
             position: 'top'
-          }
+          },
         },
         scales: {
-          x: { stacked: isStacked },
-          y: { stacked: isStacked, beginAtZero: true }
+          x: {
+            stacked: isStacked,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          },
+          y: {
+            stacked: isStacked,
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'
+            }
+          }
         }
       }
     });
   }
-
+      
   // Toggle stacked/unstucked chart
   const toggleVoteLastElectionStacked = document.getElementById('toggleVoteLastElectionStacked');
   toggleVoteLastElectionStacked.addEventListener('change', (event) => {
