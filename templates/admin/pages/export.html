@@ -363,7 +363,7 @@
                                           </td>
                                           <td class="export-date">{{ row.export_date }}</td>
                                           <td>{{ row.exported_by }}</td>
-                                          <td><button class="btn btn-danger delete-row">Delete</button></td>
+                                          <td><button class="btn btn-danger delete-row"><i class="mdi mdi-delete"></i></button></td>
                                       </tr>
                                       {% endfor %}
                                   </tbody>
@@ -373,6 +373,26 @@
                   </div>
               </div>
           </div>
+
+          <style>
+            /* Dark mode styles for the button */
+            .delete-row {
+              background-color: #191C24;  /* Dark background color */
+              color: #fff;             /* White text color */
+              border: 1px solid rgb(55, 59, 69);  /* Slightly lighter border color */
+            }
+
+            .delete-row:hover {
+              background-color: #555;  /* Slightly lighter background on hover */
+              border-color: #777;      /* Border lightens on hover */
+              color: #fff;             /* Keep text color white */
+            }
+
+            /* For icons inside the button */
+            .delete-row i {
+              color: #fff;  /* Ensure the icon stays white */
+            }
+          </style>
           <div id="pdfModal" class="modal fade" tabindex="-1" role="dialog">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">

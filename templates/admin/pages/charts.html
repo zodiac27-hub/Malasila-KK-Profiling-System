@@ -399,6 +399,7 @@
                       <option value="voteLastElectionChart">Voted Last Election</option>
                       <option value="genderstackedbar">Gender Count</option>
                       <option value="youthClassificationbarChart">Youth Classification</option>
+                      <option value="civilStatusBarChart">Civil Status</option>
 
                   </select>
                 </div>
@@ -617,6 +618,30 @@
         </div>
       </div>
     </div>
+
+    <div id="civilStatusBarChartContainer" class="chart-container">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+        
+            <!-- Title and Checkbox Row -->
+            <div class="d-flex align-items-center mb-3">
+              <h4 class="card-title text-center flex-grow-1 mb-0" style="color: #B2B3B6;">Civil Status per Purok</h4>
+              <label class="ms-3 toggle-label">
+                <input type="checkbox" id="toggleCivilStatusStacked" class="toggle-checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+        
+            <!-- Chart Canvas with fixed size -->
+            <div style="position: relative; width: 100%; height: 350px;">
+              <canvas id="civilStatusBarChart" style="height: 100%; width: 100%;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
                 
 <!--================No Backend
 
@@ -689,8 +714,18 @@
       <button id="voteLastElectionChartHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
       <div id="voteLastElectionChartOverallData" class="overall-data"></div>
     </div>
+
+    <div id="civilStatusChartSidebar" class="chart-section">
+      <h4 id="civilStatusChartTitle" class="sidebar-heading"></h4>
+      <button id="civilStatusOverallBtn" class="sidebar-btn">Show Overall Data</button>
+      <button id="civilStatusHideOverallBtn" class="sidebar-btn hidden">Hide Overall Data</button>
+      <div id="civilStatusOverallData" class="overall-data"></div>
+    </div>
+    
   </div>
 </div>
+
+
 
 <!-- Toggle Button -->
 <button class="toggle-btn" id="toggleBtn">&#8594;</button>
@@ -1017,6 +1052,113 @@ function createChart(isStacked) {
     hideOverallBtn.style.display = 'none';
   });
 }
+
+function setupCivilStatusChart() {
+  const civilStatusData = {{ civil_status_data | tojson }};  // Receive data from Flask
+  const purokcivil = Object.keys(civilStatusData);  // Extract puroks from the nested dictionary
+  const civilStatuses = [...new Set(Object.values(civilStatusData).flatMap(data => Object.keys(data)))]; // Extract unique civil statuses
+
+  // Prepare datasets for Chart.js
+  const civilStatusDatasets = civilStatuses.map((status, index) => {
+    const counts = purokcivil.map(purok => civilStatusData[purok][status] || 0); // Get counts for each purok
+    const colors = generateColor(index);
+
+    return {
+      label: status,
+      data: counts,
+      backgroundColor: colors.backgroundColor,
+      borderColor: colors.borderColor,
+      borderWidth: 1
+    };
+  });
+
+  // Generate distinct colors dynamically for both background and border
+  function generateColor(index) {
+    const colors = [
+      { backgroundColor: "rgba(165, 55, 55, 0.6)", borderColor: "rgba(165, 55, 55, 1)" }, // Maroon
+      { backgroundColor: "rgba(51, 51, 205, 0.6)", borderColor: "rgba(51, 51, 205, 1)" }, // Navy
+      { backgroundColor: "rgba(188, 175, 29, 0.6)", borderColor: "rgba(188, 175, 29, 1)" }, // Brown
+    ];
+  
+    // Cycle through the colors if there are more datasets than colors
+    const color = colors[index % colors.length];
+  
+    return {
+      backgroundColor: color.backgroundColor,
+      borderColor: color.borderColor,
+    };
+  }
+
+  const ctx6 = document.getElementById('civilStatusBarChart').getContext('2d');  // Canvas element for the chart
+
+  let civilStatusChart = createChart(false);
+
+  // Create or update the chart
+  function createChart(isStacked) {
+    return new Chart(ctx6, {
+      type: 'bar',
+      data: {
+        labels: purokcivil, // Use Puroks as the labels for the x-axis
+        datasets: civilStatusDatasets  // Use civilStatusDatasets for the data
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,  // Maintain chart size based on container
+        plugins: {
+          legend: { position: 'top' },
+        },
+        scales: { 
+          x: { 
+            stacked: isStacked,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'  // Grid color for x-axis
+            }
+          }, 
+          y: { 
+            stacked: isStacked, 
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(37, 40, 48, 0.97)'  // Grid color for y-axis
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Toggle stacked/unstuck chart
+  const toggleCivilStatusStacked = document.getElementById('toggleCivilStatusStacked');
+  toggleCivilStatusStacked.addEventListener('change', (event) => {
+    const isStacked = event.target.checked;
+    civilStatusChart.destroy();  // Destroy the old chart
+    civilStatusChart = createChart(isStacked);  // Create the new chart with the new stacking configuration
+  });
+
+  // Handle Overall Data for Civil Status Chart
+  const overallDataSection = document.getElementById('civilStatusOverallData');
+  const overallBtn = document.getElementById('civilStatusOverallBtn');
+  const hideOverallBtn = document.getElementById('civilStatusHideOverallBtn');
+
+  overallBtn.addEventListener('click', () => {
+    let overallDataHtml = `<h3>Overall Civil Status Data:</h3><ul>`;
+    civilStatuses.forEach((status, index) => {
+      const total = civilStatusChart.data.datasets[index].data.reduce((sum, value) => sum + value, 0);
+      overallDataHtml += `<li><strong>${status}:</strong> ${total}</li>`;
+    });
+    overallDataHtml += `</ul>`;
+    overallDataSection.innerHTML = overallDataHtml;
+    overallDataSection.style.display = 'block';
+    overallBtn.style.display = 'none';
+    hideOverallBtn.style.display = 'inline-block';
+  });
+
+  hideOverallBtn.addEventListener('click', () => {
+    overallDataSection.style.display = 'none';
+    overallBtn.style.display = 'inline-block';
+    hideOverallBtn.style.display = 'none';
+  });
+}
+
 
 //voter status
 function setupVoterStatusChart() {
@@ -1582,6 +1724,7 @@ function setupVoteLastElectionChart() {
   setupYouthClassificationChart();
   setupWorkStatusChart();
   setupVoteLastElectionChart();
+  setupCivilStatusChart();
                             </script>
           
 

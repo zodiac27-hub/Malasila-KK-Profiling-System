@@ -433,6 +433,7 @@ def sk_profiles():
         # SQL query to join profiles and positions, excluding the profile ID
         query = """
         SELECT 
+            kk_positions.id AS position_id,
             kk_positions.position AS position_name,
             kk_profiles.first_name,
             kk_profiles.middle_name,
@@ -492,6 +493,8 @@ def assign_position():
 
             # Return the new row data to the frontend
             return jsonify({
+                
+                "position_id": cursor.lastrowid,  # Get the ID of the newly inserted position
                 "year_term": year_term,
                 "position": position,
                 "name": name,
@@ -522,14 +525,16 @@ def get_positions():
 
         # Base SQL query
         query = """
-        SELECT  p.year_term,
-                p.position, 
-                CONCAT(k.first_name, ' ', k.last_name) AS name, 
-                k.suffix,
-                k.gender,
-                k.email, 
-                k.phone,
-                k.purok
+        SELECT
+            p.id as position_id,
+            p.year_term,
+            p.position, 
+            CONCAT(k.first_name, ' ', k.last_name) AS name, 
+            k.suffix,
+            k.gender,
+            k.email, 
+            k.phone,
+            k.purok
         FROM kk_positions p
         JOIN kk_profiles k ON p.profile_id = k.id_kkprofiles
         """
@@ -592,6 +597,36 @@ def get_names():
         cursor.close()
         db.close()
 
+# DELETE route to handle profile deletion
+@app.route('/delete_skposition/<int:id>', methods=['DELETE'])
+def delete_skposition(id):
+    try:
+        # Debugging the incoming request
+        print(f"Received position ID to delete: {id}")  # Print the ID of the position to delete
+
+        if not id:
+            return jsonify({"status": "error", "message": "Position ID is required"}), 400
+
+        # Connect to the database
+        db = get_db_connection()
+        cursor = db.cursor()
+
+        # Delete the record from the `kk_positions` table using the `id` of the position
+        query = "DELETE FROM kk_positions WHERE id = %s"
+        cursor.execute(query, (id,))
+
+        # Commit the changes
+        db.commit()
+        cursor.close()
+
+        # Return a success response
+        return jsonify({"status": "success", "message": "Position deleted successfully"}), 200
+
+    except Exception as e:
+        # Handle errors (e.g., if the position ID doesn't exist or any DB-related errors)
+        print("Error occurred:", str(e))  # Log the error message
+        return jsonify({"status": "error", "message": str(e)}), 500
+        
 from datetime import datetime
 
 @app.route('/admin/pages/kk-list')
@@ -862,6 +897,15 @@ def charts():
                 classification_data[purok] = {}
             classification_data[purok][youth_classification] = row["count"]
 
+             # Fetch civil status data grouped by purok
+        civil_status_results = execute_grouped_query("purok, civil_status", "purok, civil_status")
+        civil_status_data = {}
+        for row in civil_status_results:
+            purok, civil_status = row["purok"], row["civil_status"]
+            if purok not in civil_status_data:
+                civil_status_data[purok] = {}
+            civil_status_data[purok][civil_status] = row["count"]
+
     finally:
         cursor.close()
         db.close()
@@ -877,6 +921,7 @@ def charts():
         vote_last_election_data=vote_last_election_data,
         gender_data=gender_data,
         classification_data=classification_data,
+        civil_status_data=civil_status_data,
         from_date=from_date,
         to_date=to_date
     )

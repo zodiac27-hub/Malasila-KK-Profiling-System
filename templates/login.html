@@ -17,22 +17,29 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #4CAF50, #009688);
+            background: linear-gradient(135deg, #FF6F61, #1D9C90);
             color: #fff;
             padding-top: 50px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         .card {
-            border-radius: 20px;
+            border-radius: 15px;
         }
         .card-body {
             background-color: #ffffff;
             color: #333;
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
         .btn-primary {
             background-color: #004d40;
             border-color: #004d40;
+            border-radius: 30px;
+            padding: 10px 25px;
+            font-weight: 600;
         }
         .btn-primary:hover {
             background-color: #003d33;
@@ -40,37 +47,42 @@
         }
         .form-control {
             border-radius: 10px;
+            padding: 10px 15px;
         }
         .form-label {
             font-weight: 600;
             color: #004d40;
         }
         .alert-danger {
-            background-color: #e57373;
-            border-color: #e57373;
+            background-color:rgba(229, 115, 115, 0.75);
+            border-color:rgba(229, 115, 115, 0.73);
             color: #fff;
         }
         footer {
             background-color: #004d40;
             color: white;
-            padding: 20px 0;
+            padding: 15px 0;
             text-align: center;
+            margin-top: auto;
         }
         .btn-secondary {
             background-color: #FFD700;
             border-color: #FFD700;
             color: #333;
+            border-radius: 30px;
         }
         .btn-secondary:hover {
             background-color: #FFC107;
             border-color: #FFC107;
             color: #333;
+            transform: scale(1.05);
         }
         .welcome-text {
             color: white;
             font-size: 1.8rem;
             text-align: center;
-            margin-top: 20%;
+            font-weight: 700;
+            margin-top: 10%;
         }
         .welcome-subtext {
             color: white;
@@ -78,14 +90,23 @@
             text-align: center;
             margin-top: 10px;
         }
-        .col-md-6 {
-            margin-bottom: 30px;
+        @media (max-width: 768px) {
+            .welcome-text {
+                font-size: 1.5rem;
+            }
+            .welcome-subtext {
+                font-size: 0.9rem;
+            }
+            .btn-primary, .btn-secondary {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container py-5 h-100">
-        <div class="row justify-content-center align-items-center h-100">
+    <div class="container py-5">
+        <div class="row justify-content-center align-items-center">
             <!-- Left Column: Welcome Message -->
             <div class="col-12 col-md-6 col-lg-5">
                 <div class="welcome-text">
@@ -97,9 +118,9 @@
             </div>
 
             <!-- Right Column: Login Form -->
-            <div class="col-12 col-md-6 col-lg-6">
+            <div class="col-12 col-md-6 col-lg-5">
                 <div class="card shadow-2-strong">
-                    <div class="card-body p-4">
+                    <div class="card-body">
                         <h3 class="mb-4 text-center text-primary">Login</h3>
 
                         <!-- Error Message -->
@@ -109,22 +130,22 @@
                         </div>
                         {% endif %}
     
-                        <form action="{{ url_for('login') }}" method="POST" style="max-width: 450px; margin: 0 auto;">
+                        <form action="{{ url_for('login') }}" method="POST">
                             <!-- Username -->
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="text" id="username" name="username" class="form-control form-control-lg" required/>
+                                <input type="text" id="username" name="username" class="form-control" required />
                                 <label class="form-label" for="username">Username</label>
                             </div>
 
                             <!-- Password -->
                             <div data-mdb-input-init class="form-outline mb-4">
-                                <input type="password" id="password" name="password" class="form-control form-control-lg" required/>
+                                <input type="password" id="password" name="password" class="form-control" required />
                                 <label class="form-label" for="password">Password</label>
                             </div>
 
                             <!-- Submit Button -->
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                                <button type="submit" class="btn btn-primary btn-block">Login</button>
                             </div>
                         </form>
                         
@@ -139,13 +160,12 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Malasila Katipunan ng Kabataan Profiling System. All rights reserved.</p>
+        <p>&copy; 2025 Malasila Katipunan ng Kabataan Profiling System. All rights reserved.</p>
     </footer>
 
     <!-- Bootstrap 5 JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-
     <script type="text/javascript" src="/static/js/mdb.umd.min.js"></script>
 </body>
 </html>

@@ -26,39 +26,112 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <style>
-        .gradient-custom {
-            /* Fallback for old browsers */
-            background: #009688;
-    
-            /* Chrome 10-25, Safari 5.1-6 */
-            background: -webkit-linear-gradient(to bottom right, rgba(0, 150, 136, 1), rgba(76, 175, 80, 1));
-    
-            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            background: linear-gradient(to bottom right, rgba(0, 150, 136, 1), rgba(76, 175, 80, 1));
-            min-height: 100vh; /* Full viewport height */
-            margin: 0; /* Remove gaps */
-            padding: 0;
-   
+      .gradient-custom {
+          /* Fallback for old browsers */
+          background: #FF6F61;
+  
+          /* Chrome 10-25, Safari 5.1-6 */
+          background: -webkit-linear-gradient(to bottom right, rgba(255, 111, 97, 1), rgba(29, 156, 144, 1));
+  
+          /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+          background: linear-gradient(to bottom right, rgba(255, 111, 97, 1), rgba(29, 156, 144, 1));
+          min-height: 100vh; /* Full viewport height */
+          margin: 0; /* Remove gaps */
+          padding: 0; /* Remove padding */
       }
-      
+  
+      .card-registration {
+          border-radius: 15px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          overflow: hidden;
+      }
+  
       .card-registration .select-input.form-control[readonly]:not([disabled]) {
-      font-size: 1rem;
-      line-height: 2.15;
-      padding-left: .75em;
-      padding-right: .75em;
+          font-size: 1rem;
+          line-height: 2.15;
+          padding-left: .75em;
+          padding-right: .75em;
+          border: 1px solid rgba(0, 150, 136, 0.5); /* Add border color matching the theme */
+          background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+          border-radius: 8px;
       }
+  
       .card-registration .select-arrow {
-      top: 13px;
+          top: 13px;
+          color: #FF6F61; /* Arrow color matching the primary color of the theme */
       }
-
+  
       input[type="date"],
       input {
-          background-color: #ffffff !important; /* Force white background */
-}
+          background-color: rgba(255, 255, 255, 0.9) !important; /* Slight transparency for input */
+          border: 1px solid rgba(0, 150, 136, 0.5); /* Border matching theme color */
+          border-radius: 8px; /* Rounded corners for a modern look */
+          padding: 10px 15px; /* Comfortable padding */
+          color: #333; /* Darker text for readability */
+          font-weight: 500;
+          font-size: 1rem;
+          transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+  
+      input[type="date"]:focus,
+      input:focus {
+          outline: none;
+          border-color: #FF6F61; /* Border color when focused */
+          box-shadow: 0 0 8px rgba(255, 111, 97, 0.6); /* Glow effect */
+      }
+  
+      /* Custom button styles */
+      .btn-theme {
+          background: linear-gradient(45deg, #FF6F61, #FF6347);
+          color: white;
+          padding: 10px 30px;
+          font-size: 1rem;
+          font-weight: 600;
+          border: none;
+          border-radius: 30px;
+          transition: transform 0.3s ease, background 0.3s ease;
+      }
+  
+      .btn-theme:hover {
+          background: linear-gradient(45deg, #FF6347, #FF6F61);
+          transform: scale(1.05);
+      }
+  
+      .btn-secondary-theme {
+          background: linear-gradient(45deg, #1D9C90, #00897B);
+          color: white;
+          padding: 10px 30px;
+          font-size: 1rem;
+          font-weight: 600;
+          border: none;
+          border-radius: 30px;
+          transition: transform 0.3s ease, background 0.3s ease;
+      }
+  
+      .btn-secondary-theme:hover {
+          background: linear-gradient(45deg, #00897B, #1D9C90);
+          transform: scale(1.05);
+      }
+  
+      /* Adjustments for mobile devices */
+      @media (max-width: 768px) {
+          .card-registration .select-input.form-control[readonly]:not([disabled]) {
+              font-size: 0.9rem;
+          }
+  
+          input[type="date"],
+          input {
+              font-size: 0.9rem;
+          }
+  
+          .btn-theme, .btn-secondary-theme {
+              padding: 8px 20px;
+              font-size: 0.9rem;
+          }
+      }
+  </style>
 
-
-</style>
-    </head>
+</head>
   <body class="gradient-custom">
     
 
