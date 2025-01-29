@@ -1250,7 +1250,7 @@ def export():
 
     db = get_db_connection()
     cursor = db.cursor(dictionary=True)  # Use dictionary=True for easier access to columns by name
-    
+
     try:
         # Fetch admin user details
         username = session.get('username')  # Username stored during login
@@ -1261,8 +1261,8 @@ def export():
             flash("Admin user details not found.", "danger")
             return redirect(url_for('admin_login'))
 
-        # Fetch export logs
-        cursor.execute("SELECT id, file_name, export_date, exported_by FROM export_logs")  # Adjust columns as needed
+        # Fetch export logs with newest first
+        cursor.execute("SELECT id, file_name, export_date, exported_by FROM export_logs ORDER BY id DESC")  
         export = cursor.fetchall()
 
     except Exception as e:

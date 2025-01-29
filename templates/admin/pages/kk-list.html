@@ -1153,11 +1153,20 @@ Swal.fire({
     const ageFilter = $('#ageFilter').val(); // Age filter
     const voterTypeFilter = $('#voterStatusFilter').val(); // Voter type filter (e.g., SK or National)
     const data = [];
-    const headers = [
+
+    // Define headers based on age filter
+    const fullHeaders = [
         'No.', 'Name', 'Gender', 'Civil Status', 'Email', 'Phone', 'Purok', 'Educational Background',
         'Work Status', 'Voter Status', 'Age', 'Birthday', 'Voted Last Election?', 'Youth Age Group',
         'Youth Classification', 'Attended KK Assembly?', 'If Yes, how many times?'
     ];
+
+    const adultHeaders = [
+        'No.', 'Name', 'Gender', 'Birthday', 'Age', 'Civil Status', 'Email', 'Phone', 'Purok',
+        'Educational Background', 'Work Status', 'Voter Status', 'Voted Last Election?'
+    ];
+
+    const headers = (ageFilter === "31+") ? adultHeaders : fullHeaders;
 
     // Function to calculate age from birthday
     function calculateAge(birthday) {
@@ -1180,79 +1189,61 @@ Swal.fire({
 
         // Apply age filter
         const matchesAge = 
-            ageFilter === "" || // Show all if no age filter selected
-            (ageFilter === "15-30" && age >= 15 && age <= 30) || // Show 15-30 age group
-            (ageFilter === "31+" && age >= 31); // Show 31+ age group
+            ageFilter === "" || 
+            (ageFilter === "15-30" && age >= 15 && age <= 30) || 
+            (ageFilter === "31+" && age >= 31); 
 
-        // Apply voter status filter (including "SK and National" option)
+        // Apply voter status filter
         let matchesVoterStatus = false;
         if (voterTypeFilter === "" || voterTypeFilter.toLowerCase() === "sk and national") {
-            matchesVoterStatus = voter_status === "sk voter" || voter_status === "national voter"; // Matches either SK or National Voter
+            matchesVoterStatus = voter_status === "sk voter" || voter_status === "national voter";
         } else {
-            matchesVoterStatus = voter_status.includes(voterTypeFilter.toLowerCase()); // Exact match for specific voter status
+            matchesVoterStatus = voter_status.includes(voterTypeFilter.toLowerCase());
         }
 
-        // Add to data if the row matches both filters (age and voter status)
+        // Add to data if the row matches filters
         if (matchesAge && matchesVoterStatus) {
-            const rowData = [
-                data.length + 1, // Row number
-                row.find('td:nth-child(2)').text().trim(), // Name
-                row.find('td:nth-child(5)').text().trim(), // Gender
-                row.find('td:nth-child(13)').text().trim(), // Civil Status
-                row.find('td:nth-child(6)').text().trim(), // Email
-                row.find('td:nth-child(7)').text().trim(), // Phone
-                row.find('td:nth-child(8)').text().trim(), // Purok
-                row.find('td:nth-child(18)').text().trim(), // Educational Background
-                row.find('td:nth-child(17)').text().trim(), // Work Status
-                voter_status, // Voter Status
-                age, // Age
-                birthday, // Birthday
-                row.find('td:nth-child(20)').text().trim(), // Voted Last Election?
-                row.find('td:nth-child(16)').text().trim(), // Youth Age Group
-                row.find('td:nth-child(14)').text().trim(), // Youth Classification
-                row.find('td:nth-child(21)').text().trim(), // Attended KK Assembly?
-                row.find('td:nth-child(22)').text().trim()  // If Yes, how many times?
-            ];
-            data.push(rowData);
-        }
-    });
-
-    // Now handle non-registered users aged 15-30, without duplicating any of them
-    $('tbody tr.clickable-row').each(function () {
-        const row = $(this);
-        const birthday = row.find('td:nth-child(4)').text().trim();
-        const age = calculateAge(birthday);
-        const voter_status = row.find('td:nth-child(19)').text().toLowerCase().trim();
-
-        // Check if the user is in the 15-30 age group and is non-registered
-        const isNonRegistered = (voter_status === "" || voter_status === "not registered");
-        if (age >= 15 && age <= 30 && isNonRegistered) {
-            // Prevent duplication by checking if this row is already added
-            const name = row.find('td:nth-child(2)').text().trim();
-            const alreadyAdded = data.some(rowData => rowData[1] === name); // Check if name already exists in the data array
-
-            if (!alreadyAdded) {
-                const rowData = [
-                    data.length + 1, // Row number
-                    name, // Name
-                    row.find('td:nth-child(5)').text().trim(), // Gender
-                    row.find('td:nth-child(13)').text().trim(), // Civil Status
-                    row.find('td:nth-child(6)').text().trim(), // Email
-                    row.find('td:nth-child(7)').text().trim(), // Phone
-                    row.find('td:nth-child(8)').text().trim(), // Purok
-                    row.find('td:nth-child(18)').text().trim(), // Educational Background
-                    row.find('td:nth-child(17)').text().trim(), // Work Status
-                    voter_status, // Voter Status
-                    age, // Age
-                    birthday, // Birthday
-                    row.find('td:nth-child(20)').text().trim(), // Voted Last Election?
-                    row.find('td:nth-child(16)').text().trim(), // Youth Age Group
-                    row.find('td:nth-child(14)').text().trim(), // Youth Classification
-                    row.find('td:nth-child(21)').text().trim(), // Attended KK Assembly?
-                    row.find('td:nth-child(22)').text().trim()  // If Yes, how many times?
+            let rowData;
+            if (ageFilter === "31+") {
+                // Format data for adults (filtered columns)
+                rowData = [
+                    data.length + 1,
+                    row.find('td:nth-child(2)').text().trim(),
+                    row.find('td:nth-child(5)').text().trim(),
+                    birthday,
+                    age,
+                    row.find('td:nth-child(13)').text().trim(),
+                    row.find('td:nth-child(6)').text().trim(),
+                    row.find('td:nth-child(7)').text().trim(),
+                    row.find('td:nth-child(8)').text().trim(),
+                    row.find('td:nth-child(18)').text().trim(),
+                    row.find('td:nth-child(17)').text().trim(),
+                    voter_status,
+                    row.find('td:nth-child(20)').text().trim()
                 ];
-                data.push(rowData);
+            } else {
+                // Format data for youth (all columns)
+                rowData = [
+                    data.length + 1,
+                    row.find('td:nth-child(2)').text().trim(),
+                    row.find('td:nth-child(5)').text().trim(),
+                    row.find('td:nth-child(13)').text().trim(),
+                    row.find('td:nth-child(6)').text().trim(),
+                    row.find('td:nth-child(7)').text().trim(),
+                    row.find('td:nth-child(8)').text().trim(),
+                    row.find('td:nth-child(18)').text().trim(),
+                    row.find('td:nth-child(17)').text().trim(),
+                    voter_status,
+                    age,
+                    birthday,
+                    row.find('td:nth-child(20)').text().trim(),
+                    row.find('td:nth-child(16)').text().trim(),
+                    row.find('td:nth-child(14)').text().trim(),
+                    row.find('td:nth-child(21)').text().trim(),
+                    row.find('td:nth-child(22)').text().trim()
+                ];
             }
+            data.push(rowData);
         }
     });
 
@@ -1262,18 +1253,7 @@ Swal.fire({
     }
 
     // Set title based on filters
-    let title = '';
-    if (voterTypeFilter.toLowerCase() === "sk voter" && ageFilter === "15-30") {
-        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (SK Voters)';
-    } else if (voterTypeFilter.toLowerCase() === "national voter" && ageFilter === "15-30") {
-        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (National Voters)';
-    } else if (voterTypeFilter.toLowerCase() === "sk and national" && ageFilter === "15-30") {
-        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (SK and National Voters)';
-    } else if (voterTypeFilter.toLowerCase() === "not registered" && ageFilter === "15-30") {
-        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES (Not Registered, Ages 15-30)';
-    } else {
-        title = 'KATIPUNAN NG KABATAAN YOUTH PROFILES';
-    }
+    let title = (ageFilter === "31+") ? 'ADULT PROFILES (Ages 31+)' : 'KATIPUNAN NG KABATAAN YOUTH PROFILES';
 
     // Set title in PDF
     doc.setFont('helvetica', 'bold');
@@ -1307,28 +1287,29 @@ Swal.fire({
         margin: { top: 10, left: 10, right: 10 },
     });
 
-    // Send to backend
+    // Convert PDF to Blob
     const pdfBlob = doc.output('blob');
     const formData = new FormData();
     formData.append('pdf_file', pdfBlob, title + '.pdf');
     formData.append('report_name', title);
 
+    // Send to backend
     fetch('/save_pdf', {
         method: 'POST',
         body: formData,
     })
-        .then(response => response.json())
-        .then(result => {
-            if (result.success) {
-                alert('PDF exported and saved successfully!');
-            } else {
-                alert('Failed to save the PDF.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while saving the PDF.');
-        });
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert('PDF exported and saved successfully!');
+        } else {
+            alert('Failed to save the PDF.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while saving the PDF.');
+    });
 
     // Save the PDF locally
     doc.save(title + '.pdf');
